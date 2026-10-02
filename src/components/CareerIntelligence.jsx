@@ -1,0 +1,827 @@
+import React, { useState } from 'react';
+import { 
+  Sparkles, 
+  Compass, 
+  AlertTriangle, 
+  CheckCircle2, 
+  ArrowRight, 
+  Cpu, 
+  TrendingUp, 
+  Layers, 
+  Check, 
+  ExternalLink,
+  BookOpen,
+  Code,
+  ShieldCheck,
+  ChevronRight,
+  Info
+} from 'lucide-react';
+import { ROLES_CATALOG } from '../data/mockData';
+
+export function CareerIntelligence({ 
+  user, 
+  openVerificationModal, 
+  navigateToProjects, 
+  navigateToOpportunities 
+}) {
+  const [activeSubTab, setActiveSubTab] = useState('intelligence'); // 'intelligence' | 'gap' | 'roadmap' | 'simulator'
+  const [targetRole, setTargetRole] = useState("Data Scientist");
+
+  // Career Simulator State (Slide 12)
+  const [simulatedSkills, setSimulatedSkills] = useState([]);
+
+  const currentSkillNames = user.skills.map(s => s.name);
+  const selectedRoleData = ROLES_CATALOG[targetRole] || ROLES_CATALOG["Data Scientist"];
+
+  // Calculate Match for Target Role
+  const allTargetSkills = [...selectedRoleData.requiredSkills, ...selectedRoleData.advancedSkills];
+  const matchedTargetSkills = allTargetSkills.filter(s => currentSkillNames.some(cs => cs.toLowerCase().includes(s.toLowerCase()) || s.toLowerCase().includes(cs.toLowerCase())));
+  const missingTargetSkills = allTargetSkills.filter(s => !matchedTargetSkills.includes(s));
+  const baseMatchPercent = Math.round((matchedTargetSkills.length / allTargetSkills.length) * 100);
+
+  // Simulation Calculations
+  const combinedCurrentAndSim = [...currentSkillNames, ...simulatedSkills];
+  const simulatedMatchedSkills = allTargetSkills.filter(s => 
+    combinedCurrentAndSim.some(cs => cs.toLowerCase().includes(s.toLowerCase()) || s.toLowerCase().includes(cs.toLowerCase()))
+  );
+  const simulatedMatchPercent = Math.min(100, Math.round((simulatedMatchedSkills.length / allTargetSkills.length) * 100));
+
+  const toggleSimulatedSkill = (skill) => {
+    if (simulatedSkills.includes(skill)) {
+      setSimulatedSkills(prev => prev.filter(s => s !== skill));
+    } else {
+      setSimulatedSkills(prev => [...prev, skill]);
+    }
+  };
+
+  // Interactive Roadmap State
+  const [completedSteps, setCompletedSteps] = useState([1]); // step 1 is done by default
+
+  const toggleRoadmapStep = (stepNum) => {
+    setCompletedSteps(prev => 
+      prev.includes(stepNum) ? prev.filter(s => s !== stepNum) : [...prev, stepNum]
+    );
+  };
+
+  const roadmapReadiness = Math.round((completedSteps.length / 5) * 100);
+
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+      {/* Sub Header Navigation */}
+      <div style={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        flexWrap: 'wrap',
+        gap: '16px',
+        borderBottom: '1px solid var(--border-subtle)',
+        paddingBottom: '16px'
+      }}>
+        <div>
+          <h2 style={{ fontSize: '1.6rem', color: '#fff', display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <Compass size={24} color="#818CF8" /> AI Career Intelligence & Gap Analysis
+          </h2>
+          <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
+            Data-backed career matching, explainable gap diagnostics, personalized action roadmap, and interactive simulator.
+          </p>
+        </div>
+
+        {/* Sub Navigation Pills */}
+        <div style={{
+          display: 'flex',
+          background: 'rgba(15, 23, 42, 0.7)',
+          padding: '4px',
+          borderRadius: 'var(--radius-full)',
+          border: '1px solid var(--border-subtle)',
+          gap: '4px'
+        }}>
+          {[
+            { id: 'intelligence', label: 'Career Fits', badge: 'Slide 9' },
+            { id: 'gap', label: 'Skill Gap Matrix', badge: 'Slide 10' },
+            { id: 'roadmap', label: 'Action Roadmap', badge: 'Slide 11' },
+            { id: 'simulator', label: 'Career Simulator', badge: 'Slide 12' },
+          ].map(tab => {
+            const isActive = activeSubTab === tab.id;
+            return (
+              <button
+                key={tab.id}
+                onClick={() => setActiveSubTab(tab.id)}
+                style={{
+                  padding: '6px 14px',
+                  borderRadius: 'var(--radius-full)',
+                  fontSize: '0.82rem',
+                  fontWeight: 600,
+                  background: isActive ? 'var(--grad-primary)' : 'transparent',
+                  color: isActive ? '#fff' : 'var(--text-secondary)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '6px'
+                }}
+              >
+                <span>{tab.label}</span>
+                <span style={{
+                  fontSize: '0.65rem',
+                  padding: '1px 5px',
+                  borderRadius: '4px',
+                  background: isActive ? 'rgba(255,255,255,0.2)' : 'rgba(255,255,255,0.06)',
+                  color: '#fff'
+                }}>
+                  {tab.badge}
+                </span>
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* VIEW 1: AI CAREER INTELLIGENCE (Slide 9) */}
+      {activeSubTab === 'intelligence' && (
+        <div>
+          <div style={{
+            background: 'rgba(99, 102, 241, 0.08)',
+            border: '1px solid rgba(99, 102, 241, 0.3)',
+            borderRadius: 'var(--radius-lg)',
+            padding: '20px',
+            marginBottom: '24px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            gap: '20px'
+          }}>
+            <div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px' }}>
+                <Sparkles size={18} color="#38BDF8" />
+                <span style={{ fontSize: '0.9rem', fontWeight: 800, color: '#38BDF8', letterSpacing: '0.04em' }}>
+                  AI RECOMMENDATION ENGINE (SLIDE 9)
+                </span>
+              </div>
+              <h3 style={{ fontSize: '1.25rem', color: '#fff', marginBottom: '4px' }}>
+                "What Career Fits Me?"
+              </h3>
+              <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', maxWidth: '650px' }}>
+                TalentX continuously cross-references your verified competencies ({user.skills.filter(s => s.verified).map(s => s.name).join(', ')}), academic background, and completed projects against live industry hiring indices.
+              </p>
+            </div>
+
+            <div style={{ textAlign: 'right', flexShrink: 0 }}>
+              <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>CURRENT READINESS</div>
+              <div style={{ fontSize: '1.8rem', fontWeight: 900, color: '#34D399' }}>
+                {user.careerReadiness}%
+              </div>
+              <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>Target: {targetRole}</div>
+            </div>
+          </div>
+
+          {/* Recommended Roles Grid */}
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(360px, 1fr))', gap: '20px' }}>
+            {Object.keys(ROLES_CATALOG).map(roleKey => {
+              const role = ROLES_CATALOG[roleKey];
+              const isTarget = targetRole === role.title;
+              const reqs = [...role.requiredSkills, ...role.advancedSkills];
+              const matches = reqs.filter(s => currentSkillNames.some(cs => cs.toLowerCase().includes(s.toLowerCase()) || s.toLowerCase().includes(cs.toLowerCase())));
+              const score = Math.round((matches.length / reqs.length) * 100);
+
+              return (
+                <div
+                  key={roleKey}
+                  className="glass-panel glass-panel-interactive"
+                  style={{
+                    padding: '24px',
+                    border: isTarget ? '1px solid #6366F1' : '1px solid var(--border-subtle)',
+                    background: isTarget ? 'linear-gradient(180deg, rgba(99, 102, 241, 0.12) 0%, rgba(15, 23, 42, 0.75) 100%)' : 'var(--bg-card)',
+                    position: 'relative'
+                  }}
+                >
+                  {isTarget && (
+                    <span className="badge-pill badge-indigo" style={{ position: 'absolute', top: '16px', right: '16px' }}>
+                      Active Target
+                    </span>
+                  )}
+
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
+                    <span className="badge-pill badge-cyan" style={{ fontSize: '0.7rem' }}>{role.category}</span>
+                    <span style={{ fontSize: '0.75rem', color: '#10B981', fontWeight: 700 }}>{role.hiringDemand}</span>
+                  </div>
+
+                  <h3 style={{ fontSize: '1.2rem', color: '#fff', marginBottom: '4px' }}>
+                    {role.title}
+                  </h3>
+
+                  <div style={{ display: 'flex', alignItems: 'baseline', gap: '8px', marginBottom: '16px' }}>
+                    <div style={{ fontSize: '1.7rem', fontWeight: 900, color: score > 75 ? '#34D399' : '#F59E0B' }}>
+                      {score}%
+                    </div>
+                    <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>Capability Alignment</span>
+                  </div>
+
+                  {/* Compensation benchmark */}
+                  <div style={{
+                    background: 'rgba(255, 255, 255, 0.03)',
+                    padding: '8px 12px',
+                    borderRadius: 'var(--radius-sm)',
+                    fontSize: '0.8rem',
+                    marginBottom: '14px',
+                    display: 'flex',
+                    justifyContent: 'space-between'
+                  }}>
+                    <span style={{ color: 'var(--text-muted)' }}>Avg. India Comp:</span>
+                    <span style={{ color: '#fff', fontWeight: 600 }}>{role.averageSalaryIndia}</span>
+                  </div>
+
+                  {/* Transparent Why Recommended (Slide 9 requirement) */}
+                  <div style={{
+                    background: 'rgba(99, 102, 241, 0.08)',
+                    borderRadius: 'var(--radius-sm)',
+                    padding: '12px',
+                    borderLeft: '3px solid #6366F1',
+                    marginBottom: '16px'
+                  }}>
+                    <div style={{ fontSize: '0.75rem', fontWeight: 800, color: '#A5B4FC', marginBottom: '4px', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                      <Info size={13} /> WHY TALENTX RECOMMENDS THIS:
+                    </div>
+                    <p style={{ fontSize: '0.78rem', color: '#E2E8F0', lineHeight: 1.45 }}>
+                      {role.whyRecommended}
+                    </p>
+                  </div>
+
+                  {/* Required Skills preview */}
+                  <div style={{ marginBottom: '16px' }}>
+                    <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginBottom: '6px' }}>
+                      Key Skills ({matches.length}/{reqs.length} matched):
+                    </div>
+                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '5px' }}>
+                      {role.requiredSkills.map((s, idx) => {
+                        const isMatched = currentSkillNames.some(cs => cs.toLowerCase().includes(s.toLowerCase()));
+                        return (
+                          <span
+                            key={idx}
+                            style={{
+                              fontSize: '0.72rem',
+                              padding: '2px 8px',
+                              borderRadius: '4px',
+                              background: isMatched ? 'rgba(16, 185, 129, 0.15)' : 'rgba(255, 255, 255, 0.05)',
+                              color: isMatched ? '#34D399' : 'var(--text-muted)',
+                              border: isMatched ? '1px solid rgba(16, 185, 129, 0.3)' : '1px solid var(--border-subtle)'
+                            }}
+                          >
+                            {isMatched ? '✓' : '•'} {s}
+                          </span>
+                        );
+                      })}
+                    </div>
+                  </div>
+
+                  {/* Action */}
+                  <div style={{ display: 'flex', gap: '8px' }}>
+                    <button
+                      onClick={() => {
+                        setTargetRole(role.title);
+                        setActiveSubTab('gap');
+                      }}
+                      className={isTarget ? "btn-primary" : "btn-secondary"}
+                      style={{ width: '100%', fontSize: '0.82rem', padding: '8px 12px' }}
+                    >
+                      {isTarget ? 'Inspect Skill Gaps' : 'Set as Target & Analyze'}
+                    </button>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
+
+      {/* VIEW 2: SKILL GAP ANALYSIS (Slide 10) */}
+      {activeSubTab === 'gap' && (
+        <div>
+          {/* Target Role Selector Bar */}
+          <div style={{
+            background: 'var(--bg-card)',
+            padding: '16px 20px',
+            borderRadius: 'var(--radius-lg)',
+            border: '1px solid var(--border-subtle)',
+            marginBottom: '24px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            flexWrap: 'wrap',
+            gap: '16px'
+          }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+              <span style={{ fontSize: '0.85rem', fontWeight: 700, color: 'var(--text-secondary)' }}>
+                TARGET CAREER:
+              </span>
+              <select
+                value={targetRole}
+                onChange={(e) => setTargetRole(e.target.value)}
+                style={{
+                  background: 'rgba(255, 255, 255, 0.06)',
+                  color: '#fff',
+                  border: '1px solid var(--border-medium)',
+                  padding: '8px 16px',
+                  borderRadius: 'var(--radius-md)',
+                  fontWeight: 600,
+                  fontSize: '0.95rem'
+                }}
+              >
+                {Object.keys(ROLES_CATALOG).map(roleKey => (
+                  <option key={roleKey} value={roleKey} style={{ background: '#0F172A', color: '#fff' }}>
+                    {roleKey}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+              <div>
+                <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Match Alignment: </span>
+                <span style={{ fontSize: '1.2rem', fontWeight: 800, color: baseMatchPercent > 70 ? '#34D399' : '#F59E0B' }}>
+                  {baseMatchPercent}%
+                </span>
+              </div>
+              <button
+                onClick={() => setActiveSubTab('roadmap')}
+                className="btn-primary"
+                style={{ padding: '8px 16px', fontSize: '0.82rem' }}
+              >
+                View Generated Roadmap <ArrowRight size={14} />
+              </button>
+            </div>
+          </div>
+
+          {/* Slide 10 Exact Comparison: Current Skills vs Skill Gaps */}
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px', marginBottom: '24px' }}>
+            {/* CURRENT MATCHED SKILLS */}
+            <div className="glass-panel" style={{ padding: '24px', borderTop: '4px solid #10B981' }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px' }}>
+                <h3 style={{ fontSize: '1.15rem', color: '#fff', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <CheckCircle2 size={20} color="#10B981" /> Current Skills ({matchedTargetSkills.length})
+                </h3>
+                <span className="badge-pill badge-verified">Ready</span>
+              </div>
+              <p style={{ fontSize: '0.82rem', color: 'var(--text-secondary)', marginBottom: '16px' }}>
+                Skills already confirmed on your profile and verified through assessments:
+              </p>
+
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                {matchedTargetSkills.map((skill, idx) => {
+                  const userSkill = user.skills.find(s => s.name.toLowerCase().includes(skill.toLowerCase()) || skill.toLowerCase().includes(s.name.toLowerCase()));
+                  return (
+                    <div
+                      key={idx}
+                      style={{
+                        padding: '12px 16px',
+                        background: 'rgba(16, 185, 129, 0.08)',
+                        borderRadius: 'var(--radius-md)',
+                        border: '1px solid rgba(16, 185, 129, 0.25)',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between'
+                      }}
+                    >
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                        <div style={{
+                          width: '24px',
+                          height: '24px',
+                          borderRadius: '50%',
+                          background: 'rgba(16, 185, 129, 0.2)',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center'
+                        }}>
+                          <Check size={14} color="#34D399" />
+                        </div>
+                        <div>
+                          <div style={{ fontWeight: 600, color: '#fff', fontSize: '0.9rem' }}>{skill}</div>
+                          <div style={{ fontSize: '0.72rem', color: '#6EE7B7' }}>
+                            {userSkill?.verified ? `Verified (${userSkill.score}%) • ${userSkill.level}` : 'Claimed on Profile'}
+                          </div>
+                        </div>
+                      </div>
+
+                      {userSkill?.verified ? (
+                        <span className="badge-pill badge-verified" style={{ fontSize: '0.68rem' }}>
+                          Verified ✓
+                        </span>
+                      ) : (
+                        <button
+                          onClick={() => openVerificationModal(skill)}
+                          className="btn-verified"
+                          style={{ padding: '4px 8px', fontSize: '0.7rem' }}
+                        >
+                          Prove It
+                        </button>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* IDENTIFIED SKILL GAPS */}
+            <div className="glass-panel" style={{ padding: '24px', borderTop: '4px solid #F59E0B' }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px' }}>
+                <h3 style={{ fontSize: '1.15rem', color: '#fff', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <AlertTriangle size={20} color="#F59E0B" /> Skill Gaps ({missingTargetSkills.length})
+                </h3>
+                <span className="badge-pill badge-warning">High Impact</span>
+              </div>
+              <p style={{ fontSize: '0.82rem', color: 'var(--text-secondary)', marginBottom: '16px' }}>
+                High-priority competencies required by top employers hiring for {targetRole}:
+              </p>
+
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                {missingTargetSkills.map((gap, idx) => (
+                  <div
+                    key={idx}
+                    style={{
+                      padding: '12px 16px',
+                      background: 'rgba(245, 158, 11, 0.08)',
+                      borderRadius: 'var(--radius-md)',
+                      border: '1px solid rgba(245, 158, 11, 0.25)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'space-between'
+                    }}
+                  >
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                      <div style={{
+                        width: '24px',
+                        height: '24px',
+                        borderRadius: '50%',
+                        background: 'rgba(245, 158, 11, 0.2)',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        color: '#FBBF24',
+                        fontSize: '0.8rem',
+                        fontWeight: 700
+                      }}>
+                        ⚠
+                      </div>
+                      <div>
+                        <div style={{ fontWeight: 600, color: '#fff', fontSize: '0.9rem' }}>{gap}</div>
+                        <div style={{ fontSize: '0.72rem', color: '#FCD34D' }}>
+                          Missing in 82% of entry candidate applications
+                        </div>
+                      </div>
+                    </div>
+
+                    <div style={{ display: 'flex', gap: '6px' }}>
+                      <button
+                        onClick={() => openVerificationModal(gap)}
+                        className="btn-secondary"
+                        style={{ padding: '4px 10px', fontSize: '0.72rem' }}
+                      >
+                        Verify Now
+                      </button>
+                      <button
+                        onClick={() => setActiveSubTab('roadmap')}
+                        className="btn-primary"
+                        style={{ padding: '4px 10px', fontSize: '0.72rem' }}
+                      >
+                        Learn
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* VIEW 3: PERSONALIZED CAREER ROADMAP (Slide 11) */}
+      {activeSubTab === 'roadmap' && (
+        <div>
+          <div style={{
+            background: 'var(--bg-card)',
+            padding: '20px',
+            borderRadius: 'var(--radius-lg)',
+            border: '1px solid var(--border-subtle)',
+            marginBottom: '24px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            flexWrap: 'wrap',
+            gap: '16px'
+          }}>
+            <div>
+              <span className="badge-pill badge-indigo" style={{ marginBottom: '6px' }}>Slide 11 — From Skill Gap → Action</span>
+              <h3 style={{ fontSize: '1.25rem', color: '#fff' }}>
+                Actionable Learning & Verification Roadmap
+              </h3>
+              <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
+                Targeting: <strong style={{ color: '#38BDF8' }}>{targetRole}</strong>. Check off completed milestones to update your platform readiness score.
+              </p>
+            </div>
+
+            <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+              <div style={{ textAlign: 'right' }}>
+                <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Roadmap Progress</div>
+                <div style={{ fontSize: '1.4rem', fontWeight: 800, color: '#34D399' }}>{roadmapReadiness}%</div>
+              </div>
+              <div style={{
+                width: '120px',
+                height: '10px',
+                background: 'rgba(255, 255, 255, 0.1)',
+                borderRadius: '999px',
+                overflow: 'hidden'
+              }}>
+                <div style={{
+                  width: `${roadmapReadiness}%`,
+                  height: '100%',
+                  background: 'var(--grad-verified)',
+                  transition: 'width 0.3s ease'
+                }} />
+              </div>
+            </div>
+          </div>
+
+          {/* Sequential Steps (Slide 11) */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+            {[
+              {
+                step: 1,
+                title: "Current Foundation: Python + SQL + Statistics",
+                description: "Master foundational scripting, algorithmic thinking, and relational database querying.",
+                badge: "COMPLETED",
+                badgeType: "verified",
+                details: "You scored 88% in Python and 82% in SQL. Baseline verified.",
+                actionText: "Review Scores",
+                actionFn: () => {}
+              },
+              {
+                step: 2,
+                title: "Learn Machine Learning & Supervised Algorithms",
+                description: "Scikit-Learn, Gradient Boosted Decision Trees, Regularization, and Cross-Validation architectures.",
+                badge: "RECOMMENDED LEARNING",
+                badgeType: "indigo",
+                details: "Modules: Feature Engineering, Imbalanced Datasets, Metrics (PR-AUC, F1).",
+                actionText: "Open Free Course Track",
+                actionFn: () => window.open('https://scikit-learn.org', '_blank')
+              },
+              {
+                step: 3,
+                title: "Build Production ML Portfolio Projects",
+                description: "Bridge theoretical knowledge by shipping full-stack end-to-end applications with live demos.",
+                badge: "HANDS-ON BUILD",
+                badgeType: "cyan",
+                details: "Recommended: AgriVision AI or Real-time UPI Fraud Detection pipeline.",
+                actionText: "Explore Projects Hub",
+                actionFn: navigateToProjects
+              },
+              {
+                step: 4,
+                title: "Take ML Verification Assessment",
+                description: "Prove your ability under timed scenario-based evaluations with code debugging questions.",
+                badge: "VERIFICATION BADGE",
+                badgeType: "warning",
+                details: "Score ≥ 70/100 to earn the official cryptographic TalentX Verified Badge.",
+                actionText: "Take Assessment Now",
+                actionFn: () => openVerificationModal("Machine Learning")
+              },
+              {
+                step: 5,
+                title: "Apply for Verified Data Science Roles & Hackathons",
+                description: "Fast-track interviews with Swiggy AI Labs, Razorpay, and Microsoft Research India.",
+                badge: "HIRED & GROW",
+                badgeType: "verified",
+                details: "TalentX Verified candidates bypass initial recruiter resume screening rounds.",
+                actionText: "Browse Matched Roles",
+                actionFn: navigateToOpportunities
+              }
+            ].map(item => {
+              const isChecked = completedSteps.includes(item.step);
+              return (
+                <div
+                  key={item.step}
+                  className="glass-panel"
+                  style={{
+                    padding: '20px 24px',
+                    display: 'flex',
+                    alignItems: 'flex-start',
+                    gap: '18px',
+                    background: isChecked ? 'rgba(16, 185, 129, 0.04)' : 'var(--bg-card)',
+                    border: isChecked ? '1px solid rgba(16, 185, 129, 0.3)' : '1px solid var(--border-subtle)',
+                    transition: 'all 0.2s ease'
+                  }}
+                >
+                  {/* Step Checkbox */}
+                  <button
+                    onClick={() => toggleRoadmapStep(item.step)}
+                    style={{
+                      width: '32px',
+                      height: '32px',
+                      borderRadius: '50%',
+                      background: isChecked ? 'var(--accent-emerald)' : 'rgba(255, 255, 255, 0.08)',
+                      border: isChecked ? 'none' : '2px solid var(--border-medium)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      flexShrink: 0,
+                      marginTop: '2px',
+                      color: isChecked ? '#fff' : 'transparent'
+                    }}
+                  >
+                    <Check size={18} strokeWidth={3} />
+                  </button>
+
+                  <div style={{ flex: 1 }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '4px', flexWrap: 'wrap' }}>
+                      <span style={{ fontSize: '0.75rem', fontWeight: 800, color: 'var(--text-muted)' }}>
+                        STEP 0{item.step}
+                      </span>
+                      <span className={`badge-pill badge-${item.badgeType}`} style={{ fontSize: '0.68rem' }}>
+                        {item.badge}
+                      </span>
+                    </div>
+
+                    <h4 style={{
+                      fontSize: '1.05rem',
+                      color: '#fff',
+                      marginBottom: '4px',
+                      textDecoration: isChecked ? 'line-through' : 'none',
+                      opacity: isChecked ? 0.9 : 1
+                    }}>
+                      {item.title}
+                    </h4>
+
+                    <p style={{ fontSize: '0.82rem', color: 'var(--text-secondary)', marginBottom: '8px' }}>
+                      {item.description}
+                    </p>
+
+                    <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)', background: 'rgba(255, 255, 255, 0.02)', padding: '6px 10px', borderRadius: '4px', display: 'inline-block' }}>
+                      💡 {item.details}
+                    </div>
+                  </div>
+
+                  <button
+                    onClick={item.actionFn}
+                    className={isChecked ? "btn-secondary" : "btn-primary"}
+                    style={{ padding: '8px 16px', fontSize: '0.8rem', flexShrink: 0 }}
+                  >
+                    {item.actionText}
+                  </button>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
+
+      {/* VIEW 4: CAREER SIMULATOR (Slide 12) */}
+      {activeSubTab === 'simulator' && (
+        <div>
+          <div style={{
+            background: 'linear-gradient(135deg, rgba(99, 102, 241, 0.15) 0%, rgba(6, 182, 212, 0.1) 100%)',
+            border: '1px solid rgba(99, 102, 241, 0.4)',
+            borderRadius: 'var(--radius-lg)',
+            padding: '24px',
+            marginBottom: '24px'
+          }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
+              <Cpu size={20} color="#38BDF8" />
+              <span className="badge-pill badge-indigo">Slide 12 — Career Simulator Sandbox</span>
+            </div>
+            <h3 style={{ fontSize: '1.4rem', color: '#fff', marginBottom: '6px' }}>
+              "What If I Learn This Skill?"
+            </h3>
+            <p style={{ fontSize: '0.88rem', color: 'var(--text-secondary)', maxWidth: '680px' }}>
+              Simulate high-impact learning decisions before investing hundreds of hours. Select potential skills below to observe how the TalentX engine recalculates your capability alignment, unlocked roles, and market compensation.
+            </p>
+          </div>
+
+          {/* Interactive Skill Sandbox Selector */}
+          <div className="glass-panel" style={{ padding: '20px', marginBottom: '24px' }}>
+            <div style={{ fontSize: '0.85rem', fontWeight: 700, color: 'var(--text-secondary)', marginBottom: '12px' }}>
+              CLICK SKILLS TO SIMULATE LEARNING:
+            </div>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px' }}>
+              {[
+                { name: "Machine Learning", category: "Core AI", salaryBoost: "+25%" },
+                { name: "Deep Learning & PyTorch", category: "Advanced AI", salaryBoost: "+35%" },
+                { name: "MLOps & CI/CD", category: "Production AI", salaryBoost: "+40%" },
+                { name: "Cloud (AWS & GCP)", category: "Infrastructure", salaryBoost: "+30%" },
+                { name: "Docker & Kubernetes", category: "DevOps", salaryBoost: "+28%" },
+                { name: "Vector Databases & LLMs", category: "GenAI", salaryBoost: "+45%" },
+                { name: "Power BI & Tableau", category: "BI", salaryBoost: "+18%" }
+              ].map(item => {
+                const isSelected = simulatedSkills.includes(item.name);
+                return (
+                  <button
+                    key={item.name}
+                    onClick={() => toggleSimulatedSkill(item.name)}
+                    style={{
+                      padding: '8px 16px',
+                      borderRadius: 'var(--radius-full)',
+                      background: isSelected ? 'var(--grad-primary)' : 'rgba(255, 255, 255, 0.05)',
+                      border: isSelected ? '1px solid #38BDF8' : '1px solid var(--border-medium)',
+                      color: isSelected ? '#fff' : 'var(--text-primary)',
+                      fontWeight: 600,
+                      fontSize: '0.85rem',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '8px',
+                      boxShadow: isSelected ? '0 0 15px rgba(99, 102, 241, 0.5)' : 'none'
+                    }}
+                  >
+                    <span>{isSelected ? '✓ Added:' : '+ Add:'} {item.name}</span>
+                    <span style={{
+                      fontSize: '0.7rem',
+                      padding: '2px 6px',
+                      borderRadius: '4px',
+                      background: isSelected ? 'rgba(0, 0, 0, 0.3)' : 'rgba(16, 185, 129, 0.15)',
+                      color: isSelected ? '#fff' : '#34D399'
+                    }}>
+                      {item.salaryBoost}
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* SIMULATION RECALCULATION ENGINE OUTPUT (Slide 12) */}
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '16px', marginBottom: '24px' }}>
+            {/* Metric 1: Skill Alignment Delta */}
+            <div className="glass-panel" style={{ padding: '20px' }}>
+              <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginBottom: '4px' }}>
+                TARGET ROLE ALIGNMENT
+              </div>
+              <div style={{ display: 'flex', alignItems: 'baseline', gap: '8px' }}>
+                <span style={{ fontSize: '1.8rem', fontWeight: 800, color: 'var(--text-muted)', textDecoration: 'line-through' }}>
+                  {baseMatchPercent}%
+                </span>
+                <ArrowRight size={18} color="#38BDF8" />
+                <span style={{ fontSize: '2.4rem', fontWeight: 900, color: '#34D399' }}>
+                  {simulatedMatchPercent}%
+                </span>
+              </div>
+              <div style={{ fontSize: '0.78rem', color: '#34D399', fontWeight: 600, marginTop: '4px' }}>
+                +{simulatedMatchPercent - baseMatchPercent}% match boost with simulated skills
+              </div>
+            </div>
+
+            {/* Metric 2: Unlocked Roles */}
+            <div className="glass-panel" style={{ padding: '20px' }}>
+              <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginBottom: '4px' }}>
+                POTENTIAL ROLES UNLOCKED
+              </div>
+              <div style={{ fontSize: '2.4rem', fontWeight: 900, color: '#38BDF8' }}>
+                +{simulatedSkills.length > 0 ? simulatedSkills.length + 1 : 0} Roles
+              </div>
+              <div style={{ fontSize: '0.78rem', color: 'var(--text-secondary)', marginTop: '4px' }}>
+                {simulatedSkills.length > 0 ? 'Now qualified for ML Engineer & AI Solutions' : 'Select skills to see new roles'}
+              </div>
+            </div>
+
+            {/* Metric 3: Estimated Salary Projection */}
+            <div className="glass-panel" style={{ padding: '20px' }}>
+              <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginBottom: '4px' }}>
+                PROJECTED COMPENSATION
+              </div>
+              <div style={{ fontSize: '2.4rem', fontWeight: 900, color: '#FBBF24' }}>
+                ₹{14 + simulatedSkills.length * 4} - {28 + simulatedSkills.length * 6} LPA
+              </div>
+              <div style={{ fontSize: '0.78rem', color: '#FBBF24', fontWeight: 600, marginTop: '4px' }}>
+                Estimated market premium: +{simulatedSkills.length * 15}%
+              </div>
+            </div>
+          </div>
+
+          {/* Recalculated Next Action Steps */}
+          {simulatedSkills.length > 0 && (
+            <div style={{
+              background: 'rgba(16, 185, 129, 0.1)',
+              border: '1px solid rgba(16, 185, 129, 0.3)',
+              borderRadius: 'var(--radius-md)',
+              padding: '16px 20px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              flexWrap: 'wrap',
+              gap: '12px'
+            }}>
+              <div>
+                <div style={{ fontWeight: 700, color: '#34D399', fontSize: '0.9rem' }}>
+                  Ready to turn this simulation into reality?
+                </div>
+                <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>
+                  Take the verified assessment for {simulatedSkills[0]} to permanently unlock these roles on your TalentX identity.
+                </div>
+              </div>
+              <button
+                onClick={() => openVerificationModal(simulatedSkills[0])}
+                className="btn-verified"
+                style={{ padding: '8px 18px', fontSize: '0.82rem' }}
+              >
+                Verify {simulatedSkills[0]} Now
+              </button>
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
