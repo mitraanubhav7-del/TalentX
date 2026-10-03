@@ -44,8 +44,12 @@ export function Navbar({
   };
 
   const goProfile = () => {
-    setActiveView('talent');
-    setTalentTab('profile');
+    if (role === 'recruiter') {
+      setActiveView('recruiter-profile');
+    } else {
+      setActiveView('talent');
+      setTalentTab('profile');
+    }
   };
 
   const topNav = [
@@ -212,6 +216,21 @@ export function Navbar({
             </>
           )}
 
+          {role === 'recruiter' && (
+            <button
+              onClick={goProfile}
+              className={`nav-item${activeView === 'recruiter-profile' ? ' active' : ''}`}
+              style={{ borderLeft: '1px solid var(--border-subtle)', minWidth: '64px' }}
+            >
+              <img
+                src={user.avatar}
+                alt={authUser.name}
+                style={{ width: '24px', height: '24px', borderRadius: '50%', objectFit: 'cover' }}
+              />
+              <span className="label">Profile</span>
+            </button>
+          )}
+
           <button onClick={onLogout} className="nav-item" title={`Sign out ${authUser.email}`}>
             <LogOut className="nav-icon" size={20} />
             <span className="label">Sign out</span>
@@ -329,9 +348,13 @@ export function Navbar({
           </>
         ) : (
           <>
-            <button className={`mobile-tab${activeView === 'employer' ? ' active' : ''}`} onClick={() => setActiveView('employer')}>
+            <button className={`mobile-tab${activeView === 'employer' ? ' active' : ''}`} onClick={goHome}>
               <CheckCircle2 size={21} />
               <span>Hiring</span>
+            </button>
+            <button className={`mobile-tab${activeView === 'recruiter-profile' ? ' active' : ''}`} onClick={goProfile}>
+              <img src={user.avatar} alt="" />
+              <span>Profile</span>
             </button>
             <button className="mobile-tab" onClick={onLogout}>
               <LogOut size={21} />

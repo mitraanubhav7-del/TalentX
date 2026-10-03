@@ -135,6 +135,13 @@ test('recruiter is kept out of hiring routes until explicitly approved', async (
   const { user } = await registration.json();
   assert.equal(user.approved, false);
 
+  const pendingProfileUpdate = await fetch(`${baseUrl}/api/auth/profile`, {
+    method: 'PATCH',
+    headers: { Cookie: cookie, 'Content-Type': 'application/json' },
+    body: JSON.stringify({ profile: {} }),
+  });
+  assert.equal(pendingProfileUpdate.status, 403);
+
   const denied = await fetch(`${baseUrl}/api/test/recruiter`, { headers: { Cookie: cookie } });
   assert.equal(denied.status, 403);
   assert.equal((await denied.json()).code, 'recruiter_pending');
@@ -145,6 +152,126 @@ test('recruiter is kept out of hiring routes until explicitly approved', async (
   const allowed = await fetch(`${baseUrl}/api/test/recruiter`, { headers: { Cookie: cookie } });
   assert.equal(allowed.status, 200);
   assert.deepEqual(await allowed.json(), { access: 'granted' });
+
+  const profile = {
+    avatar: 'data:image/jpeg;base64,/9j/',
+    banner: 'data:image/jpeg;base64,/9j/',
+    title: 'Senior technical recruiter',
+    location: 'Bengaluru, India',
+    university: 'Example University',
+    targetRole: 'Talent acquisition',
+    about: 'I connect engineering teams with people who love solving hard problems.',
+    socialLinks: {
+      github: 'https://github.com/riley-recruiter',
+      linkedin: 'https://linkedin.com/in/riley-recruiter',
+      portfolio: 'https://riley-recruiter.example.com',
+    },
+    skills: [{ name: 'Technical recruiting', level: 'Advanced' }],
+    experience: [{
+      role: 'Technical recruiter',
+      company: 'Example Co',
+      period: '2023 – 2025',
+      description: 'Built engineering hiring pipelines.',
+      skillsUsed: ['Talent sourcing'],
+    }],
+    education: [{
+      degree: 'B.A.',
+      institution: 'Example University',
+      period: '2018 – 2022',
+      grade: '3.8 GPA',
+      highlights: 'Organizational psychology.',
+    }],
+    projects: [{
+      title: 'Engineering hiring playbook',
+      description: 'A structured hiring and interview guide.',
+      techStack: ['Hiring'],
+      github: 'https://github.com/riley-recruiter/playbook',
+      demo: 'https://playbook.example.com',
+    }],
+    certifications: [{
+      title: 'Recruiting foundations',
+      issuer: 'Example Academy',
+      date: '2024',
+      credentialUrl: 'https://example.com/recruiting-certificate',
+    }],
+  };
+  const profileUpdate = await fetch(`${baseUrl}/api/auth/profile`, {
+    method: 'PATCH',
+    headers: { Cookie: cookie, 'Content-Type': 'application/json' },
+    body: JSON.stringify({ profile }),
+  });
+  assert.equal(profileUpdate.status, 200);
+  assert.deepEqual((await profileUpdate.json()).profile, profile);
+});
+
+test('candidate profile completion is validated and persisted in the session', async () => {
+  const registration = await registerAndVerify(baseUrl, {
+    name: 'Profile Candidate',
+    email: 'profile-candidate@example.com',
+    password: 'profile-candidate-password',
+    role: 'candidate',
+  });
+  const cookie = sessionCookie(registration);
+
+  const incomplete = await fetch(`${baseUrl}/api/auth/profile`, {
+    method: 'PATCH',
+    headers: { Cookie: cookie, 'Content-Type': 'application/json' },
+    body: JSON.stringify({ profile: {} }),
+  });
+  assert.equal(incomplete.status, 400);
+
+  const profile = {
+    avatar: 'data:image/jpeg;base64,/9j/',
+    banner: 'data:image/jpeg;base64,/9j/',
+    title: 'Software engineer',
+    location: 'Bengaluru, India',
+    university: 'Example University',
+    targetRole: 'Frontend engineer',
+    about: 'I build accessible products and enjoy working with small teams.',
+    socialLinks: {
+      github: 'https://github.com/profile-candidate',
+      linkedin: 'https://linkedin.com/in/profile-candidate',
+      portfolio: 'https://profile-candidate.dev',
+    },
+    skills: [{ name: 'React', level: 'Intermediate' }],
+    experience: [{
+      role: 'Developer',
+      company: 'Example Co',
+      period: '2024 – 2025',
+      description: 'Built customer-facing web applications.',
+      skillsUsed: ['React'],
+    }],
+    education: [{
+      degree: 'B.Tech',
+      institution: 'Example University',
+      period: '2021 – 2025',
+      grade: '8.5 CGPA',
+      highlights: 'Computer science and engineering.',
+    }],
+    projects: [{
+      title: 'Talent app',
+      description: 'A project portfolio.',
+      techStack: ['React'],
+      github: 'https://github.com/profile-candidate/talent-app',
+      demo: 'https://talent-app.example.com',
+    }],
+    certifications: [{
+      title: 'Web development',
+      issuer: 'Example Academy',
+      date: '2025',
+      credentialUrl: 'https://example.com/certificate',
+    }],
+  };
+  const saved = await fetch(`${baseUrl}/api/auth/profile`, {
+    method: 'PATCH',
+    headers: { Cookie: cookie, 'Content-Type': 'application/json' },
+    body: JSON.stringify({ profile }),
+  });
+  assert.equal(saved.status, 200);
+  assert.deepEqual((await saved.json()).profile, profile);
+
+  const session = await fetch(`${baseUrl}/api/auth/me`, { headers: { Cookie: cookie } });
+  assert.deepEqual((await session.json()).user.profile, profile);
 });
 
 test('admin can review and decide recruiter requests while candidates cannot access the queue', async () => {

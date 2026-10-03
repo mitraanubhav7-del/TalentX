@@ -95,7 +95,7 @@ The server permits four distinct, active candidate/recruiter accounts at once by
 
 The app starts at sign-in/create-account. New accounts must verify their email with a six-digit code before they are created. Forgot-password requests send a time-limited code to the account email; a successful reset revokes its active sessions. Codes expire after 10 minutes, allow at most five attempts, and can be re-sent once per minute. Emails are sent through the Brevo transactional email API over HTTPS.
 
-Candidate accounts enter the talent workspace after verification. Recruiter accounts are created as pending and can enter the hiring workspace only after an administrator approves them. User accounts, admin accounts, verification challenges, and sessions are stored in PostgreSQL.
+After email verification, candidate accounts complete a required profile before entering the talent workspace. Recruiter accounts are created as pending and can enter the hiring workspace only after an administrator approves them; approved recruiters complete the same required profile before entering their hiring workspace. The setup includes a profile and cover photo, background, skills, experience, education, projects, certifications, and social links; it can be edited later from the profile page. Recruiters have a separate profile destination with a TalentX Recruiter badge. Profile details and uploaded photos are stored with the user in PostgreSQL. User accounts, admin accounts, verification challenges, and sessions are also stored in PostgreSQL.
 
 The recruiter can then use **Check approval status** or sign in again. The API uses port `3001` by default; `PORT` changes it for production. In production, `npm start` serves the built frontend and API over the host's HTTPS endpoint. Production cookies are Secure and HttpOnly.
 
@@ -131,13 +131,14 @@ The login screen calls these same-origin JSON endpoints, so a separately designe
 | `POST` | `/api/auth/password/forgot` | Send a password reset code; body: `{ email }` |
 | `POST` | `/api/auth/password/reset` | Verify code and set a new password; body: `{ email, code, password }` |
 | `GET` | `/api/auth/me` | Restore the signed-in account from its HttpOnly session cookie |
+| `PATCH` | `/api/auth/profile` | Save a complete candidate profile; body: `{ "profile": { ... } }` |
 | `POST` | `/api/auth/logout` | Revoke the current session |
 | `GET` | `/api/admin/recruiters?status=pending` | Admin-only recruiter request list; status can be pending, approved, rejected, or all |
 | `PATCH` | `/api/admin/recruiters/:id` | Admin-only decision; JSON body `{ "status": "approved" }` or `{ "status": "rejected" }` |
 
 Recruiter approval is restricted to authenticated administrator sessions. Email verification and password reset rely on a configured Brevo API key and verified sender; without them, codes cannot be delivered.
 
-The candidate and recruiter experiences currently use the existing demo portal data; user accounts and sessions are stored in PostgreSQL, but profile fields and hiring data are not yet persisted there. The React UI hides the other role's workspace, and `authenticate`/`requireRole` middleware in `server/auth.js` is available to enforce roles on future API endpoints.
+The candidate and recruiter experiences still include demo data in other portal areas; profile details, uploaded profile photos, user accounts, and sessions are persisted in PostgreSQL. Hiring data is not yet persisted. The React UI hides the other role's workspace, and `authenticate`/`requireRole` middleware in `server/auth.js` is available to enforce roles on future API endpoints.
 
 ### Build Production Bundle
 ```bash

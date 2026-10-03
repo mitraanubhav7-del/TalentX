@@ -129,7 +129,66 @@ function publicUser(user) {
     role: user.role,
     approved: Boolean(user.approved),
     recruiterStatus: user.role === 'recruiter' ? user.recruiter_status : undefined,
+    profile: user.profile_data || {},
   };
+}
+
+function validateProfile(profile) {
+  const requiredText = (value, maxLength) => (
+    typeof value === 'string' && value.trim().length > 0 && value.trim().length <= maxLength
+  );
+  const validUrl = value => {
+    if (!requiredText(value, 1_500)) return false;
+    try {
+      return new URL(value).protocol === 'https:';
+    } catch {
+      return false;
+    }
+  };
+  const validImage = value => (
+    typeof value === 'string'
+    && value.length <= 1_500_000
+    && /^data:image\/(?:jpeg|png|webp);base64,[\w+/]+=*$/.test(value)
+  );
+  const validEntries = (entries, requiredFields, maxCount) => (
+    Array.isArray(entries)
+    && entries.length > 0
+    && entries.length <= maxCount
+    && entries.every(entry => entry && typeof entry === 'object'
+      && requiredFields.every(([key, maxLength]) => requiredText(entry[key], maxLength)))
+  );
+
+  if (!profile || typeof profile !== 'object' || Array.isArray(profile)) return false;
+  if (!validImage(profile.avatar) || !validImage(profile.banner)) return false;
+  if (!requiredText(profile.title, 120)
+    || !requiredText(profile.location, 120)
+    || !requiredText(profile.university, 160)
+    || !requiredText(profile.targetRole, 120)
+    || !requiredText(profile.about, 2_000)) return false;
+  if (!profile.socialLinks || !['github', 'linkedin', 'portfolio']
+    .every(key => validUrl(profile.socialLinks[key]))) return false;
+  if (!validEntries(profile.skills, [['name', 80], ['level', 40]], 50)) return false;
+  if (!validEntries(profile.experience, [
+    ['role', 120], ['company', 120], ['period', 80], ['description', 1_000],
+  ], 20) || !profile.experience.every(entry => Array.isArray(entry.skillsUsed)
+    && entry.skillsUsed.length > 0
+    && entry.skillsUsed.length <= 20
+    && entry.skillsUsed.every(skill => requiredText(skill, 80)))) return false;
+  if (!validEntries(profile.education, [
+    ['degree', 120], ['institution', 160], ['period', 80], ['grade', 80], ['highlights', 1_000],
+  ], 20)) return false;
+  if (!validEntries(profile.projects, [
+    ['title', 120], ['description', 1_000],
+  ], 20) || !profile.projects.every(project => Array.isArray(project.techStack)
+    && project.techStack.length > 0
+    && project.techStack.length <= 20
+    && project.techStack.every(tech => requiredText(tech, 80))
+    && validUrl(project.github)
+    && validUrl(project.demo))) return false;
+  if (!validEntries(profile.certifications, [
+    ['title', 160], ['issuer', 120], ['date', 80],
+  ], 30) || !profile.certifications.every(cert => validUrl(cert.credentialUrl))) return false;
+  return true;
 }
 
 function setSessionCookie(response, token) {
@@ -243,7 +302,8 @@ async function activateSession(pool, tokenHash, capacity) {
         COALESCE(users.email, administrators.email) AS email,
         COALESCE(users.role, 'admin') AS role,
         COALESCE(users.approved, TRUE) AS approved,
-        users.recruiter_status
+        users.recruiter_status,
+        users.profile_data
       FROM sessions
       LEFT JOIN users ON users.id = sessions.user_id
       LEFT JOIN administrators ON administrators.id = sessions.admin_id
@@ -587,6 +647,31 @@ export function createAuthRouter(database, {
 
   router.get('/me', authenticate(database, { userCapacity }), (request, response) => {
     response.json({ user: request.authUser });
+  });
+
+  router.patch('/profile', authenticate(database, { userCapacity }), async (request, response, next) => {
+    if (!['candidate', 'recruiter'].includes(request.authUser.role)) {
+      return response.status(403).json({ error: 'This account cannot update a member profile.' });
+    }
+    if (request.authUser.role === 'recruiter' && !request.authUser.approved) {
+      return response.status(403).json({ error: 'Recruiter approval is required before updating a profile.' });
+    }
+    if (!validateProfile(request.body?.profile)) {
+      return response.status(400).json({
+        error: 'Complete every profile section with valid details, links, and profile images before saving.',
+      });
+    }
+
+    try {
+      const { rows: [user] } = await database.query(`
+        UPDATE users SET profile_data = $1::jsonb
+        WHERE id = $2
+        RETURNING profile_data
+      `, [JSON.stringify(request.body.profile), request.authUser.id]);
+      response.json({ profile: user.profile_data });
+    } catch (error) {
+      next(error);
+    }
   });
 
   router.post('/activity', authenticate(database, { userCapacity }), (_request, response) => {

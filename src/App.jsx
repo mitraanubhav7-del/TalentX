@@ -3,6 +3,7 @@ import { Navbar } from './components/Navbar';
 import { AuthLoading, AuthScreen, PendingApproval } from './components/AuthScreen';
 import { AdminDashboard } from './components/AdminDashboard';
 import { ProfileView } from './components/ProfileView';
+import { ProfileSetup } from './components/ProfileSetup';
 import { SkillVerificationModal } from './components/SkillVerificationModal';
 import { ResumeParserModal } from './components/ResumeParserModal';
 import { CareerIntelligence } from './components/CareerIntelligence';
@@ -15,6 +16,7 @@ import { SkillGraphView } from './components/SkillGraphView';
 import { PitchDeckViewer } from './components/PitchDeckViewer';
 import { INITIAL_USER } from './data/mockData';
 import { authApi } from './services/auth';
+import { profileIsComplete } from './utils/profile';
 import { 
   Bell,
   X
@@ -27,6 +29,7 @@ export function App() {
   const [isRefreshingApproval, setIsRefreshingApproval] = useState(false);
   const [authError, setAuthError] = useState('');
   const [capacityNotice, setCapacityNotice] = useState('');
+  const [isEditingProfile, setIsEditingProfile] = useState(false);
   const [activeView, setActiveView] = useState('talent'); // 'talent' | 'employer' | 'university' | 'skillgraph' | 'presentation'
   const [talentTab, setTalentTab] = useState('networking');
 
@@ -37,11 +40,12 @@ export function App() {
         if (!isCurrent) return;
         setAuthUser(currentUser);
         if (currentUser.role === 'recruiter') {
+          setUser(prev => ({ ...prev, ...currentUser.profile, name: currentUser.name }));
           setActiveView('employer');
         } else if (currentUser.role === 'admin') {
           setUser(prev => ({ ...prev, name: currentUser.name }));
         } else {
-          setUser(prev => ({ ...prev, name: currentUser.name }));
+          setUser(prev => ({ ...prev, ...currentUser.profile, name: currentUser.name }));
           setActiveView('talent');
           setTalentTab('networking');
         }
@@ -66,11 +70,24 @@ export function App() {
     setCapacityNotice('');
     setAuthUser(authenticatedUser);
     if (authenticatedUser.role === 'recruiter') {
+      setUser(prev => ({ ...prev, ...authenticatedUser.profile, name: authenticatedUser.name }));
       setActiveView('employer');
     } else if (authenticatedUser.role === 'admin') {
       setUser(prev => ({ ...prev, name: authenticatedUser.name }));
     } else {
-      setUser(prev => ({ ...prev, name: authenticatedUser.name }));
+      setUser(prev => ({ ...prev, ...authenticatedUser.profile, name: authenticatedUser.name }));
+      setActiveView('talent');
+      setTalentTab('networking');
+    }
+  };
+
+  const handleProfileSaved = profile => {
+    setAuthUser(current => ({ ...current, profile }));
+    setUser(current => ({ ...current, ...profile }));
+    setIsEditingProfile(false);
+    if (authUser.role === 'recruiter') {
+      setActiveView('employer');
+    } else {
       setActiveView('talent');
       setTalentTab('networking');
     }
@@ -317,6 +334,20 @@ export function App() {
       />
     );
   }
+  if (
+    ['candidate', 'recruiter'].includes(authUser.role)
+    && (isEditingProfile || !profileIsComplete(authUser.profile))
+  ) {
+    return (
+      <ProfileSetup
+        user={{ name: authUser.name, role: authUser.role, profile: authUser.profile }}
+        onSaved={handleProfileSaved}
+        onCancel={() => setIsEditingProfile(false)}
+        onLogout={handleLogout}
+        isRequired={!profileIsComplete(authUser.profile)}
+      />
+    );
+  }
 
   return (
     <div className="app-shell">
@@ -342,6 +373,13 @@ export function App() {
             {authError}
           </p>
         )}
+        {activeView === 'recruiter-profile' && authUser.role === 'recruiter' && (
+          <ProfileView
+            user={user}
+            role="recruiter"
+            onEditProfile={() => setIsEditingProfile(true)}
+          />
+        )}
         {/* VIEW 1: TALENT PORTAL */}
         {activeView === 'talent' && (
           <div>
@@ -351,6 +389,7 @@ export function App() {
                 openResumeParser={() => setIsResumeParserOpen(true)}
                 openVerificationModal={handleOpenVerification}
                 onNavigateToTab={setTalentTab}
+                onEditProfile={() => setIsEditingProfile(true)}
               />
             )}
 

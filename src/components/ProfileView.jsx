@@ -34,8 +34,11 @@ export function ProfileView({
   user,
   openResumeParser,
   openVerificationModal,
-  onNavigateToTab
+  onNavigateToTab,
+  onEditProfile,
+  role = 'candidate',
 }) {
+  const isRecruiter = role === 'recruiter';
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
       <div className="glass-panel" style={{ overflow: 'hidden' }}>
@@ -82,20 +85,27 @@ export function ProfileView({
             </div>
 
             <div style={{ display: 'flex', gap: '8px', paddingTop: '16px' }}>
-              <button onClick={openResumeParser} className="btn-secondary" style={{ padding: '8px 14px', fontSize: '0.85rem' }}>
-                <Sparkles size={15} /> Upload resume
+              <button onClick={onEditProfile} className="btn-secondary" style={{ padding: '8px 14px', fontSize: '0.85rem' }}>
+                Edit profile
               </button>
-              <button onClick={() => openVerificationModal('Machine Learning')} className="btn-verified" style={{ padding: '8px 14px', fontSize: '0.85rem' }}>
-                <ShieldCheck size={15} /> Verify skill
-              </button>
+              {!isRecruiter && (
+                <>
+                  <button onClick={openResumeParser} className="btn-secondary" style={{ padding: '8px 14px', fontSize: '0.85rem' }}>
+                    <Sparkles size={15} /> Upload resume
+                  </button>
+                  <button onClick={() => openVerificationModal('Machine Learning')} className="btn-verified" style={{ padding: '8px 14px', fontSize: '0.85rem' }}>
+                    <ShieldCheck size={15} /> Verify skill
+                  </button>
+                </>
+              )}
             </div>
           </div>
 
           <div style={{ marginTop: '12px' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
               <h1 style={{ fontSize: '1.55rem' }}>{user.name}</h1>
-              <span className="badge-pill badge-verified">
-                <Award size={12} /> Verified Fellow
+              <span className={`badge-pill ${isRecruiter ? 'badge-indigo' : 'badge-verified'}`}>
+                <Award size={12} /> {isRecruiter ? 'TalentX Recruiter' : 'Verified Fellow'}
               </span>
             </div>
             <div style={{ fontSize: '1rem', color: 'var(--text-primary)', marginTop: '2px' }}>
@@ -122,20 +132,22 @@ export function ProfileView({
             </div>
           </div>
 
-          <div style={{ display: 'flex', gap: '10px', marginTop: '16px', flexWrap: 'wrap' }}>
-            <div className="metric-tile">
-              <div style={{ fontSize: '0.68rem', color: 'var(--text-muted)', fontWeight: 650 }}>VERIFIED SKILLS</div>
-              <div style={{ fontSize: '1.35rem', fontWeight: 800, color: 'var(--accent-emerald)' }}>{user.verifiedBadgeCount}</div>
+          {!isRecruiter && (
+            <div style={{ display: 'flex', gap: '10px', marginTop: '16px', flexWrap: 'wrap' }}>
+              <div className="metric-tile">
+                <div style={{ fontSize: '0.68rem', color: 'var(--text-muted)', fontWeight: 650 }}>VERIFIED SKILLS</div>
+                <div style={{ fontSize: '1.35rem', fontWeight: 800, color: 'var(--accent-emerald)' }}>{user.verifiedBadgeCount}</div>
+              </div>
+              <div className="metric-tile">
+                <div style={{ fontSize: '0.68rem', color: 'var(--text-muted)', fontWeight: 650 }}>CAREER READINESS</div>
+                <div style={{ fontSize: '1.35rem', fontWeight: 800, color: 'var(--primary)' }}>{user.careerReadiness}%</div>
+              </div>
+              <div className="metric-tile">
+                <div style={{ fontSize: '0.68rem', color: 'var(--text-muted)', fontWeight: 650 }}>REPUTATION</div>
+                <div style={{ fontSize: '1.35rem', fontWeight: 800, color: '#C37D16' }}>{user.reputationScore}</div>
+              </div>
             </div>
-            <div className="metric-tile">
-              <div style={{ fontSize: '0.68rem', color: 'var(--text-muted)', fontWeight: 650 }}>CAREER READINESS</div>
-              <div style={{ fontSize: '1.35rem', fontWeight: 800, color: 'var(--primary)' }}>{user.careerReadiness}%</div>
-            </div>
-            <div className="metric-tile">
-              <div style={{ fontSize: '0.68rem', color: 'var(--text-muted)', fontWeight: 650 }}>REPUTATION</div>
-              <div style={{ fontSize: '1.35rem', fontWeight: 800, color: '#C37D16' }}>{user.reputationScore}</div>
-            </div>
-          </div>
+          )}
 
           <p style={{ fontSize: '0.9rem', color: 'var(--text-secondary)', lineHeight: 1.6, maxWidth: '850px', marginTop: '16px' }}>
             {user.about}
@@ -163,12 +175,14 @@ export function ProfileView({
               Skills
             </h2>
             <p style={{ fontSize: '0.82rem', color: 'var(--text-secondary)', marginTop: '4px', paddingLeft: '44px' }}>
-              Verified through scenario tests — not just self-reported.
+            {isRecruiter ? 'Professional skills and areas of expertise.' : 'Verified through scenario tests — not just self-reported.'}
             </p>
           </div>
-          <button onClick={() => openVerificationModal('Machine Learning')} className="btn-verified" style={{ padding: '8px 14px', fontSize: '0.82rem' }}>
-            <Plus size={14} /> Add skill
-          </button>
+          {!isRecruiter && (
+            <button onClick={() => openVerificationModal('Machine Learning')} className="btn-verified" style={{ padding: '8px 14px', fontSize: '0.82rem' }}>
+              <Plus size={14} /> Add skill
+            </button>
+          )}
         </div>
 
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: '12px' }}>
@@ -206,17 +220,17 @@ export function ProfileView({
                 <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)', fontFamily: 'var(--font-mono)' }}>
                   ID: {skill.certId}
                 </div>
-              ) : (
+              ) : !isRecruiter ? (
                 <button onClick={() => openVerificationModal(skill.name)} className="btn-secondary" style={{ width: '100%', padding: '6px', fontSize: '0.75rem' }}>
                   Take verification test
                 </button>
-              )}
+              ) : null}
             </div>
           ))}
         </div>
       </div>
 
-      <div className="glass-panel" style={{ padding: '20px 24px' }}>
+      {!isRecruiter && <div className="glass-panel" style={{ padding: '20px 24px' }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px' }}>
           <div>
             <h2 style={{ fontSize: '1.2rem', display: 'flex', alignItems: 'center', gap: '8px' }}>
@@ -227,9 +241,11 @@ export function ProfileView({
               Live work with verified GitHub repositories.
             </p>
           </div>
-          <button onClick={() => onNavigateToTab('projects')} className="btn-secondary" style={{ padding: '6px 14px', fontSize: '0.8rem' }}>
-            Open project hub
-          </button>
+          {!isRecruiter && (
+            <button onClick={() => onNavigateToTab('projects')} className="btn-secondary" style={{ padding: '6px 14px', fontSize: '0.8rem' }}>
+              Open project hub
+            </button>
+          )}
         </div>
 
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(360px, 1fr))', gap: '12px' }}>
@@ -298,7 +314,7 @@ export function ProfileView({
             </div>
           ))}
         </div>
-      </div>
+      </div>}
 
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
         <div className="glass-panel" style={{ padding: '20px 24px' }}>

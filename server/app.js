@@ -31,7 +31,7 @@ export function createApp(database) {
       },
     },
   }));
-  app.use(express.json({ limit: '10kb' }));
+  app.use(express.json({ limit: '4mb' }));
   app.use('/api/auth', createAuthRouter(database, { userCapacity }));
   app.use('/api/admin', createAdminRouter(database, { userCapacity }));
 

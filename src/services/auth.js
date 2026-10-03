@@ -22,6 +22,10 @@ async function request(path, options = {}) {
 
 export const authApi = {
   currentUser: () => request('/api/auth/me'),
+  updateProfile: profile => request('/api/auth/profile', {
+    method: 'PATCH',
+    body: JSON.stringify({ profile }),
+  }),
   activity: () => request('/api/auth/activity', { method: 'POST' }),
   register: details => request('/api/auth/register', {
     method: 'POST',

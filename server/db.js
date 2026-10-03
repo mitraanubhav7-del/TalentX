@@ -23,8 +23,10 @@ export async function initializeDatabase(pool = db) {
       approved BOOLEAN NOT NULL DEFAULT TRUE,
       recruiter_status TEXT NOT NULL DEFAULT 'approved'
         CHECK (recruiter_status IN ('pending', 'approved', 'rejected')),
-      created_at BIGINT NOT NULL
+      created_at BIGINT NOT NULL,
+      profile_data JSONB NOT NULL DEFAULT '{}'
     );
+    ALTER TABLE users ADD COLUMN IF NOT EXISTS profile_data JSONB NOT NULL DEFAULT '{}';
 
     CREATE TABLE IF NOT EXISTS administrators (
       id SERIAL PRIMARY KEY,
