@@ -52,7 +52,12 @@ export function createApp(database) {
       return response.status(400).json({ error: 'Request body must be valid JSON.' });
     }
     console.error('Request failed:', error);
-    response.status(500).json({ error: 'An unexpected server error occurred.' });
+    const status = Number.isInteger(error.status) && error.status >= 400 && error.status < 500
+      ? error.status
+      : 500;
+    response.status(status).json({
+      error: error.publicMessage || 'An unexpected server error occurred.',
+    });
   });
 
   return app;

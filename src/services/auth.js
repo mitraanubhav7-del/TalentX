@@ -27,6 +27,18 @@ export const authApi = {
     method: 'POST',
     body: JSON.stringify(details),
   }),
+  verifyRegistration: details => request('/api/auth/register/verify', {
+    method: 'POST',
+    body: JSON.stringify(details),
+  }),
+  requestPasswordReset: details => request('/api/auth/password/forgot', {
+    method: 'POST',
+    body: JSON.stringify(details),
+  }),
+  resetPassword: details => request('/api/auth/password/reset', {
+    method: 'POST',
+    body: JSON.stringify(details),
+  }),
   login: credentials => request('/api/auth/login', {
     method: 'POST',
     body: JSON.stringify(credentials),

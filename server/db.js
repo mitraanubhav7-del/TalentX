@@ -53,6 +53,21 @@ export async function initializeDatabase(pool = db) {
     CREATE INDEX IF NOT EXISTS sessions_expiry_idx ON sessions(expires_at);
     CREATE INDEX IF NOT EXISTS recruiters_status_idx ON users(role, recruiter_status);
 
+    CREATE TABLE IF NOT EXISTS email_challenges (
+      email TEXT NOT NULL,
+      purpose TEXT NOT NULL CHECK (purpose IN ('signup', 'password_reset')),
+      code_hash TEXT NOT NULL,
+      name TEXT,
+      role TEXT,
+      password_hash TEXT,
+      password_salt TEXT,
+      expires_at BIGINT NOT NULL,
+      created_at BIGINT NOT NULL,
+      attempts INTEGER NOT NULL DEFAULT 0,
+      PRIMARY KEY (email, purpose)
+    );
+    CREATE INDEX IF NOT EXISTS email_challenges_expiry_idx ON email_challenges(expires_at);
+
     CREATE TABLE IF NOT EXISTS capacity_guard (
       id INTEGER PRIMARY KEY CHECK (id = 1),
       revision BIGINT NOT NULL DEFAULT 0

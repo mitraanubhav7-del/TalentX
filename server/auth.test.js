@@ -10,10 +10,16 @@ import { provisionAdmin } from './provision-admin.js';
 const memory = newDb();
 const Pool = memory.adapters.createPg().Pool;
 const database = new Pool();
+const otpCodes = new Map();
+const testOtpSecret = 'test-only-otp-hmac-secret-at-least-32-chars';
 const app = express();
 app.use(express.json());
-app.use('/api/auth', createAuthRouter(database));
-app.use('/api/admin', createAdminRouter(database));
+app.use('/api/auth', createAuthRouter(database, {
+  userCapacity: 10,
+  otpSecret: testOtpSecret,
+  sendOtp: async ({ email, code, purpose }) => otpCodes.set(`${purpose}:${email}`, code),
+}));
+app.use('/api/admin', createAdminRouter(database, { userCapacity: 10 }));
 app.get(
   '/api/test/recruiter',
   authenticate(database),
@@ -52,6 +58,26 @@ async function post(path, body, cookie) {
   });
 }
 
+async function postTo(url, path, body, cookie) {
+  return fetch(`${url}${path}`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      ...(cookie ? { Cookie: cookie } : {}),
+    },
+    body: JSON.stringify(body),
+  });
+}
+
+async function registerAndVerify(url, details, codes = otpCodes) {
+  const registration = await postTo(url, '/api/auth/register', details);
+  if (registration.status !== 202) return registration;
+  return postTo(url, '/api/auth/register/verify', {
+    email: details.email,
+    code: codes.get(`signup:${details.email.toLowerCase()}`),
+  });
+}
+
 function sessionCookie(response) {
   const cookie = response.headers.get('set-cookie');
   assert.ok(cookie, 'expected the server to set an authentication cookie');
@@ -59,11 +85,21 @@ function sessionCookie(response) {
 }
 
 test('candidate can register, sign in, read session, and sign out', async () => {
-  const registration = await post('/api/auth/register', {
+  const registrationRequest = await post('/api/auth/register', {
     name: 'Casey Candidate',
     email: 'casey@example.com',
     password: 'candidate-password',
     role: 'candidate',
+  });
+  assert.equal(registrationRequest.status, 202);
+  const { rows: [beforeVerification] } = await database.query(
+    'SELECT COUNT(*)::INTEGER AS count FROM users WHERE email = $1',
+    ['casey@example.com'],
+  );
+  assert.equal(Number(beforeVerification.count), 0);
+  const registration = await post('/api/auth/register/verify', {
+    email: 'casey@example.com',
+    code: otpCodes.get('signup:casey@example.com'),
   });
   assert.equal(registration.status, 201);
   const cookie = sessionCookie(registration);
@@ -88,7 +124,7 @@ test('candidate can register, sign in, read session, and sign out', async () => 
 });
 
 test('recruiter is kept out of hiring routes until explicitly approved', async () => {
-  const registration = await post('/api/auth/register', {
+  const registration = await registerAndVerify(baseUrl, {
     name: 'Riley Recruiter',
     email: 'riley@example.com',
     password: 'recruiter-password',
@@ -112,14 +148,14 @@ test('recruiter is kept out of hiring routes until explicitly approved', async (
 });
 
 test('admin can review and decide recruiter requests while candidates cannot access the queue', async () => {
-  const registration = await post('/api/auth/register', {
+  const registration = await registerAndVerify(baseUrl, {
     name: 'New Recruiter',
     email: 'new-recruiter@example.com',
     password: 'new-recruiter-password',
     role: 'recruiter',
   });
   const recruiterId = (await registration.json()).user.id;
-  const rejectedRegistration = await post('/api/auth/register', {
+  const rejectedRegistration = await registerAndVerify(baseUrl, {
     name: 'Another Recruiter',
     email: 'rejected-recruiter@example.com',
     password: 'another-recruiter-password',
@@ -127,7 +163,7 @@ test('admin can review and decide recruiter requests while candidates cannot acc
   });
   const rejectedRecruiterId = (await rejectedRegistration.json()).user.id;
 
-  const candidateRegistration = await post('/api/auth/register', {
+  const candidateRegistration = await registerAndVerify(baseUrl, {
     name: 'Candidate User',
     email: 'candidate-user@example.com',
     password: 'candidate-user-password',
@@ -193,6 +229,93 @@ test('invalid registration data and incorrect credentials are rejected', async (
   assert.equal(denied.status, 401);
 });
 
+test('signup requires a valid email OTP before creating an account', async () => {
+  const email = 'otp-candidate@example.com';
+  const requested = await post('/api/auth/register', {
+    name: 'OTP Candidate',
+    email,
+    password: 'otp-candidate-password',
+    role: 'candidate',
+  });
+  assert.equal(requested.status, 202);
+  const issuedCode = otpCodes.get(`signup:${email}`);
+  const wrongCode = issuedCode === '000000' ? '000001' : '000000';
+  const invalidCode = await post('/api/auth/register/verify', { email, code: wrongCode });
+  assert.equal(invalidCode.status, 400);
+  const { rows: [notCreated] } = await database.query(
+    'SELECT COUNT(*)::INTEGER AS count FROM users WHERE email = $1',
+    [email],
+  );
+  assert.equal(Number(notCreated.count), 0);
+
+  const verified = await post('/api/auth/register/verify', {
+    email,
+    code: otpCodes.get(`signup:${email}`),
+  });
+  assert.equal(verified.status, 201);
+  assert.equal((await verified.json()).user.email, email);
+});
+
+test('password reset uses email OTP and revokes existing sessions', async () => {
+  const email = 'casey@example.com';
+  const existingLogin = await post('/api/auth/login', {
+    email,
+    password: 'candidate-password',
+  });
+  const existingCookie = sessionCookie(existingLogin);
+  const resetRequest = await post('/api/auth/password/forgot', { email });
+  assert.equal(resetRequest.status, 200);
+  assert.match((await resetRequest.json()).message, /If an account exists/);
+
+  const issuedCode = otpCodes.get(`password_reset:${email}`);
+  const wrongCode = issuedCode === '000000' ? '000001' : '000000';
+  const invalidCode = await post('/api/auth/password/reset', {
+    email,
+    code: wrongCode,
+    password: 'new-candidate-password',
+  });
+  assert.equal(invalidCode.status, 400);
+
+  const reset = await post('/api/auth/password/reset', {
+    email,
+    code: otpCodes.get(`password_reset:${email}`),
+    password: 'new-candidate-password',
+  });
+  assert.equal(reset.status, 200);
+
+  const oldSession = await fetch(`${baseUrl}/api/auth/me`, { headers: { Cookie: existingCookie } });
+  assert.equal(oldSession.status, 401);
+  const oldPasswordLogin = await post('/api/auth/login', {
+    email,
+    password: 'candidate-password',
+  });
+  assert.equal(oldPasswordLogin.status, 401);
+  const newPasswordLogin = await post('/api/auth/login', {
+    email,
+    password: 'new-candidate-password',
+  });
+  assert.equal(newPasswordLogin.status, 200);
+
+  const adminResetRequest = await post('/api/auth/password/forgot', { email: 'admin@example.com' });
+  assert.equal(adminResetRequest.status, 200);
+  const adminReset = await post('/api/auth/password/reset', {
+    email: 'admin@example.com',
+    code: otpCodes.get('password_reset:admin@example.com'),
+    password: 'new-admin-test-password-123',
+  });
+  assert.equal(adminReset.status, 200);
+  const oldAdminLogin = await post('/api/auth/login', {
+    email: 'admin@example.com',
+    password: 'admin-test-password-123',
+  });
+  assert.equal(oldAdminLogin.status, 401);
+  const newAdminLogin = await post('/api/auth/login', {
+    email: 'admin@example.com',
+    password: 'new-admin-test-password-123',
+  });
+  assert.equal(newAdminLogin.status, 200);
+});
+
 test('admin bootstrap is idempotent and only an explicit rotation changes the password', async () => {
   const adminMemory = newDb();
   const AdminPool = adminMemory.adapters.createPg().Pool;
@@ -238,7 +361,12 @@ test('candidate accounts are capped at four active users and sign-out frees a sl
   await initializeDatabase(limitedDatabase);
   const limitedApp = express();
   limitedApp.use(express.json());
-  limitedApp.use('/api/auth', createAuthRouter(limitedDatabase, { userCapacity: 4 }));
+  const limitedOtpCodes = new Map();
+  limitedApp.use('/api/auth', createAuthRouter(limitedDatabase, {
+    userCapacity: 4,
+    otpSecret: testOtpSecret,
+    sendOtp: async ({ email, code, purpose }) => limitedOtpCodes.set(`${purpose}:${email}`, code),
+  }));
   limitedApp.use('/api/admin', createAdminRouter(limitedDatabase, { userCapacity: 4 }));
   const { hash: adminHash, salt: adminSalt } = await createPasswordHash('limited-admin-password-123');
   await limitedDatabase.query(`
@@ -252,45 +380,38 @@ test('candidate accounts are capped at four active users and sign-out frees a sl
   try {
     const cookies = [];
     for (let index = 1; index <= 4; index += 1) {
-      const response = await fetch(`${limitedUrl}/api/auth/register`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          name: `Candidate ${index}`,
-          email: `capacity-${index}@example.com`,
-          password: `capacity-test-password-${index}`,
-          role: 'candidate',
-        }),
-      });
+      const response = await registerAndVerify(limitedUrl, {
+        name: `Candidate ${index}`,
+        email: `capacity-${index}@example.com`,
+        password: `capacity-test-password-${index}`,
+        role: 'candidate',
+      }, limitedOtpCodes);
       assert.equal(response.status, 201);
       cookies.push(sessionCookie(response));
     }
 
-    const blocked = await fetch(`${limitedUrl}/api/auth/register`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        name: 'Candidate Five',
-        email: 'capacity-5@example.com',
-        password: 'capacity-test-password-5',
-        role: 'candidate',
-      }),
+    const blockedRequest = await postTo(limitedUrl, '/api/auth/register', {
+      name: 'Candidate Five',
+      email: 'capacity-5@example.com',
+      password: 'capacity-test-password-5',
+      role: 'candidate',
+    });
+    assert.equal(blockedRequest.status, 202);
+    const blocked = await postTo(limitedUrl, '/api/auth/register/verify', {
+      email: 'capacity-5@example.com',
+      code: limitedOtpCodes.get('signup:capacity-5@example.com'),
     });
     assert.equal(blocked.status, 429);
     assert.equal((await blocked.json()).code, 'user_capacity_reached');
     const { rows: [count] } = await limitedDatabase.query('SELECT COUNT(*)::INTEGER AS count FROM sessions');
     assert.equal(Number(count.count), 4);
 
-    const pendingRecruiter = await fetch(`${limitedUrl}/api/auth/register`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        name: 'Pending Recruiter',
-        email: 'pending-capacity-recruiter@example.com',
-        password: 'capacity-recruiter-password',
-        role: 'recruiter',
-      }),
-    });
+    const pendingRecruiter = await registerAndVerify(limitedUrl, {
+      name: 'Pending Recruiter',
+      email: 'pending-capacity-recruiter@example.com',
+      password: 'capacity-recruiter-password',
+      role: 'recruiter',
+    }, limitedOtpCodes);
     assert.equal(pendingRecruiter.status, 201);
     const recruiterId = (await pendingRecruiter.json()).user.id;
     const adminLogin = await postTo(limitedUrl, '/api/auth/login', {
@@ -312,32 +433,24 @@ test('candidate accounts are capped at four active users and sign-out frees a sl
       method: 'POST',
       headers: { Cookie: cookies[0] },
     });
-    const replacement = await fetch(`${limitedUrl}/api/auth/register`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        name: 'Candidate Replacement',
-        email: 'capacity-replacement@example.com',
-        password: 'capacity-test-password-5',
-        role: 'candidate',
-      }),
-    });
+    const replacement = await registerAndVerify(limitedUrl, {
+      name: 'Candidate Replacement',
+      email: 'capacity-replacement@example.com',
+      password: 'capacity-test-password-5',
+      role: 'candidate',
+    }, limitedOtpCodes);
     assert.equal(replacement.status, 201);
 
     await limitedDatabase.query(`
       UPDATE sessions SET last_seen_at = $1
       WHERE user_id = (SELECT id FROM users WHERE email = $2)
     `, [Date.now() - 6 * 60 * 1000, 'capacity-2@example.com']);
-    const afterIdle = await fetch(`${limitedUrl}/api/auth/register`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        name: 'Candidate Six',
-        email: 'capacity-6@example.com',
-        password: 'capacity-test-password-6',
-        role: 'candidate',
-      }),
-    });
+    const afterIdle = await registerAndVerify(limitedUrl, {
+      name: 'Candidate Six',
+      email: 'capacity-6@example.com',
+      password: 'capacity-test-password-6',
+      role: 'candidate',
+    }, limitedOtpCodes);
     assert.equal(afterIdle.status, 201);
     const expiredSession = await fetch(`${limitedUrl}/api/auth/me`, {
       headers: { Cookie: cookies[1] },
@@ -348,11 +461,4 @@ test('candidate accounts are capped at four active users and sign-out frees a sl
     await limitedDatabase.end();
   }
 
-  async function postTo(url, path, body) {
-    return fetch(`${url}${path}`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(body),
-    });
-  }
 });
