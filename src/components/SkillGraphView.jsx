@@ -75,7 +75,7 @@ export function SkillGraphView({ onNavigateToVerify }) {
       ctx.beginPath();
       ctx.moveTo(fromNode.x, fromNode.y);
       ctx.lineTo(toNode.x, toNode.y);
-      ctx.strokeStyle = isConnected ? '#38BDF8' : 'rgba(255, 255, 255, 0.12)';
+      ctx.strokeStyle = isConnected ? '#35B879' : 'rgba(255, 255, 255, 0.12)';
       ctx.lineWidth = isConnected ? 2.5 : 1.2;
       ctx.stroke();
     });
@@ -128,8 +128,8 @@ export function SkillGraphView({ onNavigateToVerify }) {
     <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
       {/* Header Banner */}
       <div style={{
-        background: 'linear-gradient(135deg, rgba(99, 102, 241, 0.15) 0%, rgba(6, 182, 212, 0.15) 100%)',
-        border: '1px solid rgba(99, 102, 241, 0.35)',
+        background: 'linear-gradient(135deg, rgba(34, 128, 74, 0.15) 0%, rgba(34, 160, 107, 0.15) 100%)',
+        border: '1px solid rgba(34, 128, 74, 0.35)',
         borderRadius: 'var(--radius-lg)',
         padding: '24px',
         display: 'flex',
@@ -140,7 +140,7 @@ export function SkillGraphView({ onNavigateToVerify }) {
       }}>
         <div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
-            <Network size={22} color="#06B6D4" />
+            <Network size={22} color="#22A06B" />
             <span className="badge-pill badge-indigo">Slide 21 & 22 — Connected Skill Graph</span>
           </div>
           <h2 style={{ fontSize: '1.5rem', color: 'var(--text-primary)', marginBottom: '6px' }}>
@@ -154,10 +154,10 @@ export function SkillGraphView({ onNavigateToVerify }) {
 
         <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '4px', fontSize: '0.75rem', color: 'var(--primary)' }}>
-            <span style={{ width: '10px', height: '10px', borderRadius: '50%', background: '#818CF8', display: 'inline-block' }} /> Roles
+            <span style={{ width: '10px', height: '10px', borderRadius: '50%', background: '#35A36A', display: 'inline-block' }} /> Roles
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '4px', fontSize: '0.75rem', color: 'var(--primary)' }}>
-            <span style={{ width: '10px', height: '10px', borderRadius: '50%', background: '#06B6D4', display: 'inline-block' }} /> Skills
+            <span style={{ width: '10px', height: '10px', borderRadius: '50%', background: '#22A06B', display: 'inline-block' }} /> Skills
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '4px', fontSize: '0.75rem', color: '#F59E0B' }}>
             <span style={{ width: '10px', height: '10px', borderRadius: '50%', background: '#F59E0B', display: 'inline-block' }} /> Companies
@@ -234,7 +234,7 @@ export function SkillGraphView({ onNavigateToVerify }) {
                       const otherId = l.from === selectedNode.id ? l.to : l.from;
                       const otherNode = nodes.find(n => n.id === otherId);
                       return (
-                        <span key={idx} style={{ fontSize: '0.75rem', padding: '3px 8px', borderRadius: '4px', background: 'rgba(99, 102, 241, 0.15)', color: 'var(--primary)' }}>
+                        <span key={idx} style={{ fontSize: '0.75rem', padding: '3px 8px', borderRadius: '4px', background: 'rgba(34, 128, 74, 0.15)', color: 'var(--primary)' }}>
                           ↔ {otherNode?.label}
                         </span>
                       );
@@ -331,7 +331,7 @@ export function SkillGraphView({ onNavigateToVerify }) {
         {activeTrendTab === 'emerging' && (
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '14px' }}>
             {MARKET_SKILL_TRENDS.emergingHyperGrowth.map((item, idx) => (
-              <div key={idx} style={{ background: 'rgba(99, 102, 241, 0.06)', padding: '16px', borderRadius: 'var(--radius-md)', border: '1px solid rgba(99, 102, 241, 0.3)' }}>
+              <div key={idx} style={{ background: 'rgba(34, 128, 74, 0.06)', padding: '16px', borderRadius: 'var(--radius-md)', border: '1px solid rgba(34, 128, 74, 0.3)' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
                   <span style={{ fontWeight: 700, color: 'var(--text-primary)', fontSize: '0.95rem' }}>{item.name}</span>
                   <span className="badge-pill badge-indigo">{item.badge}</span>

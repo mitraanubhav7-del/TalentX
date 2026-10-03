@@ -130,9 +130,9 @@ export function NetworkingFeed({ user }) {
                   fontSize: '0.8rem',
                   fontWeight: 600,
                   whiteSpace: 'nowrap',
-                  background: isSelected ? 'rgba(99, 102, 241, 0.2)' : 'rgba(255, 255, 255, 0.04)',
-                  border: isSelected ? '1px solid #6366F1' : '1px solid var(--border-subtle)',
-                  color: isSelected ? '#A5B4FC' : 'var(--text-secondary)'
+                  background: isSelected ? 'rgba(34, 128, 74, 0.2)' : 'rgba(255, 255, 255, 0.04)',
+                  border: isSelected ? '1px solid #21804A' : '1px solid var(--border-subtle)',
+                  color: isSelected ? '#A7E2C1' : 'var(--text-secondary)'
                 }}
               >
                 {filter}
@@ -200,7 +200,7 @@ export function NetworkingFeed({ user }) {
                   marginBottom: '14px'
                 }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                    <Code size={18} color="#38BDF8" />
+                    <Code size={18} color="#35B879" />
                     <span style={{ fontWeight: 600, color: 'var(--text-primary)', fontSize: '0.88rem' }}>
                       {post.projectCard.title}
                     </span>
@@ -291,7 +291,7 @@ export function NetworkingFeed({ user }) {
       <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
         <div className="glass-panel" style={{ padding: '20px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px' }}>
-            <Sparkles size={18} color="#38BDF8" />
+            <Sparkles size={18} color="#35B879" />
             <h3 style={{ fontSize: '1.05rem', color: 'var(--text-primary)' }}>
               People You Should Meet
             </h3>
@@ -339,7 +339,7 @@ export function NetworkingFeed({ user }) {
 
                   {/* Explainable AI Match Reason (Slide 13) */}
                   <div style={{
-                    background: 'rgba(99, 102, 241, 0.08)',
+                    background: 'rgba(34, 128, 74, 0.08)',
                     borderRadius: 'var(--radius-sm)',
                     padding: '8px 10px',
                     fontSize: '0.73rem',

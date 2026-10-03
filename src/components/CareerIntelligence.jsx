@@ -79,7 +79,7 @@ export function CareerIntelligence({
       }}>
         <div>
           <h2 style={{ fontSize: '1.6rem', color: 'var(--text-primary)', display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <Compass size={24} color="#818CF8" /> AI Career Intelligence & Gap Analysis
+            <Compass size={24} color="#35A36A" /> AI Career Intelligence & Gap Analysis
           </h2>
           <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
             Data-backed career matching, explainable gap diagnostics, personalized action roadmap, and interactive simulator.
@@ -138,8 +138,8 @@ export function CareerIntelligence({
       {activeSubTab === 'intelligence' && (
         <div>
           <div style={{
-            background: 'rgba(99, 102, 241, 0.08)',
-            border: '1px solid rgba(99, 102, 241, 0.3)',
+            background: 'rgba(34, 128, 74, 0.08)',
+            border: '1px solid rgba(34, 128, 74, 0.3)',
             borderRadius: 'var(--radius-lg)',
             padding: '20px',
             marginBottom: '24px',
@@ -150,7 +150,7 @@ export function CareerIntelligence({
           }}>
             <div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px' }}>
-                <Sparkles size={18} color="#38BDF8" />
+                <Sparkles size={18} color="#35B879" />
                 <span style={{ fontSize: '0.9rem', fontWeight: 800, color: 'var(--primary)', letterSpacing: '0.04em' }}>
                   AI RECOMMENDATION ENGINE (SLIDE 9)
                 </span>
@@ -187,8 +187,8 @@ export function CareerIntelligence({
                   className="glass-panel glass-panel-interactive"
                   style={{
                     padding: '24px',
-                    border: isTarget ? '1px solid #6366F1' : '1px solid var(--border-subtle)',
-                    background: isTarget ? 'linear-gradient(180deg, rgba(99, 102, 241, 0.12) 0%, rgba(15, 23, 42, 0.75) 100%)' : 'var(--bg-card)',
+                    border: isTarget ? '1px solid #21804A' : '1px solid var(--border-subtle)',
+                    background: isTarget ? 'linear-gradient(180deg, rgba(34, 128, 74, 0.12) 0%, rgba(15, 23, 42, 0.75) 100%)' : 'var(--bg-card)',
                     position: 'relative'
                   }}
                 >
@@ -230,10 +230,10 @@ export function CareerIntelligence({
 
                   {/* Transparent Why Recommended (Slide 9 requirement) */}
                   <div style={{
-                    background: 'rgba(99, 102, 241, 0.08)',
+                    background: 'rgba(34, 128, 74, 0.08)',
                     borderRadius: 'var(--radius-sm)',
                     padding: '12px',
-                    borderLeft: '3px solid #6366F1',
+                    borderLeft: '3px solid #21804A',
                     marginBottom: '16px'
                   }}>
                     <div style={{ fontSize: '0.75rem', fontWeight: 800, color: 'var(--primary)', marginBottom: '4px', display: 'flex', alignItems: 'center', gap: '4px' }}>
@@ -674,14 +674,14 @@ export function CareerIntelligence({
       {activeSubTab === 'simulator' && (
         <div>
           <div style={{
-            background: 'linear-gradient(135deg, rgba(99, 102, 241, 0.15) 0%, rgba(6, 182, 212, 0.1) 100%)',
-            border: '1px solid rgba(99, 102, 241, 0.4)',
+            background: 'linear-gradient(135deg, rgba(34, 128, 74, 0.15) 0%, rgba(34, 160, 107, 0.1) 100%)',
+            border: '1px solid rgba(34, 128, 74, 0.4)',
             borderRadius: 'var(--radius-lg)',
             padding: '24px',
             marginBottom: '24px'
           }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
-              <Cpu size={20} color="#38BDF8" />
+              <Cpu size={20} color="#35B879" />
               <span className="badge-pill badge-indigo">Slide 12 — Career Simulator Sandbox</span>
             </div>
             <h3 style={{ fontSize: '1.4rem', color: 'var(--text-primary)', marginBottom: '6px' }}>
@@ -716,14 +716,14 @@ export function CareerIntelligence({
                       padding: '8px 16px',
                       borderRadius: 'var(--radius-full)',
                       background: isSelected ? 'var(--grad-primary)' : 'rgba(255, 255, 255, 0.05)',
-                      border: isSelected ? '1px solid #38BDF8' : '1px solid var(--border-medium)',
+                      border: isSelected ? '1px solid #35B879' : '1px solid var(--border-medium)',
                       color: isSelected ? '#fff' : 'var(--text-primary)',
                       fontWeight: 600,
                       fontSize: '0.85rem',
                       display: 'flex',
                       alignItems: 'center',
                       gap: '8px',
-                      boxShadow: isSelected ? '0 0 15px rgba(99, 102, 241, 0.5)' : 'none'
+                      boxShadow: isSelected ? '0 0 15px rgba(34, 128, 74, 0.5)' : 'none'
                     }}
                   >
                     <span>{isSelected ? '✓ Added:' : '+ Add:'} {item.name}</span>
@@ -753,7 +753,7 @@ export function CareerIntelligence({
                 <span style={{ fontSize: '1.8rem', fontWeight: 800, color: 'var(--text-muted)', textDecoration: 'line-through' }}>
                   {baseMatchPercent}%
                 </span>
-                <ArrowRight size={18} color="#38BDF8" />
+                <ArrowRight size={18} color="#35B879" />
                 <span style={{ fontSize: '2.4rem', fontWeight: 900, color: 'var(--accent-emerald)' }}>
                   {simulatedMatchPercent}%
                 </span>

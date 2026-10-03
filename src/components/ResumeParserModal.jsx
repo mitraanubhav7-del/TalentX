@@ -152,7 +152,7 @@ export function ResumeParserModal({ isOpen, onClose, onSyncProfile }) {
         position: 'relative',
         padding: '28px',
         background: 'var(--bg-glass-heavy)',
-        border: '1px solid rgba(99, 102, 241, 0.3)',
+        border: '1px solid rgba(34, 128, 74, 0.3)',
         borderRadius: 'var(--radius-xl)',
         boxShadow: 'var(--shadow-lg)'
       }}>
@@ -183,7 +183,7 @@ export function ResumeParserModal({ isOpen, onClose, onSyncProfile }) {
             width: '42px',
             height: '42px',
             borderRadius: '12px',
-            background: 'linear-gradient(135deg, #8B5CF6 0%, #6366F1 100%)',
+            background: 'linear-gradient(135deg, #21804A 0%, #166534 100%)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center'
@@ -206,29 +206,29 @@ export function ResumeParserModal({ isOpen, onClose, onSyncProfile }) {
             <div 
               onClick={() => simulateAiParsing('priya')}
               style={{
-                border: '2px dashed rgba(99, 102, 241, 0.4)',
+                border: '2px dashed rgba(34, 128, 74, 0.4)',
                 borderRadius: 'var(--radius-lg)',
                 padding: '40px 24px',
                 textAlign: 'center',
-                background: 'rgba(99, 102, 241, 0.03)',
+                background: 'rgba(34, 128, 74, 0.03)',
                 cursor: 'pointer',
                 transition: 'all 0.2s ease',
                 marginBottom: '20px'
               }}
-              onMouseEnter={e => e.currentTarget.style.borderColor = '#6366F1'}
-              onMouseLeave={e => e.currentTarget.style.borderColor = 'rgba(99, 102, 241, 0.4)'}
+              onMouseEnter={e => e.currentTarget.style.borderColor = '#21804A'}
+              onMouseLeave={e => e.currentTarget.style.borderColor = 'rgba(34, 128, 74, 0.4)'}
             >
               <div style={{
                 width: '60px',
                 height: '60px',
                 borderRadius: '50%',
-                background: 'rgba(99, 102, 241, 0.1)',
+                background: 'rgba(34, 128, 74, 0.1)',
                 display: 'inline-flex',
                 alignItems: 'center',
                 justifyContent: 'center',
                 marginBottom: '16px'
               }}>
-                <UploadCloud size={30} color="#818CF8" />
+                <UploadCloud size={30} color="#35A36A" />
               </div>
               <h3 style={{ fontSize: '1.1rem', color: 'var(--text-primary)', marginBottom: '6px' }}>
                 Drop your resume here or click to browse
@@ -269,7 +269,7 @@ export function ResumeParserModal({ isOpen, onClose, onSyncProfile }) {
                     width: '36px',
                     height: '36px',
                     borderRadius: '8px',
-                    background: 'rgba(99, 102, 241, 0.15)',
+                    background: 'rgba(34, 128, 74, 0.15)',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
@@ -301,7 +301,7 @@ export function ResumeParserModal({ isOpen, onClose, onSyncProfile }) {
                     width: '36px',
                     height: '36px',
                     borderRadius: '8px',
-                    background: 'rgba(6, 182, 212, 0.15)',
+                    background: 'rgba(34, 160, 107, 0.15)',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
@@ -328,13 +328,13 @@ export function ResumeParserModal({ isOpen, onClose, onSyncProfile }) {
               height: '72px',
               margin: '0 auto 24px',
               borderRadius: '50%',
-              background: 'linear-gradient(135deg, rgba(99, 102, 241, 0.2) 0%, rgba(6, 182, 212, 0.2) 100%)',
+              background: 'linear-gradient(135deg, rgba(34, 128, 74, 0.2) 0%, rgba(34, 160, 107, 0.2) 100%)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
               animation: 'spin 2s linear infinite'
             }}>
-              <Loader2 size={38} color="#38BDF8" className="animate-spin" />
+              <Loader2 size={38} color="#35B879" className="animate-spin" />
             </div>
 
             <h3 style={{ fontSize: '1.25rem', color: 'var(--text-primary)', marginBottom: '8px' }}>
@@ -380,7 +380,7 @@ export function ResumeParserModal({ isOpen, onClose, onSyncProfile }) {
             <div style={{ marginBottom: '20px' }}>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '10px' }}>
                 <h4 style={{ fontSize: '0.95rem', color: 'var(--text-primary)', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                  <Code size={16} color="#818CF8" /> Extracted Skills ({extractedData.skills.length})
+                  <Code size={16} color="#35A36A" /> Extracted Skills ({extractedData.skills.length})
                 </h4>
                 <div style={{ display: 'flex', gap: '6px' }}>
                   <input
@@ -418,8 +418,8 @@ export function ResumeParserModal({ isOpen, onClose, onSyncProfile }) {
                   <div
                     key={idx}
                     style={{
-                      background: 'rgba(99, 102, 241, 0.12)',
-                      border: '1px solid rgba(99, 102, 241, 0.3)',
+                      background: 'rgba(34, 128, 74, 0.12)',
+                      border: '1px solid rgba(34, 128, 74, 0.3)',
                       borderRadius: 'var(--radius-full)',
                       padding: '5px 12px',
                       display: 'flex',
@@ -445,7 +445,7 @@ export function ResumeParserModal({ isOpen, onClose, onSyncProfile }) {
             {/* Extracted Projects */}
             <div style={{ marginBottom: '20px' }}>
               <h4 style={{ fontSize: '0.95rem', color: 'var(--text-primary)', display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '10px' }}>
-                <Code size={16} color="#06B6D4" /> Extracted Projects ({extractedData.projects.length})
+                <Code size={16} color="#22A06B" /> Extracted Projects ({extractedData.projects.length})
               </h4>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                 {extractedData.projects.map((proj, idx) => (
@@ -478,7 +478,7 @@ export function ResumeParserModal({ isOpen, onClose, onSyncProfile }) {
                 border: '1px solid var(--border-subtle)'
               }}>
                 <div style={{ fontSize: '0.8rem', fontWeight: 700, color: 'var(--text-muted)', marginBottom: '6px', display: 'flex', alignItems: 'center', gap: '4px' }}>
-                  <Briefcase size={14} color="#818CF8" /> EXPERIENCE
+                  <Briefcase size={14} color="#35A36A" /> EXPERIENCE
                 </div>
                 {extractedData.experience.map((exp, idx) => (
                   <div key={idx}>
@@ -495,7 +495,7 @@ export function ResumeParserModal({ isOpen, onClose, onSyncProfile }) {
                 border: '1px solid var(--border-subtle)'
               }}>
                 <div style={{ fontSize: '0.8rem', fontWeight: 700, color: 'var(--text-muted)', marginBottom: '6px', display: 'flex', alignItems: 'center', gap: '4px' }}>
-                  <GraduationCap size={14} color="#06B6D4" /> EDUCATION
+                  <GraduationCap size={14} color="#22A06B" /> EDUCATION
                 </div>
                 {extractedData.education.map((edu, idx) => (
                   <div key={idx}>

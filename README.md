@@ -59,7 +59,8 @@ PEOPLE ↔ SKILLS ↔ JOBS ↔ LEARNING ↔ NETWORK ↔ INDUSTRY DEMAND
 ## 🛠️ Technology Stack & Aesthetics
 
 - **Frontend Core**: React 19, Modern JavaScript (ES Modules), Vite 5.
-- **Styling Architecture**: Vanilla CSS tokens, glassmorphism (`backdrop-filter: blur(16px)`), modern dark mode palette (`#070A12`, `#0F172A`, `#1E293B`), neon-indigo and emerald accents.
+- **Backend**: Node.js, Express, SQLite (`better-sqlite3`), scrypt-hashed passwords, and revocable HttpOnly sessions.
+- **Styling Architecture**: Vanilla CSS tokens, glassmorphism (`backdrop-filter: blur(16px)`), light surfaces with green brand accents.
 - **Typography**: Google Fonts (*Outfit*, *Plus Jakarta Sans*, and *JetBrains Mono*).
 - **Icons & Graphics**: Lucide React, Custom SVG icons, HTML5 Canvas graph visualizer.
 - **Celebration & Micro-interactions**: `canvas-confetti` fireworks upon verified badge attainment.
@@ -69,25 +70,60 @@ PEOPLE ↔ SKILLS ↔ JOBS ↔ LEARNING ↔ NETWORK ↔ INDUSTRY DEMAND
 ## ⚡ Quick Start & Local Execution
 
 ### Prerequisites
-- Node.js v18+ (tested on v24)
+- Node.js v20+ (tested on v24)
 - npm v9+
 
-### Run Dev Server
+### Run for up to four local-network users
 ```bash
 # Navigate to project directory
 cd TalentX
 
-# Start the Vite development server
+# Start the app and authentication API, reachable from devices on your Wi-Fi/LAN
 npm run dev
 ```
 
-Visit **`http://localhost:5173/`** in your browser.
+On the host computer, visit **`http://localhost:5173/`**. To let up to four people on the same trusted Wi-Fi/LAN use it, find the host computer's IPv4 address with `ipconfig` and have them visit `http://<host-ipv4>:5173/` (for example `http://192.168.1.25:5173/`). Allow Node.js on **Private networks only** if Windows Firewall prompts. Keep the host computer running; its Vite dev server proxies API requests to the local SQLite-backed server.
+
+The server permits four distinct, active candidate/recruiter accounts at once by default. Admin accounts do not use a user slot. Accounts release their slot when they sign out or when their browser has been inactive for five minutes; an open app tab refreshes its activity every minute. Set `USER_CAPACITY` in `.env` if you want to change this local limit. This is a trusted-LAN development setup, not an internet deployment; don't forward ports or expose Vite to an untrusted/public network.
+
+### Authentication and role access
+
+The app starts at sign-in/create-account. Candidate accounts enter the talent workspace. Recruiter accounts are created as pending and can enter the hiring workspace only after an administrator approves them. The development command starts the Vite client and the Express API together; SQLite stores accounts and sessions in the ignored `data/` folder.
+
+The recruiter can then use **Check approval status** or sign in again. Set `TALENTX_DB_PATH` to choose a persistent database file. The API uses port `3001` by default; `PORT` changes it for production. For production, build the frontend with `npm run build`, set `NODE_ENV=production`, and run `npm start` behind HTTPS with persistent storage. Production cookies are Secure and HttpOnly.
+
+### Admin recruiter approvals
+
+Create a private `.env` file from `.env.example`, and set `ADMIN_NAME`, `ADMIN_EMAIL`, and a unique `ADMIN_PASSWORD` with at least 14 characters. Keep `.env` private; it is ignored by Git. Create the admin account once:
+
+```bash
+npm run auth:admin:create
+```
+
+On the login tab, sign in using that admin email and password (admin is not a public signup role). The admin dashboard lists pending recruiter requests and lets the admin approve or reject them. Recruiters sign in with their own credentials after approval to access the Hiring portal. Never use example credentials in production.
+
+The login screen calls these same-origin JSON endpoints, so a separately designed login page can replace the current screen without changing the account system:
+
+| Method | Endpoint | Purpose |
+|---|---|---|
+| `POST` | `/api/auth/register` | Create candidate/recruiter account; body: `{ name, email, password, role }` |
+| `POST` | `/api/auth/login` | Sign in; body: `{ email, password }` |
+| `GET` | `/api/auth/me` | Restore the signed-in account from its HttpOnly session cookie |
+| `POST` | `/api/auth/logout` | Revoke the current session |
+| `GET` | `/api/admin/recruiters?status=pending` | Admin-only recruiter request list; status can be pending, approved, rejected, or all |
+| `PATCH` | `/api/admin/recruiters/:id` | Admin-only decision; JSON body `{ "status": "approved" }` or `{ "status": "rejected" }` |
+
+Recruiter approval is restricted to authenticated administrator sessions. Password reset/email verification are not included yet.
+
+The candidate and recruiter experiences currently use the existing demo portal data; user accounts and sessions are stored in SQLite, but profile fields and hiring data are not yet persisted there. The React UI hides the other role's workspace, and `authenticate`/`requireRole` middleware in `server/auth.js` is available to enforce roles on future API endpoints.
 
 ### Build Production Bundle
 ```bash
 npm run build
 ```
 Generates optimized static assets in `dist/`.
+
+Run the authentication tests with `npm run test:auth`.
 
 ---
 

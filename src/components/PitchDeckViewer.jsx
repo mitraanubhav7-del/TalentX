@@ -59,7 +59,7 @@ export function PitchDeckViewer({ onNavigateToFeature }) {
         gap: '16px'
       }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-          <Presentation size={20} color="#818CF8" />
+          <Presentation size={20} color="#35A36A" />
           <span style={{ fontWeight: 700, color: 'var(--text-primary)', fontSize: '1rem' }}>
             Build for Bharat 2.0 Pitch Deck
           </span>
@@ -124,7 +124,7 @@ export function PitchDeckViewer({ onNavigateToFeature }) {
         flexDirection: 'column',
         justifyContent: 'space-between',
         background: 'linear-gradient(135deg, rgba(15, 23, 42, 0.95) 0%, rgba(10, 15, 29, 0.98) 100%)',
-        border: '1px solid rgba(99, 102, 241, 0.3)',
+        border: '1px solid rgba(34, 128, 74, 0.3)',
         borderRadius: 'var(--radius-xl)',
         boxShadow: 'var(--shadow-lg)',
         position: 'relative'
@@ -164,8 +164,8 @@ export function PitchDeckViewer({ onNavigateToFeature }) {
 
           {slide.tagline && (
             <div style={{
-              background: 'rgba(99, 102, 241, 0.1)',
-              borderLeft: '4px solid #6366F1',
+              background: 'rgba(34, 128, 74, 0.1)',
+              borderLeft: '4px solid #21804A',
               padding: '14px 20px',
               borderRadius: 'var(--radius-sm)',
               fontSize: '1.1rem',
@@ -199,7 +199,7 @@ export function PitchDeckViewer({ onNavigateToFeature }) {
                   width: '26px',
                   height: '26px',
                   borderRadius: '50%',
-                  background: 'rgba(99, 102, 241, 0.2)',
+                  background: 'rgba(34, 128, 74, 0.2)',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',

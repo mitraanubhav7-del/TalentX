@@ -7,6 +7,7 @@ import {
   TrendingUp,
   Presentation,
   Bell,
+  LogOut,
   Search,
   CheckCircle2,
   Sparkles,
@@ -17,6 +18,9 @@ import {
 } from 'lucide-react';
 
 export function Navbar({
+  role,
+  authUser,
+  onLogout,
   activeView,
   setActiveView,
   talentTab,
@@ -29,8 +33,12 @@ export function Navbar({
   const [query, setQuery] = useState('');
 
   const goHome = () => {
-    setActiveView('talent');
-    setTalentTab('networking');
+    if (role === 'recruiter') {
+      setActiveView('employer');
+    } else {
+      setActiveView('talent');
+      setTalentTab('networking');
+    }
   };
 
   const goProfile = () => {
@@ -46,6 +54,9 @@ export function Navbar({
     { id: 'university', label: 'Campus', icon: GraduationCap, action: () => setActiveView('university'), active: activeView === 'university' },
     { id: 'skillgraph', label: 'Insights', icon: TrendingUp, action: () => setActiveView('skillgraph'), active: activeView === 'skillgraph' },
   ];
+  const visibleTopNav = role === 'recruiter'
+    ? topNav.filter(item => item.id === 'employer')
+    : topNav.filter(item => item.id !== 'employer' && item.id !== 'university');
 
   const talentTabs = [
     { id: 'career_ai', label: 'Career AI', icon: Compass },
@@ -109,7 +120,7 @@ export function Navbar({
             tX
           </div>
           <div style={{ lineHeight: 1.1, textAlign: 'left' }}>
-            <div style={{ fontWeight: 800, fontSize: '1.15rem', letterSpacing: '-0.04em', color: '#0A66C2' }}>
+            <div style={{ fontWeight: 800, fontSize: '1.15rem', letterSpacing: '-0.04em', color: 'var(--primary)' }}>
               TalentX
             </div>
             <div style={{ fontSize: '0.62rem', color: 'var(--text-muted)', fontWeight: 600, letterSpacing: '0.04em' }}>
@@ -118,18 +129,20 @@ export function Navbar({
           </div>
         </button>
 
-        <form className="nav-search" onSubmit={onSearch}>
-          <Search size={16} color="#666666" />
-          <input
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            placeholder="Search jobs, people, skills"
-            aria-label="Search"
-          />
-        </form>
+        {role === 'candidate' && (
+          <form className="nav-search" onSubmit={onSearch}>
+            <Search size={16} color="#666666" />
+            <input
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder="Search jobs, people, skills"
+              aria-label="Search"
+            />
+          </form>
+        )}
 
         <nav style={{ display: 'flex', alignItems: 'stretch', marginLeft: 'auto', height: '100%' }}>
-          {topNav.map(item => {
+          {visibleTopNav.map(item => {
             const Icon = item.icon;
             return (
               <button
@@ -143,54 +156,63 @@ export function Navbar({
             );
           })}
 
-          <button
-            className="nav-item"
-            onClick={() => setShowNotifications(prev => !prev)}
-            style={{ position: 'relative' }}
-          >
-            <Bell className="nav-icon" size={22} strokeWidth={1.8} />
-            <span className="label">Alerts</span>
-            {unreadNotifications > 0 && (
-              <span style={{
-                position: 'absolute',
-                top: '4px',
-                right: '18px',
-                minWidth: '16px',
-                height: '16px',
-                padding: '0 4px',
-                background: '#CC1016',
-                color: '#fff',
-                borderRadius: '8px',
-                fontSize: '0.62rem',
-                fontWeight: 800,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center'
-              }}>
-                {unreadNotifications}
-              </span>
-            )}
-          </button>
+          {role === 'candidate' && (
+            <>
+              <button
+                className="nav-item"
+                onClick={() => setShowNotifications(prev => !prev)}
+                style={{ position: 'relative' }}
+              >
+                <Bell className="nav-icon" size={22} strokeWidth={1.8} />
+                <span className="label">Alerts</span>
+                {unreadNotifications > 0 && (
+                  <span style={{
+                    position: 'absolute',
+                    top: '4px',
+                    right: '18px',
+                    minWidth: '16px',
+                    height: '16px',
+                    padding: '0 4px',
+                    background: '#CC1016',
+                    color: '#fff',
+                    borderRadius: '8px',
+                    fontSize: '0.62rem',
+                    fontWeight: 800,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center'
+                  }}>
+                    {unreadNotifications}
+                  </span>
+                )}
+              </button>
 
-          <button
-            className={`nav-item${activeView === 'presentation' ? ' active' : ''}`}
-            onClick={() => setActiveView('presentation')}
-          >
-            <Presentation className="nav-icon" size={22} strokeWidth={activeView === 'presentation' ? 2.2 : 1.8} />
-            <span className="label">Deck</span>
-          </button>
+              <button
+                className={`nav-item${activeView === 'presentation' ? ' active' : ''}`}
+                onClick={() => setActiveView('presentation')}
+              >
+                <Presentation className="nav-icon" size={22} strokeWidth={activeView === 'presentation' ? 2.2 : 1.8} />
+                <span className="label">Deck</span>
+              </button>
 
-          <button
-            onClick={goProfile}
-            className={`nav-item${activeView === 'talent' && talentTab === 'profile' ? ' active' : ''}`}
-            style={{ borderLeft: '1px solid var(--border-subtle)', minWidth: '64px' }}
-          >
-            <img
-              src={user.avatar}
-              alt={user.name}
-              style={{ width: '24px', height: '24px', borderRadius: '50%', objectFit: 'cover' }}
-            />
-            <span className="label">Profile</span>
+              <button
+                onClick={goProfile}
+                className={`nav-item${activeView === 'talent' && talentTab === 'profile' ? ' active' : ''}`}
+                style={{ borderLeft: '1px solid var(--border-subtle)', minWidth: '64px' }}
+              >
+                <img
+                  src={user.avatar}
+                  alt={authUser.name}
+                  style={{ width: '24px', height: '24px', borderRadius: '50%', objectFit: 'cover' }}
+                />
+                <span className="label">Profile</span>
+              </button>
+            </>
+          )}
+
+          <button onClick={onLogout} className="nav-item" title={`Sign out ${authUser.email}`}>
+            <LogOut className="nav-icon" size={20} />
+            <span className="label">Sign out</span>
           </button>
         </nav>
       </div>

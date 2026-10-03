@@ -42,8 +42,8 @@ export function WorkforceIntelligence() {
     <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
       {/* Header Banner */}
       <div style={{
-        background: 'linear-gradient(135deg, rgba(99, 102, 241, 0.15) 0%, rgba(245, 158, 11, 0.12) 100%)',
-        border: '1px solid rgba(99, 102, 241, 0.35)',
+        background: 'linear-gradient(135deg, rgba(34, 128, 74, 0.15) 0%, rgba(245, 158, 11, 0.12) 100%)',
+        border: '1px solid rgba(34, 128, 74, 0.35)',
         borderRadius: 'var(--radius-lg)',
         padding: '24px',
         display: 'flex',
@@ -117,7 +117,7 @@ export function WorkforceIntelligence() {
 
           <div style={{ display: 'flex', alignItems: 'center', gap: '16px', fontSize: '0.8rem' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-              <div style={{ width: '12px', height: '12px', background: '#6366F1', borderRadius: '3px' }} />
+              <div style={{ width: '12px', height: '12px', background: '#21804A', borderRadius: '3px' }} />
               <span style={{ color: 'var(--text-secondary)' }}>Current Workforce</span>
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
@@ -159,7 +159,7 @@ export function WorkforceIntelligence() {
                   <span>{item.currentWorkforce}%</span>
                 </div>
                 <div style={{ height: '8px', background: 'var(--track)', borderRadius: '999px', overflow: 'hidden' }}>
-                  <div style={{ width: `${item.currentWorkforce}%`, height: '100%', background: '#6366F1', borderRadius: '999px' }} />
+                  <div style={{ width: `${item.currentWorkforce}%`, height: '100%', background: '#21804A', borderRadius: '999px' }} />
                 </div>
               </div>
 

@@ -32,8 +32,8 @@ export function UniversityPortal() {
     <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
       {/* Header Banner */}
       <div style={{
-        background: 'linear-gradient(135deg, rgba(6, 182, 212, 0.15) 0%, rgba(99, 102, 241, 0.15) 100%)',
-        border: '1px solid rgba(6, 182, 212, 0.35)',
+        background: 'linear-gradient(135deg, rgba(34, 160, 107, 0.15) 0%, rgba(34, 128, 74, 0.15) 100%)',
+        border: '1px solid rgba(34, 160, 107, 0.35)',
         borderRadius: 'var(--radius-lg)',
         padding: '24px',
         display: 'flex',
@@ -44,7 +44,7 @@ export function UniversityPortal() {
       }}>
         <div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
-            <GraduationCap size={22} color="#06B6D4" />
+            <GraduationCap size={22} color="#22A06B" />
             <span className="badge-pill badge-cyan">Slide 20 — University Intelligence</span>
           </div>
           <h2 style={{ fontSize: '1.5rem', color: 'var(--text-primary)', marginBottom: '6px' }}>
@@ -138,7 +138,7 @@ export function UniversityPortal() {
                   <span style={{ color: 'var(--text-primary)', fontWeight: 600 }}>{row.curriculumCoverage}%</span>
                 </div>
                 <div style={{ height: '6px', background: 'var(--track)', borderRadius: '999px', overflow: 'hidden' }}>
-                  <div style={{ width: `${row.curriculumCoverage}%`, height: '100%', background: '#6366F1' }} />
+                  <div style={{ width: `${row.curriculumCoverage}%`, height: '100%', background: '#21804A' }} />
                 </div>
               </div>
 
@@ -148,7 +148,7 @@ export function UniversityPortal() {
                   <span style={{ color: 'var(--primary)', fontWeight: 600 }}>{row.industryDemand}%</span>
                 </div>
                 <div style={{ height: '6px', background: 'var(--track)', borderRadius: '999px', overflow: 'hidden' }}>
-                  <div style={{ width: `${row.industryDemand}%`, height: '100%', background: '#38BDF8' }} />
+                  <div style={{ width: `${row.industryDemand}%`, height: '100%', background: '#35B879' }} />
                 </div>
               </div>
 

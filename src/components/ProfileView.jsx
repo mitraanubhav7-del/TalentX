@@ -41,7 +41,7 @@ export function ProfileView({
       <div className="glass-panel" style={{ overflow: 'hidden' }}>
         <div style={{
           height: '196px',
-          backgroundImage: `linear-gradient(180deg, rgba(10, 102, 194, 0.15) 0%, rgba(10, 102, 194, 0.55) 100%), url(${user.banner})`,
+          backgroundImage: `linear-gradient(180deg, rgba(22, 101, 52, 0.15) 0%, rgba(22, 101, 52, 0.55) 100%), url(${user.banner})`,
           backgroundSize: 'cover',
           backgroundPosition: 'center'
         }} />

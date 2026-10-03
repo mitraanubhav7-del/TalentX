@@ -269,11 +269,11 @@ export function SkillVerificationModal({ isOpen, onClose, defaultSkill = "Machin
                 display: 'flex',
                 alignItems: 'center',
                 gap: '8px',
-                background: timeLeft < 60 ? 'rgba(244, 63, 94, 0.15)' : 'rgba(99, 102, 241, 0.15)',
-                border: timeLeft < 60 ? '1px solid #F43F5E' : '1px solid rgba(99, 102, 241, 0.4)',
+                background: timeLeft < 60 ? 'rgba(244, 63, 94, 0.15)' : 'rgba(34, 128, 74, 0.15)',
+                border: timeLeft < 60 ? '1px solid #F43F5E' : '1px solid rgba(34, 128, 74, 0.4)',
                 padding: '6px 14px',
                 borderRadius: 'var(--radius-full)',
-                color: timeLeft < 60 ? '#FB7185' : '#818CF8',
+                color: timeLeft < 60 ? '#FB7185' : '#35A36A',
                 fontWeight: 700,
                 fontSize: '0.95rem'
               }}>
@@ -312,8 +312,8 @@ export function SkillVerificationModal({ isOpen, onClose, defaultSkill = "Machin
                           style={{
                             padding: '14px 18px',
                             borderRadius: 'var(--radius-md)',
-                            background: isSelected ? 'rgba(99, 102, 241, 0.18)' : 'rgba(255, 255, 255, 0.03)',
-                            border: isSelected ? '1px solid #6366F1' : '1px solid var(--border-subtle)',
+                            background: isSelected ? 'rgba(34, 128, 74, 0.18)' : 'rgba(255, 255, 255, 0.03)',
+                            border: isSelected ? '1px solid #21804A' : '1px solid var(--border-subtle)',
                             color: isSelected ? '#fff' : 'var(--text-secondary)',
                             cursor: 'pointer',
                             display: 'flex',
@@ -326,8 +326,8 @@ export function SkillVerificationModal({ isOpen, onClose, defaultSkill = "Machin
                             width: '24px',
                             height: '24px',
                             borderRadius: '50%',
-                            border: isSelected ? '2px solid #6366F1' : '2px solid var(--text-muted)',
-                            background: isSelected ? '#6366F1' : 'transparent',
+                            border: isSelected ? '2px solid #21804A' : '2px solid var(--text-muted)',
+                            background: isSelected ? '#21804A' : 'transparent',
                             display: 'flex',
                             alignItems: 'center',
                             justifyContent: 'center',
@@ -364,7 +364,7 @@ export function SkillVerificationModal({ isOpen, onClose, defaultSkill = "Machin
                             height: '8px',
                             borderRadius: '50%',
                             background: dotIdx === currentQuestionIndex 
-                              ? '#6366F1' 
+                              ? '#21804A'
                               : selectedAnswers[activeTest.questions[dotIdx].id] !== undefined 
                                 ? '#10B981' 
                                 : 'rgba(255, 255, 255, 0.15)'
@@ -425,7 +425,7 @@ export function SkillVerificationModal({ isOpen, onClose, defaultSkill = "Machin
                 <div style={{
                   maxWidth: '460px',
                   margin: '0 auto 24px',
-                  background: 'linear-gradient(145deg, rgba(16, 185, 129, 0.12) 0%, rgba(6, 182, 212, 0.08) 100%)',
+                  background: 'linear-gradient(145deg, rgba(16, 185, 129, 0.12) 0%, rgba(34, 160, 107, 0.08) 100%)',
                   border: '1px solid rgba(16, 185, 129, 0.5)',
                   borderRadius: 'var(--radius-lg)',
                   padding: '24px',

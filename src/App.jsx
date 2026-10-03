@@ -1,5 +1,7 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Navbar } from './components/Navbar';
+import { AuthLoading, AuthScreen, PendingApproval } from './components/AuthScreen';
+import { AdminDashboard } from './components/AdminDashboard';
 import { ProfileView } from './components/ProfileView';
 import { SkillVerificationModal } from './components/SkillVerificationModal';
 import { ResumeParserModal } from './components/ResumeParserModal';
@@ -12,19 +14,125 @@ import { UniversityPortal } from './components/UniversityPortal';
 import { SkillGraphView } from './components/SkillGraphView';
 import { PitchDeckViewer } from './components/PitchDeckViewer';
 import { INITIAL_USER } from './data/mockData';
+import { authApi } from './services/auth';
 import { 
-  Bell, 
-  CheckCircle2, 
-  Sparkles, 
-  X, 
-  ArrowRight, 
-  Presentation 
+  Bell,
+  X
 } from 'lucide-react';
 
 export function App() {
   const [user, setUser] = useState(INITIAL_USER);
+  const [authUser, setAuthUser] = useState(null);
+  const [isCheckingSession, setIsCheckingSession] = useState(true);
+  const [isRefreshingApproval, setIsRefreshingApproval] = useState(false);
+  const [authError, setAuthError] = useState('');
+  const [capacityNotice, setCapacityNotice] = useState('');
   const [activeView, setActiveView] = useState('talent'); // 'talent' | 'employer' | 'university' | 'skillgraph' | 'presentation'
   const [talentTab, setTalentTab] = useState('networking');
+
+  useEffect(() => {
+    let isCurrent = true;
+    authApi.currentUser()
+      .then(({ user: currentUser }) => {
+        if (!isCurrent) return;
+        setAuthUser(currentUser);
+        if (currentUser.role === 'recruiter') {
+          setActiveView('employer');
+        } else if (currentUser.role === 'admin') {
+          setUser(prev => ({ ...prev, name: currentUser.name }));
+        } else {
+          setUser(prev => ({ ...prev, name: currentUser.name }));
+          setActiveView('talent');
+          setTalentTab('networking');
+        }
+      })
+      .catch(error => {
+        if (!isCurrent) return;
+        if (error.code === 'user_capacity_reached') {
+          setCapacityNotice(error.message);
+        } else if (error.status !== 401) {
+          setAuthError(error.message);
+        }
+      })
+      .finally(() => {
+        if (isCurrent) setIsCheckingSession(false);
+      });
+
+    return () => { isCurrent = false; };
+  }, []);
+
+  const handleAuthenticated = (authenticatedUser) => {
+    setAuthError('');
+    setCapacityNotice('');
+    setAuthUser(authenticatedUser);
+    if (authenticatedUser.role === 'recruiter') {
+      setActiveView('employer');
+    } else if (authenticatedUser.role === 'admin') {
+      setUser(prev => ({ ...prev, name: authenticatedUser.name }));
+    } else {
+      setUser(prev => ({ ...prev, name: authenticatedUser.name }));
+      setActiveView('talent');
+      setTalentTab('networking');
+    }
+  };
+
+  useEffect(() => {
+    if (
+      !authUser
+      || authUser.role === 'admin'
+      || (authUser.role === 'recruiter' && !authUser.approved)
+    ) return undefined;
+
+    let isCurrent = true;
+    const intervalId = setInterval(async () => {
+      try {
+        await authApi.activity();
+      } catch (error) {
+        if (!isCurrent) return;
+        if (error.code === 'user_capacity_reached') {
+          setCapacityNotice(error.message);
+          setAuthUser(null);
+          setActiveView('talent');
+          setTalentTab('networking');
+        } else if (error.status === 401) {
+          setAuthError(error.message);
+          setAuthUser(null);
+        } else {
+          setAuthError(`Could not confirm this active session: ${error.message}`);
+        }
+      }
+    }, 60_000);
+
+    return () => {
+      isCurrent = false;
+      clearInterval(intervalId);
+    };
+  }, [authUser]);
+
+  const handleLogout = async () => {
+    try {
+      await authApi.logout();
+      setAuthUser(null);
+      setAuthError('');
+      setActiveView('talent');
+      setTalentTab('networking');
+    } catch (error) {
+      setAuthError(error.message);
+    }
+  };
+
+  const handleRefreshApproval = async () => {
+    setIsRefreshingApproval(true);
+    setAuthError('');
+    try {
+      const { user: currentUser } = await authApi.currentUser();
+      handleAuthenticated(currentUser);
+    } catch (error) {
+      setAuthError(error.message);
+    } finally {
+      setIsRefreshingApproval(false);
+    }
+  };
 
   // Modals
   const [isResumeParserOpen, setIsResumeParserOpen] = useState(false);
@@ -167,9 +275,9 @@ export function App() {
       setActiveView('talent');
       setTalentTab('opportunities');
     } else if (action === 'openEmployer') {
-      setActiveView('employer');
+      if (authUser.role === 'recruiter') setActiveView('employer');
     } else if (action === 'openWorkforce') {
-      setActiveView('employer');
+      if (authUser.role === 'recruiter') setActiveView('employer');
     } else if (action === 'openUniversity') {
       setActiveView('university');
     } else if (action === 'openSkillGraph') {
@@ -182,10 +290,41 @@ export function App() {
     }
   };
 
+  if (isCheckingSession) return <AuthLoading />;
+  if (authError && !authUser && !capacityNotice) {
+    return (
+      <main className="auth-screen">
+        <section className="auth-card">
+          <h1>Can't reach TalentX</h1>
+          <p className="auth-description">{authError}</p>
+          <button className="auth-submit" onClick={() => window.location.reload()}>Try again</button>
+        </section>
+      </main>
+    );
+  }
+  if (!authUser) return <AuthScreen onAuthenticated={handleAuthenticated} capacityNotice={capacityNotice} />;
+  if (authUser.role === 'admin') {
+    return <AdminDashboard user={authUser} onLogout={handleLogout} />;
+  }
+  if (authUser.role === 'recruiter' && !authUser.approved) {
+    return (
+      <PendingApproval
+        user={authUser}
+        onLogout={handleLogout}
+        onRefresh={handleRefreshApproval}
+        error={authError}
+        isRefreshing={isRefreshingApproval}
+      />
+    );
+  }
+
   return (
     <div className="app-shell">
       {/* Top Main Navigation */}
       <Navbar
+        role={authUser.role}
+        authUser={authUser}
+        onLogout={handleLogout}
         activeView={activeView}
         setActiveView={setActiveView}
         talentTab={talentTab}
@@ -198,6 +337,11 @@ export function App() {
 
       {/* Main Page Layout Container */}
       <main className="app-main">
+        {authError && (
+          <p className="auth-error" role="alert" style={{ marginBottom: '16px' }}>
+            {authError}
+          </p>
+        )}
         {/* VIEW 1: TALENT PORTAL */}
         {activeView === 'talent' && (
           <div>
@@ -292,7 +436,7 @@ export function App() {
           >
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '14px' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <Bell size={18} color="#0A66C2" />
+                <Bell size={18} color="var(--primary)" />
                 <h3 style={{ fontSize: '1rem' }}>Notifications</h3>
               </div>
               <button
@@ -308,7 +452,7 @@ export function App() {
                 <div
                   key={n.id}
                   style={{
-                    background: n.read ? 'var(--surface-tint)' : '#E8F3FF',
+                    background: n.read ? 'var(--surface-tint)' : '#EAF5ED',
                     border: '1px solid var(--border-subtle)',
                     borderRadius: 'var(--radius-md)',
                     padding: '12px'

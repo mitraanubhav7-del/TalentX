@@ -33,8 +33,8 @@ export function OpportunitiesView({ user }) {
     <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
       {/* Header Banner */}
       <div style={{
-        background: 'linear-gradient(135deg, rgba(99, 102, 241, 0.15) 0%, rgba(16, 185, 129, 0.1) 100%)',
-        border: '1px solid rgba(99, 102, 241, 0.35)',
+        background: 'linear-gradient(135deg, rgba(34, 128, 74, 0.15) 0%, rgba(16, 185, 129, 0.1) 100%)',
+        border: '1px solid rgba(34, 128, 74, 0.35)',
         borderRadius: 'var(--radius-lg)',
         padding: '24px',
         display: 'flex',
@@ -45,7 +45,7 @@ export function OpportunitiesView({ user }) {
       }}>
         <div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
-            <Briefcase size={22} color="#818CF8" />
+            <Briefcase size={22} color="#35A36A" />
             <span className="badge-pill badge-indigo">Slide 15 — Smart Opportunities</span>
           </div>
           <h2 style={{ fontSize: '1.5rem', color: 'var(--text-primary)', marginBottom: '6px' }}>
@@ -183,7 +183,7 @@ export function OpportunitiesView({ user }) {
 
                 {/* Fast track notice */}
                 <div style={{
-                  background: 'rgba(99, 102, 241, 0.06)',
+                  background: 'rgba(34, 128, 74, 0.06)',
                   borderRadius: 'var(--radius-sm)',
                   padding: '8px 12px',
                   fontSize: '0.75rem',
@@ -235,7 +235,7 @@ export function OpportunitiesView({ user }) {
             maxWidth: '620px',
             padding: '28px',
             background: 'var(--bg-glass-heavy)',
-            border: '1px solid rgba(99, 102, 241, 0.4)',
+            border: '1px solid rgba(34, 128, 74, 0.4)',
             borderRadius: 'var(--radius-xl)',
             position: 'relative'
           }}>
@@ -260,7 +260,7 @@ export function OpportunitiesView({ user }) {
             </button>
 
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
-              <Sparkles size={18} color="#38BDF8" />
+              <Sparkles size={18} color="#35B879" />
               <span className="badge-pill badge-indigo">Slide 18 — Explainable AI Matching</span>
             </div>
 

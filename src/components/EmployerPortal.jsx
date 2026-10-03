@@ -48,8 +48,8 @@ export function EmployerPortal() {
     <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
       {/* Header Banner */}
       <div style={{
-        background: 'linear-gradient(135deg, rgba(79, 70, 229, 0.2) 0%, rgba(6, 182, 212, 0.15) 100%)',
-        border: '1px solid rgba(79, 70, 229, 0.4)',
+        background: 'linear-gradient(135deg, rgba(34, 128, 74, 0.2) 0%, rgba(34, 160, 107, 0.15) 100%)',
+        border: '1px solid rgba(34, 128, 74, 0.4)',
         borderRadius: 'var(--radius-lg)',
         padding: '24px',
         display: 'flex',
@@ -60,7 +60,7 @@ export function EmployerPortal() {
       }}>
         <div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
-            <Briefcase size={22} color="#818CF8" />
+            <Briefcase size={22} color="#35A36A" />
             <span className="badge-pill badge-indigo">Slide 16-18 — Intelligent Recruitment</span>
           </div>
           <h2 style={{ fontSize: '1.5rem', color: 'var(--text-primary)', marginBottom: '6px' }}>
@@ -150,8 +150,8 @@ export function EmployerPortal() {
       {activeSubTab === 'candidates' && (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '18px' }}>
           <div style={{
-            background: 'rgba(99, 102, 241, 0.08)',
-            border: '1px solid rgba(99, 102, 241, 0.3)',
+            background: 'rgba(34, 128, 74, 0.08)',
+            border: '1px solid rgba(34, 128, 74, 0.3)',
             borderRadius: 'var(--radius-md)',
             padding: '14px 18px',
             display: 'flex',
@@ -159,7 +159,7 @@ export function EmployerPortal() {
             justifyContent: 'space-between'
           }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <Sparkles size={18} color="#38BDF8" />
+              <Sparkles size={18} color="#35B879" />
               <span style={{ fontSize: '0.85rem', fontWeight: 700, color: 'var(--primary)' }}>
                 Slide 18 Principle: Explainable Candidate Matching — Not Just "87% Match"
               </span>
@@ -286,10 +286,10 @@ export function EmployerPortal() {
 
                   {/* Explainable AI Hiring Recommendation Summary (Slide 18) */}
                   <div style={{
-                    background: 'rgba(99, 102, 241, 0.07)',
+                    background: 'rgba(34, 128, 74, 0.07)',
                     borderRadius: 'var(--radius-sm)',
                     padding: '12px 14px',
-                    borderLeft: '3px solid #818CF8'
+                    borderLeft: '3px solid #35A36A'
                   }}>
                     <div style={{ fontSize: '0.75rem', fontWeight: 800, color: 'var(--primary)', marginBottom: '4px' }}>
                       TRANSPARENT MATCHING REASONING:
@@ -350,7 +350,7 @@ export function EmployerPortal() {
       {activeSubTab === 'criteria' && (
         <div className="glass-panel" style={{ padding: '28px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
-            <Sliders size={20} color="#818CF8" />
+            <Sliders size={20} color="#35A36A" />
             <h3 style={{ fontSize: '1.35rem', color: 'var(--text-primary)' }}>
               Company-Specific Assessment Standards (Slide 17)
             </h3>
@@ -372,7 +372,7 @@ export function EmployerPortal() {
                 max="95"
                 value={criteria.minPython}
                 onChange={(e) => setCriteria({ ...criteria, minPython: Number(e.target.value) })}
-                style={{ width: '100%', accentColor: '#6366F1' }}
+                style={{ width: '100%', accentColor: '#21804A' }}
               />
               <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)', marginTop: '6px' }}>
                 Requires Intermediate or Advanced verified test badge.
@@ -391,7 +391,7 @@ export function EmployerPortal() {
                 max="95"
                 value={criteria.minSql}
                 onChange={(e) => setCriteria({ ...criteria, minSql: Number(e.target.value) })}
-                style={{ width: '100%', accentColor: '#06B6D4' }}
+                style={{ width: '100%', accentColor: '#22A06B' }}
               />
               <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)', marginTop: '6px' }}>
                 Tests relational queries, window functions, and indexing.
@@ -470,7 +470,7 @@ export function EmployerPortal() {
       {activeSubTab === 'post_job' && (
         <div className="glass-panel" style={{ padding: '28px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
-            <Sparkles size={20} color="#818CF8" />
+            <Sparkles size={20} color="#35A36A" />
             <h3 style={{ fontSize: '1.35rem', color: 'var(--text-primary)' }}>
               Create Job with AI Skill Extraction (Slide 16)
             </h3>

@@ -49,7 +49,7 @@ export function MessagingModal({ isOpen, onClose, recipient }) {
         flexDirection: 'column',
         position: 'relative',
         background: 'var(--bg-glass-heavy)',
-        border: '1px solid rgba(99, 102, 241, 0.4)',
+        border: '1px solid rgba(34, 128, 74, 0.4)',
         borderRadius: 'var(--radius-xl)',
         overflow: 'hidden'
       }}>
@@ -99,8 +99,8 @@ export function MessagingModal({ isOpen, onClose, recipient }) {
 
         {/* AI Compatibility Banner */}
         <div style={{
-          background: 'rgba(99, 102, 241, 0.1)',
-          borderBottom: '1px solid rgba(99, 102, 241, 0.2)',
+          background: 'rgba(34, 128, 74, 0.1)',
+          borderBottom: '1px solid rgba(34, 128, 74, 0.2)',
           padding: '8px 16px',
           fontSize: '0.75rem',
           color: 'var(--primary)',
@@ -108,7 +108,7 @@ export function MessagingModal({ isOpen, onClose, recipient }) {
           alignItems: 'center',
           gap: '6px'
         }}>
-          <Sparkles size={14} color="#38BDF8" />
+          <Sparkles size={14} color="#35B879" />
           <span>TalentX AI Match: {recipient.matchReason}</span>
         </div>
 

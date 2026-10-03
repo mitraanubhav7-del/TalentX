@@ -73,8 +73,8 @@ export function ProjectHub({ user }) {
     <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
       {/* Header Banner */}
       <div style={{
-        background: 'linear-gradient(135deg, rgba(6, 182, 212, 0.15) 0%, rgba(99, 102, 241, 0.1) 100%)',
-        border: '1px solid rgba(6, 182, 212, 0.35)',
+        background: 'linear-gradient(135deg, rgba(34, 160, 107, 0.15) 0%, rgba(34, 128, 74, 0.1) 100%)',
+        border: '1px solid rgba(34, 160, 107, 0.35)',
         borderRadius: 'var(--radius-lg)',
         padding: '24px',
         display: 'flex',
@@ -85,7 +85,7 @@ export function ProjectHub({ user }) {
       }}>
         <div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
-            <Code2 size={22} color="#06B6D4" />
+            <Code2 size={22} color="#22A06B" />
             <span className="badge-pill badge-cyan">Slide 14 — Project & Collaboration Hub</span>
           </div>
           <h2 style={{ fontSize: '1.5rem', color: 'var(--text-primary)', marginBottom: '6px' }}>
@@ -244,7 +244,7 @@ export function ProjectHub({ user }) {
             maxWidth: '560px',
             padding: '28px',
             background: 'var(--bg-glass-heavy)',
-            border: '1px solid rgba(6, 182, 212, 0.4)',
+            border: '1px solid rgba(34, 160, 107, 0.4)',
             borderRadius: 'var(--radius-xl)'
           }}>
             <h3 style={{ fontSize: '1.3rem', color: 'var(--text-primary)', marginBottom: '8px' }}>
