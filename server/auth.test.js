@@ -1,13 +1,15 @@
 import assert from 'node:assert/strict';
 import { after, before, test } from 'node:test';
-import Database from 'better-sqlite3';
+import { newDb } from 'pg-mem';
 import express from 'express';
 import { authenticate, createAuthRouter, createPasswordHash, requireRole } from './auth.js';
 import { createAdminRouter } from './admin.js';
 import { initializeDatabase } from './db.js';
+import { provisionAdmin } from './provision-admin.js';
 
-const database = new Database(':memory:');
-initializeDatabase(database);
+const memory = newDb();
+const Pool = memory.adapters.createPg().Pool;
+const database = new Pool();
 const app = express();
 app.use(express.json());
 app.use('/api/auth', createAuthRouter(database));
@@ -23,19 +25,20 @@ let server;
 let baseUrl;
 
 before(async () => {
+  await initializeDatabase(database);
   server = app.listen(0, '127.0.0.1');
   await new Promise(resolve => server.once('listening', resolve));
   baseUrl = `http://127.0.0.1:${server.address().port}`;
   const { hash, salt } = await createPasswordHash('admin-test-password-123');
-  database.prepare(`
+  await database.query(`
     INSERT INTO administrators (name, email, password_hash, password_salt, created_at)
-    VALUES (?, ?, ?, ?, ?)
-  `).run('Test Admin', 'admin@example.com', hash, salt, Date.now());
+    VALUES ($1, $2, $3, $4, $5)
+  `, ['Test Admin', 'admin@example.com', hash, salt, Date.now()]);
 });
 
 after(async () => {
   await new Promise((resolve, reject) => server.close(error => error ? reject(error) : resolve()));
-  database.close();
+  await database.end();
 });
 
 async function post(path, body, cookie) {
@@ -100,7 +103,9 @@ test('recruiter is kept out of hiring routes until explicitly approved', async (
   assert.equal(denied.status, 403);
   assert.equal((await denied.json()).code, 'recruiter_pending');
 
-  database.prepare("UPDATE users SET approved = 1, recruiter_status = 'approved' WHERE email = ?").run('riley@example.com');
+  await database.query(`
+    UPDATE users SET approved = TRUE, recruiter_status = 'approved' WHERE email = $1
+  `, ['riley@example.com']);
   const allowed = await fetch(`${baseUrl}/api/test/recruiter`, { headers: { Cookie: cookie } });
   assert.equal(allowed.status, 200);
   assert.deepEqual(await allowed.json(), { access: 'granted' });
@@ -188,46 +193,58 @@ test('invalid registration data and incorrect credentials are rejected', async (
   assert.equal(denied.status, 401);
 });
 
-test('existing account and session databases migrate without losing sessions', () => {
-  const legacy = new Database(':memory:');
-  legacy.exec(`
-    CREATE TABLE users (
-      id INTEGER PRIMARY KEY,
-      name TEXT NOT NULL,
-      email TEXT NOT NULL COLLATE NOCASE UNIQUE,
-      role TEXT NOT NULL CHECK (role IN ('candidate', 'recruiter')),
-      password_hash TEXT NOT NULL,
-      password_salt TEXT NOT NULL,
-      approved INTEGER NOT NULL DEFAULT 1 CHECK (approved IN (0, 1)),
-      created_at INTEGER NOT NULL
-    );
-    CREATE TABLE sessions (
-      token_hash TEXT PRIMARY KEY,
-      user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-      expires_at INTEGER NOT NULL,
-      created_at INTEGER NOT NULL
-    );
-    INSERT INTO users (name, email, role, password_hash, password_salt, approved, created_at)
-    VALUES ('Existing Recruiter', 'existing@example.com', 'recruiter', 'hash', 'salt', 0, 1);
-    INSERT INTO sessions (token_hash, user_id, expires_at, created_at)
-    VALUES ('existing-token-hash', 1, 9999999999999, 2);
-  `);
+test('admin bootstrap is idempotent and only an explicit rotation changes the password', async () => {
+  const adminMemory = newDb();
+  const AdminPool = adminMemory.adapters.createPg().Pool;
+  const adminDatabase = new AdminPool();
+  await initializeDatabase(adminDatabase);
 
-  initializeDatabase(legacy);
-  const session = legacy.prepare('SELECT * FROM sessions WHERE token_hash = ?').get('existing-token-hash');
-  assert.equal(session.user_id, 1);
-  assert.equal(session.admin_id, null);
-  assert.equal(legacy.prepare('SELECT recruiter_status FROM users WHERE id = 1').get().recruiter_status, 'pending');
-  assert.equal(legacy.prepare('PRAGMA foreign_key_check').all().length, 0);
-  legacy.close();
+  try {
+    const firstCredentials = {
+      name: 'Deployment Admin',
+      email: 'deployment-admin@example.com',
+      password: 'first-deployment-admin-password',
+    };
+    await provisionAdmin(adminDatabase, firstCredentials);
+    const { rows: [initial] } = await adminDatabase.query(
+      'SELECT password_hash FROM administrators WHERE email = $1',
+      [firstCredentials.email],
+    );
+
+    await provisionAdmin(adminDatabase, { ...firstCredentials, password: 'different-deployment-password' });
+    const { rows: [afterRestart] } = await adminDatabase.query(
+      'SELECT password_hash FROM administrators WHERE email = $1',
+      [firstCredentials.email],
+    );
+    assert.equal(afterRestart.password_hash, initial.password_hash);
+
+    await provisionAdmin(adminDatabase, { ...firstCredentials, password: 'rotated-deployment-password' }, {
+      updateExisting: true,
+    });
+    const { rows: [afterRotation] } = await adminDatabase.query(
+      'SELECT password_hash FROM administrators WHERE email = $1',
+      [firstCredentials.email],
+    );
+    assert.notEqual(afterRotation.password_hash, initial.password_hash);
+  } finally {
+    await adminDatabase.end();
+  }
 });
 
 test('candidate accounts are capped at four active users and sign-out frees a slot', async () => {
-  const limitedDatabase = new Database(':memory:');
-  initializeDatabase(limitedDatabase);
+  const limitedMemory = newDb();
+  const LimitedPool = limitedMemory.adapters.createPg().Pool;
+  const limitedDatabase = new LimitedPool();
+  await initializeDatabase(limitedDatabase);
   const limitedApp = express();
   limitedApp.use(express.json());
   limitedApp.use('/api/auth', createAuthRouter(limitedDatabase, { userCapacity: 4 }));
+  limitedApp.use('/api/admin', createAdminRouter(limitedDatabase, { userCapacity: 4 }));
+  const { hash: adminHash, salt: adminSalt } = await createPasswordHash('limited-admin-password-123');
+  await limitedDatabase.query(`
+    INSERT INTO administrators (name, email, password_hash, password_salt, created_at)
+    VALUES ($1, $2, $3, $4, $5)
+  `, ['Limited Admin', 'limited-admin@example.com', adminHash, adminSalt, Date.now()]);
   const limitedServer = limitedApp.listen(0, '127.0.0.1');
   await new Promise(resolve => limitedServer.once('listening', resolve));
   const limitedUrl = `http://127.0.0.1:${limitedServer.address().port}`;
@@ -261,7 +278,35 @@ test('candidate accounts are capped at four active users and sign-out frees a sl
     });
     assert.equal(blocked.status, 429);
     assert.equal((await blocked.json()).code, 'user_capacity_reached');
-    assert.equal(limitedDatabase.prepare('SELECT COUNT(*) AS count FROM users').get().count, 4);
+    const { rows: [count] } = await limitedDatabase.query('SELECT COUNT(*)::INTEGER AS count FROM sessions');
+    assert.equal(Number(count.count), 4);
+
+    const pendingRecruiter = await fetch(`${limitedUrl}/api/auth/register`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        name: 'Pending Recruiter',
+        email: 'pending-capacity-recruiter@example.com',
+        password: 'capacity-recruiter-password',
+        role: 'recruiter',
+      }),
+    });
+    assert.equal(pendingRecruiter.status, 201);
+    const recruiterId = (await pendingRecruiter.json()).user.id;
+    const adminLogin = await postTo(limitedUrl, '/api/auth/login', {
+      email: 'limited-admin@example.com',
+      password: 'limited-admin-password-123',
+    });
+    const approvalWhenFull = await fetch(`${limitedUrl}/api/admin/recruiters/${recruiterId}`, {
+      method: 'PATCH',
+      headers: {
+        Cookie: sessionCookie(adminLogin),
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ status: 'approved' }),
+    });
+    assert.equal(approvalWhenFull.status, 429);
+    assert.equal((await approvalWhenFull.json()).code, 'user_capacity_reached');
 
     await fetch(`${limitedUrl}/api/auth/logout`, {
       method: 'POST',
@@ -271,21 +316,18 @@ test('candidate accounts are capped at four active users and sign-out frees a sl
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        name: 'Candidate Five',
-        email: 'capacity-5@example.com',
+        name: 'Candidate Replacement',
+        email: 'capacity-replacement@example.com',
         password: 'capacity-test-password-5',
         role: 'candidate',
       }),
     });
     assert.equal(replacement.status, 201);
-    const replacementCookie = sessionCookie(replacement);
 
-    limitedDatabase.prepare(`
-      UPDATE sessions
-      SET last_seen_at = ?
-      WHERE user_id = (SELECT id FROM users WHERE email = ?)
-    `).run(Date.now() - 6 * 60 * 1000, 'capacity-2@example.com');
-
+    await limitedDatabase.query(`
+      UPDATE sessions SET last_seen_at = $1
+      WHERE user_id = (SELECT id FROM users WHERE email = $2)
+    `, [Date.now() - 6 * 60 * 1000, 'capacity-2@example.com']);
     const afterIdle = await fetch(`${limitedUrl}/api/auth/register`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -301,13 +343,16 @@ test('candidate accounts are capped at four active users and sign-out frees a sl
       headers: { Cookie: cookies[1] },
     });
     assert.equal(expiredSession.status, 401);
-
-    await fetch(`${limitedUrl}/api/auth/logout`, {
-      method: 'POST',
-      headers: { Cookie: replacementCookie },
-    });
   } finally {
     await new Promise((resolve, reject) => limitedServer.close(error => error ? reject(error) : resolve()));
-    limitedDatabase.close();
+    await limitedDatabase.end();
+  }
+
+  async function postTo(url, path, body) {
+    return fetch(`${url}${path}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+    });
   }
 });

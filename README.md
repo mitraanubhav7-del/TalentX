@@ -59,7 +59,7 @@ PEOPLE ↔ SKILLS ↔ JOBS ↔ LEARNING ↔ NETWORK ↔ INDUSTRY DEMAND
 ## 🛠️ Technology Stack & Aesthetics
 
 - **Frontend Core**: React 19, Modern JavaScript (ES Modules), Vite 5.
-- **Backend**: Node.js, Express, SQLite (`better-sqlite3`), scrypt-hashed passwords, and revocable HttpOnly sessions.
+- **Backend**: Node.js, Express, PostgreSQL, scrypt-hashed passwords, and revocable HttpOnly sessions.
 - **Styling Architecture**: Vanilla CSS tokens, glassmorphism (`backdrop-filter: blur(16px)`), light surfaces with green brand accents.
 - **Typography**: Google Fonts (*Outfit*, *Plus Jakarta Sans*, and *JetBrains Mono*).
 - **Icons & Graphics**: Lucide React, Custom SVG icons, HTML5 Canvas graph visualizer.
@@ -73,34 +73,50 @@ PEOPLE ↔ SKILLS ↔ JOBS ↔ LEARNING ↔ NETWORK ↔ INDUSTRY DEMAND
 - Node.js v20+ (tested on v24)
 - npm v9+
 
-### Run for up to four local-network users
+### Run locally for up to four users
+
+Create a PostgreSQL database (local or Supabase), copy `.env.example` to `.env`, and set `DATABASE_URL` to its connection string. Set a private administrator name/email and a unique password of at least 14 characters.
+
+The app now uses PostgreSQL for local and hosted use; the previous SQLite account database is not automatically imported. Existing SQLite accounts and sessions will not appear in the new database.
+
 ```bash
 # Navigate to project directory
 cd TalentX
 
-# Start the app and authentication API, reachable from devices on your Wi-Fi/LAN
+# Start the app and authentication API
 npm run dev
 ```
 
-On the host computer, visit **`http://localhost:5173/`**. To let up to four people on the same trusted Wi-Fi/LAN use it, find the host computer's IPv4 address with `ipconfig` and have them visit `http://<host-ipv4>:5173/` (for example `http://192.168.1.25:5173/`). Allow Node.js on **Private networks only** if Windows Firewall prompts. Keep the host computer running; its Vite dev server proxies API requests to the local SQLite-backed server.
+Visit **`http://localhost:5173/`**. The Vite development server proxies API requests to the PostgreSQL-backed Express server.
 
-The server permits four distinct, active candidate/recruiter accounts at once by default. Admin accounts do not use a user slot. Accounts release their slot when they sign out or when their browser has been inactive for five minutes; an open app tab refreshes its activity every minute. Set `USER_CAPACITY` in `.env` if you want to change this local limit. This is a trusted-LAN development setup, not an internet deployment; don't forward ports or expose Vite to an untrusted/public network.
+The server permits four distinct, active candidate/recruiter accounts at once by default. Admin accounts do not use a user slot. Accounts release their slot when they sign out or when their browser has been inactive for five minutes; an open app tab refreshes its activity every minute. Set `USER_CAPACITY` in `.env` if you want to change this limit.
 
 ### Authentication and role access
 
-The app starts at sign-in/create-account. Candidate accounts enter the talent workspace. Recruiter accounts are created as pending and can enter the hiring workspace only after an administrator approves them. The development command starts the Vite client and the Express API together; SQLite stores accounts and sessions in the ignored `data/` folder.
+The app starts at sign-in/create-account. Candidate accounts enter the talent workspace. Recruiter accounts are created as pending and can enter the hiring workspace only after an administrator approves them. User accounts, admin accounts, and sessions are stored in PostgreSQL.
 
-The recruiter can then use **Check approval status** or sign in again. Set `TALENTX_DB_PATH` to choose a persistent database file. The API uses port `3001` by default; `PORT` changes it for production. For production, build the frontend with `npm run build`, set `NODE_ENV=production`, and run `npm start` behind HTTPS with persistent storage. Production cookies are Secure and HttpOnly.
+The recruiter can then use **Check approval status** or sign in again. The API uses port `3001` by default; `PORT` changes it for production. In production, `npm start` serves the built frontend and API over the host's HTTPS endpoint. Production cookies are Secure and HttpOnly.
 
 ### Admin recruiter approvals
 
-Create a private `.env` file from `.env.example`, and set `ADMIN_NAME`, `ADMIN_EMAIL`, and a unique `ADMIN_PASSWORD` with at least 14 characters. Keep `.env` private; it is ignored by Git. Create the admin account once:
+Create a private `.env` file from `.env.example`, and set `ADMIN_NAME`, `ADMIN_EMAIL`, and a unique `ADMIN_PASSWORD` with at least 14 characters. Keep `.env` private; it is ignored by Git. When all three variables are set, startup creates the administrator if it is missing. To deliberately rotate its password, run:
 
 ```bash
 npm run auth:admin:create
 ```
 
 On the login tab, sign in using that admin email and password (admin is not a public signup role). The admin dashboard lists pending recruiter requests and lets the admin approve or reject them. Recruiters sign in with their own credentials after approval to access the Hiring portal. Never use example credentials in production.
+
+### Free deployment (Render + Supabase)
+
+The repository includes a Render Blueprint in `render.yaml`. It configures the free Render web service, build/start commands, health check, four-user limit, and prompts for secrets without storing them in Git.
+
+1. Create a Supabase project and open **Connect**. Copy its PostgreSQL **Session pooler** connection string. Keep the password private.
+2. In Render, create a **Blueprint** from this GitHub repository. In the setup form, provide `DATABASE_URL`, `ADMIN_NAME`, `ADMIN_EMAIL`, and a unique `ADMIN_PASSWORD` (at least 14 characters). Enter these directly into Render's private environment-variable fields, never into source files or chat.
+3. Confirm the free web service, then deploy. Render runs the production build and the service health check at `/api/health`. The first successful server start initializes the tables and provisions the admin from those environment variables.
+4. Open the Render URL, sign in as the administrator, and review recruiter requests. Four active candidate/recruiter accounts are allowed by default; set `USER_CAPACITY` in Render if needed.
+
+The free Render service may sleep when idle, and its local filesystem is ephemeral; PostgreSQL data remains in Supabase. Supabase's free database has size and inactivity limits and may pause after prolonged inactivity. This is suitable for a trial/demo, not a reliability or backup guarantee. Configure backups and a paid database/service before relying on it for important or production data. Existing local SQLite accounts are not copied; users must register again on the deployed site.
 
 The login screen calls these same-origin JSON endpoints, so a separately designed login page can replace the current screen without changing the account system:
 
@@ -115,7 +131,7 @@ The login screen calls these same-origin JSON endpoints, so a separately designe
 
 Recruiter approval is restricted to authenticated administrator sessions. Password reset/email verification are not included yet.
 
-The candidate and recruiter experiences currently use the existing demo portal data; user accounts and sessions are stored in SQLite, but profile fields and hiring data are not yet persisted there. The React UI hides the other role's workspace, and `authenticate`/`requireRole` middleware in `server/auth.js` is available to enforce roles on future API endpoints.
+The candidate and recruiter experiences currently use the existing demo portal data; user accounts and sessions are stored in PostgreSQL, but profile fields and hiring data are not yet persisted there. The React UI hides the other role's workspace, and `authenticate`/`requireRole` middleware in `server/auth.js` is available to enforce roles on future API endpoints.
 
 ### Build Production Bundle
 ```bash

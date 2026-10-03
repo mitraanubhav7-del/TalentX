@@ -9,8 +9,12 @@ const projectRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '
 
 export function createApp(database) {
   const userCapacity = Number(process.env.USER_CAPACITY || 4);
+  if (!Number.isSafeInteger(userCapacity) || userCapacity < 1) {
+    throw new Error('USER_CAPACITY must be a positive whole number.');
+  }
   const app = express();
   app.disable('x-powered-by');
+  if (process.env.NODE_ENV === 'production') app.set('trust proxy', 1);
   app.use(helmet({
     contentSecurityPolicy: {
       directives: {
