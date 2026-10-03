@@ -12,7 +12,7 @@
     "preview": "vite preview",
     "start": "node server/index.js",
     "auth:admin:create": "node server/create-admin.js",
-    "test:auth": "node --test server/auth.test.js"
+    "test:auth": "node --test server/auth.test.js server/email.test.js"
   },
   "dependencies": {
     "canvas-confetti": "^1.9.4",
@@ -20,7 +20,6 @@
     "express": "^5.2.1",
     "helmet": "^8.3.0",
     "lucide-react": "^1.50.0",
-    "nodemailer": "^10.0.13",
     "pg": "^8.23.1",
     "react": "^19.2.8",
     "react-dom": "^19.2.8"

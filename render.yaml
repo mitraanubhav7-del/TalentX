@@ -18,9 +18,9 @@ services:
         sync: false
       - key: ADMIN_PASSWORD
         sync: false
-      - key: GMAIL_USER
+      - key: BREVO_API_KEY
         sync: false
-      - key: GMAIL_APP_PASSWORD
+      - key: BREVO_SENDER_EMAIL
         sync: false
       - key: EMAIL_OTP_SECRET
         generateValue: true

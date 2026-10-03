@@ -75,7 +75,7 @@ PEOPLE ↔ SKILLS ↔ JOBS ↔ LEARNING ↔ NETWORK ↔ INDUSTRY DEMAND
 
 ### Run locally for up to four users
 
-Create a PostgreSQL database (local or Supabase), copy `.env.example` to `.env`, and set `DATABASE_URL` to its connection string. For OTP mail, enable 2-Step Verification on the Gmail sender account and create a Google App Password. Set `GMAIL_USER`, `GMAIL_APP_PASSWORD`, and a random `EMAIL_OTP_SECRET` (at least 32 characters). Set a private administrator name/email and a unique password of at least 14 characters.
+Create a PostgreSQL database (local or Supabase), copy `.env.example` to `.env`, and set `DATABASE_URL` to its connection string. For OTP email, create a Brevo account, generate an API key, and verify a sender email address in Brevo. Set `BREVO_API_KEY`, `BREVO_SENDER_EMAIL`, and a random `EMAIL_OTP_SECRET` (at least 32 characters). Set a private administrator name/email and a unique password of at least 14 characters.
 
 The app now uses PostgreSQL for local and hosted use; the previous SQLite account database is not automatically imported. Existing SQLite accounts and sessions will not appear in the new database.
 
@@ -93,7 +93,7 @@ The server permits four distinct, active candidate/recruiter accounts at once by
 
 ### Authentication and role access
 
-The app starts at sign-in/create-account. New accounts must verify their email with a six-digit code before they are created. Forgot-password requests send a time-limited code to the account email; a successful reset revokes its active sessions. Codes expire after 10 minutes, allow at most five attempts, and can be re-sent once per minute. Emails are sent through Gmail SMTP using an App Password, not your normal Google password.
+The app starts at sign-in/create-account. New accounts must verify their email with a six-digit code before they are created. Forgot-password requests send a time-limited code to the account email; a successful reset revokes its active sessions. Codes expire after 10 minutes, allow at most five attempts, and can be re-sent once per minute. Emails are sent through the Brevo transactional email API over HTTPS.
 
 Candidate accounts enter the talent workspace after verification. Recruiter accounts are created as pending and can enter the hiring workspace only after an administrator approves them. User accounts, admin accounts, verification challenges, and sessions are stored in PostgreSQL.
 
@@ -114,9 +114,10 @@ On the login tab, sign in using that admin email and password (admin is not a pu
 The repository includes a Render Blueprint in `render.yaml`. It configures the free Render web service, build/start commands, health check, four-user limit, and prompts for secrets without storing them in Git.
 
 1. Create a Supabase project and open **Connect**. Copy its PostgreSQL **Session pooler** connection string. Keep the password private.
-2. In Render, create a **Blueprint** from this GitHub repository. In the setup form, provide `DATABASE_URL`, `ADMIN_NAME`, `ADMIN_EMAIL`, a unique `ADMIN_PASSWORD` (at least 14 characters), `GMAIL_USER`, and `GMAIL_APP_PASSWORD`. Set `EMAIL_OTP_SECRET` to a random secret of at least 32 characters (Render can generate one). Enter these directly into Render's private environment-variable fields, never into source files or chat.
-3. Confirm the free web service, then deploy. Render runs the production build and the service health check at `/api/health`. The first successful server start initializes the tables and provisions the admin from those environment variables.
-4. Open the Render URL, sign in as the administrator, and review recruiter requests. Four active candidate/recruiter accounts are allowed by default; set `USER_CAPACITY` in Render if needed.
+2. In Brevo, create an API key and verify the sender email address you want TalentX to send from.
+3. In Render, create a **Blueprint** from this GitHub repository. In the setup form, provide `DATABASE_URL`, `ADMIN_NAME`, `ADMIN_EMAIL`, a unique `ADMIN_PASSWORD` (at least 14 characters), `BREVO_API_KEY`, and `BREVO_SENDER_EMAIL`. Set `EMAIL_OTP_SECRET` to a random secret of at least 32 characters (Render can generate one). Enter secrets directly into Render's private environment-variable fields, never into source files or chat.
+4. Confirm the free web service, then deploy. Render runs the production build and the service health check at `/api/health`. The first successful server start initializes the tables and provisions the admin from those environment variables.
+5. Open the Render URL, sign in as the administrator, and review recruiter requests. Four active candidate/recruiter accounts are allowed by default; set `USER_CAPACITY` in Render if needed.
 
 The free Render service may sleep when idle, and its local filesystem is ephemeral; PostgreSQL data remains in Supabase. Supabase's free database has size and inactivity limits and may pause after prolonged inactivity. This is suitable for a trial/demo, not a reliability or backup guarantee. Configure backups and a paid database/service before relying on it for important or production data. Existing local SQLite accounts are not copied; users must register again on the deployed site.
 
@@ -134,7 +135,7 @@ The login screen calls these same-origin JSON endpoints, so a separately designe
 | `GET` | `/api/admin/recruiters?status=pending` | Admin-only recruiter request list; status can be pending, approved, rejected, or all |
 | `PATCH` | `/api/admin/recruiters/:id` | Admin-only decision; JSON body `{ "status": "approved" }` or `{ "status": "rejected" }` |
 
-Recruiter approval is restricted to authenticated administrator sessions. Email verification and password reset rely on the configured Gmail SMTP sender; without working SMTP credentials, codes cannot be delivered.
+Recruiter approval is restricted to authenticated administrator sessions. Email verification and password reset rely on a configured Brevo API key and verified sender; without them, codes cannot be delivered.
 
 The candidate and recruiter experiences currently use the existing demo portal data; user accounts and sessions are stored in PostgreSQL, but profile fields and hiring data are not yet persisted there. The React UI hides the other role's workspace, and `authenticate`/`requireRole` middleware in `server/auth.js` is available to enforce roles on future API endpoints.
 

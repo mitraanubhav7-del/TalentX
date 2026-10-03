@@ -328,7 +328,7 @@ export function createAuthRouter(database, {
   const router = Router();
   const authRateLimit = createRateLimiter({ limit: 30, windowMs: 15 * 60 * 1000 });
   const otpDeliveryAvailable = typeof otpSecret === 'string' && otpSecret.length >= 32 &&
-    (sendOtp !== sendVerificationCode || (process.env.GMAIL_USER && process.env.GMAIL_APP_PASSWORD));
+    (sendOtp !== sendVerificationCode || (process.env.BREVO_API_KEY && process.env.BREVO_SENDER_EMAIL));
   if (!Number.isSafeInteger(userCapacity) || userCapacity < 1) {
     throw new Error('USER_CAPACITY must be a positive whole number.');
   }
