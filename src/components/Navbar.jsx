@@ -15,6 +15,7 @@ import {
   Cpu,
   Share2,
   Code2,
+  MoreHorizontal,
 } from 'lucide-react';
 
 export function Navbar({
@@ -31,6 +32,7 @@ export function Navbar({
   openResumeParser
 }) {
   const [query, setQuery] = useState('');
+  const [isMoreMenuOpen, setIsMoreMenuOpen] = useState(false);
 
   const goHome = () => {
     if (role === 'recruiter') {
@@ -93,7 +95,7 @@ export function Navbar({
 
   return (
     <header className="header-container">
-      <div style={{
+      <div className="header-main-row" style={{
         maxWidth: '1128px',
         margin: '0 auto',
         padding: '10px 12px 8px',
@@ -102,7 +104,7 @@ export function Navbar({
         gap: '12px',
         minHeight: '72px'
       }}>
-        <button onClick={goHome} style={{ display: 'flex', alignItems: 'center', gap: '8px', background: 'none', flexShrink: 0 }}>
+        <button className="header-brand" onClick={goHome} style={{ display: 'flex', alignItems: 'center', gap: '8px', background: 'none', flexShrink: 0 }}>
           <div style={{
             width: '34px',
             height: '34px',
@@ -141,7 +143,7 @@ export function Navbar({
           </form>
         )}
 
-        <nav style={{ display: 'flex', alignItems: 'stretch', marginLeft: 'auto', height: '100%' }}>
+        <nav className="primary-nav" style={{ display: 'flex', alignItems: 'stretch', marginLeft: 'auto', height: '100%' }}>
           {visibleTopNav.map(item => {
             const Icon = item.icon;
             return (
@@ -218,8 +220,8 @@ export function Navbar({
       </div>
 
       {activeView === 'talent' && (
-        <div style={{ borderTop: '1px solid var(--border-subtle)', background: '#FFFFFF' }}>
-          <div style={{
+        <div className="subnav-wrapper" style={{ borderTop: '1px solid var(--border-subtle)', background: '#FFFFFF' }}>
+          <div className="subnav-scroll" style={{
             maxWidth: '1128px',
             margin: '0 auto',
             padding: '0 12px',
@@ -243,7 +245,7 @@ export function Navbar({
               );
             })}
 
-            <div style={{ marginLeft: 'auto', display: 'flex', gap: '8px', padding: '8px 0' }}>
+            <div className="subnav-utility" style={{ marginLeft: 'auto', display: 'flex', gap: '8px', padding: '8px 0' }}>
               <button onClick={openResumeParser} className="btn-secondary" style={{ padding: '6px 12px', fontSize: '0.78rem' }}>
                 <Sparkles size={14} /> Upload resume
               </button>
@@ -251,6 +253,93 @@ export function Navbar({
           </div>
         </div>
       )}
+
+      {isMoreMenuOpen && (
+        <>
+          <button
+            className="mobile-menu-backdrop"
+            aria-label="Close more menu"
+            onClick={() => setIsMoreMenuOpen(false)}
+          />
+          <div className="mobile-more-menu" role="group" aria-label="More navigation">
+            <button onClick={() => { setActiveView('skillgraph'); setIsMoreMenuOpen(false); }}>
+              <TrendingUp size={18} /> Insights
+            </button>
+            <button onClick={() => { setActiveView('presentation'); setIsMoreMenuOpen(false); }}>
+              <Presentation size={18} /> Pitch deck
+            </button>
+            <button onClick={() => { setShowNotifications(true); setIsMoreMenuOpen(false); }}>
+              <Bell size={18} /> Alerts
+              {unreadNotifications > 0 && <span className="mobile-alert-count">{unreadNotifications}</span>}
+            </button>
+            <button onClick={() => { openResumeParser(); setIsMoreMenuOpen(false); }}>
+              <Sparkles size={18} /> Upload resume
+            </button>
+            <button onClick={onLogout}>
+              <LogOut size={18} /> Sign out
+            </button>
+          </div>
+        </>
+      )}
+
+      <nav className="mobile-bottom-nav" aria-label="Mobile navigation">
+        {role === 'candidate' ? (
+          <>
+            <button
+              className={`mobile-tab${activeView === 'talent' && talentTab === 'career_ai' ? ' active' : ''}`}
+              onClick={() => { setActiveView('talent'); setTalentTab('career_ai'); }}
+              aria-label="Home"
+            >
+              <Home size={21} />
+              <span>Home</span>
+            </button>
+            <button
+              className={`mobile-tab${activeView === 'talent' && talentTab === 'networking' ? ' active' : ''}`}
+              onClick={() => { setActiveView('talent'); setTalentTab('networking'); }}
+              aria-label="Feed"
+            >
+              <Users size={21} />
+              <span>Feed</span>
+            </button>
+            <button
+              className={`mobile-tab${activeView === 'talent' && talentTab === 'opportunities' ? ' active' : ''}`}
+              onClick={() => { setActiveView('talent'); setTalentTab('opportunities'); }}
+              aria-label="Jobs"
+            >
+              <Briefcase size={21} />
+              <span>Jobs</span>
+            </button>
+            <button
+              className={`mobile-tab${activeView === 'talent' && talentTab === 'profile' ? ' active' : ''}`}
+              onClick={goProfile}
+              aria-label="Profile"
+            >
+              <img src={user.avatar} alt="" />
+              <span>Profile</span>
+            </button>
+            <button
+              className={`mobile-tab${isMoreMenuOpen ? ' active' : ''}`}
+              onClick={() => setIsMoreMenuOpen(open => !open)}
+              aria-expanded={isMoreMenuOpen}
+              aria-label="More"
+            >
+              <MoreHorizontal size={21} />
+              <span>More</span>
+            </button>
+          </>
+        ) : (
+          <>
+            <button className={`mobile-tab${activeView === 'employer' ? ' active' : ''}`} onClick={() => setActiveView('employer')}>
+              <CheckCircle2 size={21} />
+              <span>Hiring</span>
+            </button>
+            <button className="mobile-tab" onClick={onLogout}>
+              <LogOut size={21} />
+              <span>Sign out</span>
+            </button>
+          </>
+        )}
+      </nav>
     </header>
   );
 }
