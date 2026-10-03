@@ -18,14 +18,13 @@ import {
   Sparkles, 
   X, 
   ArrowRight, 
-  ShieldCheck, 
   Presentation 
 } from 'lucide-react';
 
 export function App() {
   const [user, setUser] = useState(INITIAL_USER);
   const [activeView, setActiveView] = useState('talent'); // 'talent' | 'employer' | 'university' | 'skillgraph' | 'presentation'
-  const [talentTab, setTalentTab] = useState('profile');
+  const [talentTab, setTalentTab] = useState('networking');
 
   // Modals
   const [isResumeParserOpen, setIsResumeParserOpen] = useState(false);
@@ -140,11 +139,11 @@ export function App() {
   const handleFeatureNavigate = (action) => {
     if (action === 'openResumeParser') {
       setActiveView('talent');
-      setTalentTab('profile');
+      setTalentTab('networking');
       setIsResumeParserOpen(true);
     } else if (action === 'openSkillVerification') {
       setActiveView('talent');
-      setTalentTab('verification');
+      setTalentTab('profile');
       handleOpenVerification("Machine Learning");
     } else if (action === 'openCareerIntelligence') {
       setActiveView('talent');
@@ -179,12 +178,12 @@ export function App() {
       setActiveView('skillgraph');
     } else {
       setActiveView('talent');
-      setTalentTab('profile');
+      setTalentTab('networking');
     }
   };
 
   return (
-    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
+    <div className="app-shell">
       {/* Top Main Navigation */}
       <Navbar
         activeView={activeView}
@@ -195,17 +194,10 @@ export function App() {
         unreadNotifications={unreadCount}
         setShowNotifications={setShowNotifications}
         openResumeParser={() => setIsResumeParserOpen(true)}
-        openVerificationModal={() => handleOpenVerification("Machine Learning")}
       />
 
       {/* Main Page Layout Container */}
-      <main style={{
-        maxWidth: '1440px',
-        margin: '0 auto',
-        width: '100%',
-        padding: '24px 24px 60px',
-        flex: 1
-      }}>
+      <main className="app-main">
         {/* VIEW 1: TALENT PORTAL */}
         {activeView === 'talent' && (
           <div>
@@ -216,41 +208,6 @@ export function App() {
                 openVerificationModal={handleOpenVerification}
                 onNavigateToTab={setTalentTab}
               />
-            )}
-
-            {talentTab === 'verification' && (
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-                <div className="glass-panel" style={{ padding: '24px', textAlign: 'center' }}>
-                  <ShieldCheck size={48} color="#10B981" style={{ margin: '0 auto 12px' }} />
-                  <h2 style={{ fontSize: '1.6rem', color: '#fff', marginBottom: '6px' }}>
-                    Skill Verification Testing Center (Slide 8)
-                  </h2>
-                  <p style={{ fontSize: '0.88rem', color: 'var(--text-secondary)', maxWidth: '580px', margin: '0 auto 20px' }}>
-                    "Don't Just Claim a Skill. Prove It." — Select an unverified skill below to take the timed scenario challenge and unlock your verified badge.
-                  </p>
-
-                  <div style={{ display: 'flex', justifyContent: 'center', gap: '12px', flexWrap: 'wrap' }}>
-                    {['Machine Learning', 'Python', 'SQL'].map(sk => (
-                      <button
-                        key={sk}
-                        onClick={() => handleOpenVerification(sk)}
-                        className="btn-verified"
-                        style={{ padding: '10px 22px', fontSize: '0.9rem' }}
-                      >
-                        Launch {sk} Verification Test
-                      </button>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Show profile skills table */}
-                <ProfileView
-                  user={user}
-                  openResumeParser={() => setIsResumeParserOpen(true)}
-                  openVerificationModal={handleOpenVerification}
-                  onNavigateToTab={setTalentTab}
-                />
-              </div>
             )}
 
             {(talentTab === 'career_ai' || talentTab === 'roadmap' || talentTab === 'simulator') && (
@@ -320,23 +277,23 @@ export function App() {
             onClick={(e) => e.stopPropagation()}
             style={{
               position: 'fixed',
-              top: '70px',
-              right: '24px',
+              top: '60px',
+              right: '16px',
               width: '380px',
               maxHeight: '80vh',
               overflowY: 'auto',
-              padding: '20px',
-              background: 'var(--bg-glass-heavy)',
-              border: '1px solid rgba(99, 102, 241, 0.4)',
-              borderRadius: 'var(--radius-lg)',
+              padding: '16px',
+              background: '#FFFFFF',
+              border: '1px solid var(--border-subtle)',
+              borderRadius: '12px',
               boxShadow: 'var(--shadow-lg)',
               zIndex: 1000
             }}
           >
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '14px' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <Bell size={18} color="#818CF8" />
-                <h3 style={{ fontSize: '1rem', color: '#fff' }}>Notifications</h3>
+                <Bell size={18} color="#0A66C2" />
+                <h3 style={{ fontSize: '1rem' }}>Notifications</h3>
               </div>
               <button
                 onClick={() => setShowNotifications(false)}
@@ -351,13 +308,13 @@ export function App() {
                 <div
                   key={n.id}
                   style={{
-                    background: n.read ? 'rgba(255, 255, 255, 0.02)' : 'rgba(99, 102, 241, 0.08)',
+                    background: n.read ? 'var(--surface-tint)' : '#E8F3FF',
                     border: '1px solid var(--border-subtle)',
                     borderRadius: 'var(--radius-md)',
                     padding: '12px'
                   }}
                 >
-                  <div style={{ fontWeight: 600, color: '#fff', fontSize: '0.85rem', marginBottom: '4px' }}>
+                  <div style={{ fontWeight: 650, fontSize: '0.85rem', marginBottom: '4px' }}>
                     {n.title}
                   </div>
                   <div style={{ fontSize: '0.78rem', color: 'var(--text-secondary)', lineHeight: 1.4, marginBottom: '6px' }}>
@@ -374,28 +331,25 @@ export function App() {
       {/* Modern Footer with Bharat 2.0 attribution */}
       <footer style={{
         borderTop: '1px solid var(--border-subtle)',
-        background: 'rgba(7, 10, 18, 0.95)',
-        padding: '20px 24px',
+        background: '#FFFFFF',
+        padding: '18px 24px',
         textAlign: 'center',
-        fontSize: '0.82rem',
+        fontSize: '0.8rem',
         color: 'var(--text-muted)'
       }}>
-        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '16px', flexWrap: 'wrap', marginBottom: '8px' }}>
-          <strong style={{ color: '#fff' }}>TalentX</strong>
+        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '14px', flexWrap: 'wrap' }}>
+          <strong style={{ color: 'var(--primary)' }}>TalentX</strong>
           <span>•</span>
-          <span>AI-Powered Talent Intelligence & Professional Network</span>
+          <span>AI-powered talent intelligence</span>
           <span>•</span>
-          <span style={{ color: '#38BDF8' }}>Build for Bharat 2.0</span>
+          <span>Build for Bharat 2.0</span>
           <span>•</span>
-          <button 
+          <button
             onClick={() => setActiveView('presentation')}
-            style={{ background: 'none', border: 'none', color: '#818CF8', fontWeight: 600, textDecoration: 'underline' }}
+            style={{ background: 'none', border: 'none', color: 'var(--primary)', fontWeight: 650 }}
           >
-            30-Slide Pitch Deck Presentation
+            Pitch deck
           </button>
-        </div>
-        <div>
-          Tagline: <span style={{ color: '#34D399' }}>Learn → Build → Verify → Connect → Discover → Get Hired → Grow</span>
         </div>
       </footer>
     </div>

@@ -19,16 +19,16 @@ export function SkillGraphView({ onNavigateToVerify }) {
 
   // Graph Data Nodes
   const nodes = [
-    { id: 'role_ds', label: 'Data Scientist', type: 'role', x: 260, y: 180, color: '#818CF8' },
-    { id: 'role_ml', label: 'ML Engineer', type: 'role', x: 380, y: 320, color: '#818CF8' },
-    { id: 'role_da', label: 'Data Analyst', type: 'role', x: 140, y: 320, color: '#818CF8' },
+    { id: 'role_ds', label: 'Data Scientist', type: 'role', x: 260, y: 180, color: 'var(--primary)' },
+    { id: 'role_ml', label: 'ML Engineer', type: 'role', x: 380, y: 320, color: 'var(--primary)' },
+    { id: 'role_da', label: 'Data Analyst', type: 'role', x: 140, y: 320, color: 'var(--primary)' },
 
-    { id: 'skill_py', label: 'Python', type: 'skill', x: 260, y: 60, color: '#06B6D4' },
-    { id: 'skill_sql', label: 'SQL', type: 'skill', x: 120, y: 160, color: '#06B6D4' },
-    { id: 'skill_ml', label: 'Machine Learning', type: 'skill', x: 420, y: 160, color: '#06B6D4' },
-    { id: 'skill_cloud', label: 'Cloud (AWS)', type: 'skill', x: 480, y: 260, color: '#06B6D4' },
-    { id: 'skill_stats', label: 'Statistics', type: 'skill', x: 180, y: 240, color: '#06B6D4' },
-    { id: 'skill_mlops', label: 'MLOps', type: 'skill', x: 500, y: 380, color: '#06B6D4' },
+    { id: 'skill_py', label: 'Python', type: 'skill', x: 260, y: 60, color: 'var(--primary)' },
+    { id: 'skill_sql', label: 'SQL', type: 'skill', x: 120, y: 160, color: 'var(--primary)' },
+    { id: 'skill_ml', label: 'Machine Learning', type: 'skill', x: 420, y: 160, color: 'var(--primary)' },
+    { id: 'skill_cloud', label: 'Cloud (AWS)', type: 'skill', x: 480, y: 260, color: 'var(--primary)' },
+    { id: 'skill_stats', label: 'Statistics', type: 'skill', x: 180, y: 240, color: 'var(--primary)' },
+    { id: 'skill_mlops', label: 'MLOps', type: 'skill', x: 500, y: 380, color: 'var(--primary)' },
 
     { id: 'comp_swiggy', label: 'Swiggy AI', type: 'company', x: 260, y: 440, color: '#F59E0B' },
     { id: 'comp_razorpay', label: 'Razorpay', type: 'company', x: 120, y: 440, color: '#F59E0B' },
@@ -143,20 +143,20 @@ export function SkillGraphView({ onNavigateToVerify }) {
             <Network size={22} color="#06B6D4" />
             <span className="badge-pill badge-indigo">Slide 21 & 22 — Connected Skill Graph</span>
           </div>
-          <h2 style={{ fontSize: '1.5rem', color: '#fff', marginBottom: '6px' }}>
+          <h2 style={{ fontSize: '1.5rem', color: 'var(--text-primary)', marginBottom: '6px' }}>
             The Intelligence Layer Behind TalentX
           </h2>
           <p style={{ fontSize: '0.88rem', color: 'var(--text-secondary)', maxWidth: '700px' }}>
-            TalentX connects: <strong style={{ color: '#38BDF8' }}>People ↔ Skills ↔ Roles ↔ Jobs ↔ Companies ↔ Projects</strong>.
+            TalentX connects: <strong style={{ color: 'var(--primary)' }}>People ↔ Skills ↔ Roles ↔ Jobs ↔ Companies ↔ Projects</strong>.
             Click any node below to inspect relationships and dynamic career paths.
           </p>
         </div>
 
         <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '4px', fontSize: '0.75rem', color: '#818CF8' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '4px', fontSize: '0.75rem', color: 'var(--primary)' }}>
             <span style={{ width: '10px', height: '10px', borderRadius: '50%', background: '#818CF8', display: 'inline-block' }} /> Roles
           </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '4px', fontSize: '0.75rem', color: '#06B6D4' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '4px', fontSize: '0.75rem', color: 'var(--primary)' }}>
             <span style={{ width: '10px', height: '10px', borderRadius: '50%', background: '#06B6D4', display: 'inline-block' }} /> Skills
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '4px', fontSize: '0.75rem', color: '#F59E0B' }}>
@@ -202,14 +202,14 @@ export function SkillGraphView({ onNavigateToVerify }) {
               <div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '10px' }}>
                   <div style={{ width: '14px', height: '14px', borderRadius: '50%', background: selectedNode.color }} />
-                  <h3 style={{ fontSize: '1.3rem', color: '#fff' }}>{selectedNode.label}</h3>
+                  <h3 style={{ fontSize: '1.3rem', color: 'var(--text-primary)' }}>{selectedNode.label}</h3>
                 </div>
                 <span className="badge-pill badge-indigo" style={{ marginBottom: '14px' }}>
                   Type: {selectedNode.type.toUpperCase()}
                 </span>
 
                 <div style={{
-                  background: 'rgba(255, 255, 255, 0.03)',
+                  background: 'var(--surface-tint)',
                   padding: '12px',
                   borderRadius: 'var(--radius-md)',
                   border: '1px solid var(--border-subtle)',
@@ -234,7 +234,7 @@ export function SkillGraphView({ onNavigateToVerify }) {
                       const otherId = l.from === selectedNode.id ? l.to : l.from;
                       const otherNode = nodes.find(n => n.id === otherId);
                       return (
-                        <span key={idx} style={{ fontSize: '0.75rem', padding: '3px 8px', borderRadius: '4px', background: 'rgba(99, 102, 241, 0.15)', color: '#A5B4FC' }}>
+                        <span key={idx} style={{ fontSize: '0.75rem', padding: '3px 8px', borderRadius: '4px', background: 'rgba(99, 102, 241, 0.15)', color: 'var(--primary)' }}>
                           ↔ {otherNode?.label}
                         </span>
                       );
@@ -265,7 +265,7 @@ export function SkillGraphView({ onNavigateToVerify }) {
       <div className="glass-panel" style={{ padding: '24px' }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '20px', flexWrap: 'wrap', gap: '12px' }}>
           <div>
-            <h3 style={{ fontSize: '1.25rem', color: '#fff', marginBottom: '4px' }}>
+            <h3 style={{ fontSize: '1.25rem', color: 'var(--text-primary)', marginBottom: '4px' }}>
               Live Labor Market Intelligence & Trends (Slide 7 & 23)
             </h3>
             <p style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>
@@ -275,7 +275,7 @@ export function SkillGraphView({ onNavigateToVerify }) {
 
           <div style={{
             display: 'flex',
-            background: 'rgba(15, 23, 42, 0.7)',
+            background: 'var(--surface-tint)',
             padding: '4px',
             borderRadius: 'var(--radius-full)',
             border: '1px solid var(--border-subtle)',
@@ -311,13 +311,13 @@ export function SkillGraphView({ onNavigateToVerify }) {
         {activeTrendTab === 'demanded' && (
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '14px' }}>
             {MARKET_SKILL_TRENDS.topDemanded.map((item, idx) => (
-              <div key={idx} style={{ background: 'rgba(255, 255, 255, 0.02)', padding: '16px', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-subtle)' }}>
+              <div key={idx} style={{ background: 'var(--surface-tint)', padding: '16px', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-subtle)' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
-                  <span style={{ fontWeight: 700, color: '#fff', fontSize: '1rem' }}>{item.name}</span>
+                  <span style={{ fontWeight: 700, color: 'var(--text-primary)', fontSize: '1rem' }}>{item.name}</span>
                   <span style={{ color: '#10B981', fontSize: '0.8rem', fontWeight: 700 }}>{item.growthYoY}</span>
                 </div>
                 <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginBottom: '8px' }}>
-                  Demand Index: <strong style={{ color: '#38BDF8' }}>{item.demandIndex}/100</strong>
+                  Demand Index: <strong style={{ color: 'var(--primary)' }}>{item.demandIndex}/100</strong>
                 </div>
                 <div style={{ fontSize: '0.72rem', color: 'var(--text-secondary)' }}>
                   Common in: {item.roles}
@@ -333,13 +333,13 @@ export function SkillGraphView({ onNavigateToVerify }) {
             {MARKET_SKILL_TRENDS.emergingHyperGrowth.map((item, idx) => (
               <div key={idx} style={{ background: 'rgba(99, 102, 241, 0.06)', padding: '16px', borderRadius: 'var(--radius-md)', border: '1px solid rgba(99, 102, 241, 0.3)' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
-                  <span style={{ fontWeight: 700, color: '#fff', fontSize: '0.95rem' }}>{item.name}</span>
+                  <span style={{ fontWeight: 700, color: 'var(--text-primary)', fontSize: '0.95rem' }}>{item.name}</span>
                   <span className="badge-pill badge-indigo">{item.badge}</span>
                 </div>
-                <div style={{ fontSize: '1.2rem', fontWeight: 900, color: '#38BDF8', marginBottom: '4px' }}>
+                <div style={{ fontSize: '1.2rem', fontWeight: 900, color: 'var(--primary)', marginBottom: '4px' }}>
                   {item.growthYoY} YoY
                 </div>
-                <div style={{ fontSize: '0.75rem', color: '#34D399', fontWeight: 600 }}>
+                <div style={{ fontSize: '0.75rem', color: 'var(--accent-emerald)', fontWeight: 600 }}>
                   Salary Impact: {item.salaryImpact}
                 </div>
               </div>
@@ -353,14 +353,14 @@ export function SkillGraphView({ onNavigateToVerify }) {
             {MARKET_SKILL_TRENDS.decliningSkills.map((item, idx) => (
               <div key={idx} style={{ background: 'rgba(244, 63, 94, 0.05)', padding: '16px', borderRadius: 'var(--radius-md)', border: '1px solid rgba(244, 63, 94, 0.25)' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
-                  <span style={{ fontWeight: 700, color: '#fff', fontSize: '0.95rem' }}>{item.name}</span>
+                  <span style={{ fontWeight: 700, color: 'var(--text-primary)', fontSize: '0.95rem' }}>{item.name}</span>
                   <span className="badge-pill badge-danger">{item.status}</span>
                 </div>
                 <div style={{ fontSize: '1.2rem', fontWeight: 900, color: '#FB7185', marginBottom: '4px' }}>
                   {item.growthYoY}
                 </div>
                 <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>
-                  Migrate to: <strong style={{ color: '#fff' }}>{item.replacement}</strong>
+                  Migrate to: <strong style={{ color: 'var(--text-primary)' }}>{item.replacement}</strong>
                 </div>
               </div>
             ))}

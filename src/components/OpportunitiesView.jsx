@@ -48,7 +48,7 @@ export function OpportunitiesView({ user }) {
             <Briefcase size={22} color="#818CF8" />
             <span className="badge-pill badge-indigo">Slide 15 — Smart Opportunities</span>
           </div>
-          <h2 style={{ fontSize: '1.5rem', color: '#fff', marginBottom: '6px' }}>
+          <h2 style={{ fontSize: '1.5rem', color: 'var(--text-primary)', marginBottom: '6px' }}>
             AI-Matched Opportunities: Jobs, Internships & Hackathons
           </h2>
           <p style={{ fontSize: '0.88rem', color: 'var(--text-secondary)', maxWidth: '680px' }}>
@@ -59,7 +59,7 @@ export function OpportunitiesView({ user }) {
         {/* Category Filters */}
         <div style={{
           display: 'flex',
-          background: 'rgba(15, 23, 42, 0.7)',
+          background: 'var(--surface-tint)',
           padding: '4px',
           borderRadius: 'var(--radius-full)',
           border: '1px solid var(--border-subtle)',
@@ -112,7 +112,7 @@ export function OpportunitiesView({ user }) {
                     border: '1px solid rgba(16, 185, 129, 0.4)',
                     padding: '4px 10px',
                     borderRadius: 'var(--radius-full)',
-                    color: '#34D399',
+                    color: 'var(--accent-emerald)',
                     fontSize: '0.8rem',
                     fontWeight: 700
                   }}>
@@ -122,10 +122,10 @@ export function OpportunitiesView({ user }) {
                 </div>
 
                 {/* Title & Company */}
-                <h3 style={{ fontSize: '1.25rem', color: '#fff', marginBottom: '6px' }}>
+                <h3 style={{ fontSize: '1.25rem', color: 'var(--text-primary)', marginBottom: '6px' }}>
                   {opp.title}
                 </h3>
-                <div style={{ fontSize: '0.9rem', color: '#38BDF8', fontWeight: 600, marginBottom: '10px' }}>
+                <div style={{ fontSize: '0.9rem', color: 'var(--primary)', fontWeight: 600, marginBottom: '10px' }}>
                   {opp.company}
                 </div>
 
@@ -187,7 +187,7 @@ export function OpportunitiesView({ user }) {
                   borderRadius: 'var(--radius-sm)',
                   padding: '8px 12px',
                   fontSize: '0.75rem',
-                  color: '#C7D2FE',
+                  color: 'var(--primary)',
                   display: 'flex',
                   alignItems: 'center',
                   gap: '6px'
@@ -245,7 +245,7 @@ export function OpportunitiesView({ user }) {
                 position: 'absolute',
                 top: '20px',
                 right: '20px',
-                background: 'rgba(255, 255, 255, 0.08)',
+                background: 'var(--track)',
                 border: 'none',
                 color: 'var(--text-secondary)',
                 width: '32px',
@@ -264,10 +264,10 @@ export function OpportunitiesView({ user }) {
               <span className="badge-pill badge-indigo">Slide 18 — Explainable AI Matching</span>
             </div>
 
-            <h3 style={{ fontSize: '1.35rem', color: '#fff', marginBottom: '4px' }}>
+            <h3 style={{ fontSize: '1.35rem', color: 'var(--text-primary)', marginBottom: '4px' }}>
               Match Breakdown: {selectedOpp.title}
             </h3>
-            <p style={{ fontSize: '0.85rem', color: '#38BDF8', marginBottom: '20px' }}>
+            <p style={{ fontSize: '0.85rem', color: 'var(--primary)', marginBottom: '20px' }}>
               {selectedOpp.company} • {selectedOpp.salary}
             </p>
 
@@ -284,7 +284,7 @@ export function OpportunitiesView({ user }) {
             }}>
               <div>
                 <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>TRANSPARENT MATCH INDEX</div>
-                <div style={{ fontSize: '1.8rem', fontWeight: 900, color: '#34D399' }}>
+                <div style={{ fontSize: '1.8rem', fontWeight: 900, color: 'var(--accent-emerald)' }}>
                   {selectedOpp.aiMatchScore}% Profile Alignment
                 </div>
               </div>
@@ -295,7 +295,7 @@ export function OpportunitiesView({ user }) {
 
             {/* Matched Skills */}
             <div style={{ marginBottom: '16px' }}>
-              <div style={{ fontSize: '0.82rem', fontWeight: 700, color: '#34D399', marginBottom: '8px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+              <div style={{ fontSize: '0.82rem', fontWeight: 700, color: 'var(--accent-emerald)', marginBottom: '8px', display: 'flex', alignItems: 'center', gap: '6px' }}>
                 <CheckCircle2 size={16} /> CONFIRMED MATCHED SKILLS:
               </div>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
@@ -305,13 +305,13 @@ export function OpportunitiesView({ user }) {
                     borderRadius: 'var(--radius-sm)',
                     background: 'rgba(16, 185, 129, 0.1)',
                     fontSize: '0.82rem',
-                    color: '#fff',
+                    color: 'var(--text-primary)',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'space-between'
                   }}>
                     <span>{m}</span>
-                    <span style={{ color: '#34D399', fontWeight: 700 }}>Pass ✓</span>
+                    <span style={{ color: 'var(--accent-emerald)', fontWeight: 700 }}>Pass ✓</span>
                   </div>
                 ))}
               </div>
@@ -330,7 +330,7 @@ export function OpportunitiesView({ user }) {
                       borderRadius: 'var(--radius-sm)',
                       background: 'rgba(245, 158, 11, 0.08)',
                       fontSize: '0.82rem',
-                      color: '#fff',
+                      color: 'var(--text-primary)',
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'space-between'

@@ -47,7 +47,7 @@ export function UniversityPortal() {
             <GraduationCap size={22} color="#06B6D4" />
             <span className="badge-pill badge-cyan">Slide 20 — University Intelligence</span>
           </div>
-          <h2 style={{ fontSize: '1.5rem', color: '#fff', marginBottom: '6px' }}>
+          <h2 style={{ fontSize: '1.5rem', color: 'var(--text-primary)', marginBottom: '6px' }}>
             Connect Education With Industry: Curriculum Gap Telemetry
           </h2>
           <p style={{ fontSize: '0.88rem', color: 'var(--text-secondary)', maxWidth: '700px' }}>
@@ -81,14 +81,14 @@ export function UniversityPortal() {
 
         <div className="glass-panel" style={{ padding: '20px' }}>
           <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>GRADUATE EMPLOYABILITY INDEX</div>
-          <div style={{ fontSize: '2.2rem', fontWeight: 900, color: '#38BDF8' }}>62 / 100</div>
+          <div style={{ fontSize: '2.2rem', fontWeight: 900, color: 'var(--primary)' }}>62 / 100</div>
           <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', marginTop: '4px' }}>Projected to reach 89 with recommended labs</div>
         </div>
 
         <div className="glass-panel" style={{ padding: '20px' }}>
           <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>TALENTX VERIFIED STUDENTS</div>
-          <div style={{ fontSize: '2.2rem', fontWeight: 900, color: '#34D399' }}>412 Students</div>
-          <div style={{ fontSize: '0.75rem', color: '#34D399', marginTop: '4px' }}>Active in hackathons & internships</div>
+          <div style={{ fontSize: '2.2rem', fontWeight: 900, color: 'var(--accent-emerald)' }}>412 Students</div>
+          <div style={{ fontSize: '0.75rem', color: 'var(--accent-emerald)', marginTop: '4px' }}>Active in hackathons & internships</div>
         </div>
       </div>
 
@@ -96,7 +96,7 @@ export function UniversityPortal() {
       <div className="glass-panel" style={{ padding: '24px' }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '20px', flexWrap: 'wrap', gap: '12px' }}>
           <div>
-            <h3 style={{ fontSize: '1.25rem', color: '#fff', marginBottom: '4px' }}>
+            <h3 style={{ fontSize: '1.25rem', color: 'var(--text-primary)', marginBottom: '4px' }}>
               University Curriculum vs Industry Skill Demand Matrix
             </h3>
             <p style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>
@@ -116,7 +116,7 @@ export function UniversityPortal() {
             <div
               key={idx}
               style={{
-                background: 'rgba(255, 255, 255, 0.02)',
+                background: 'var(--surface-tint)',
                 border: '1px solid var(--border-subtle)',
                 borderRadius: 'var(--radius-md)',
                 padding: '18px',
@@ -127,7 +127,7 @@ export function UniversityPortal() {
               }}
             >
               <div>
-                <div style={{ fontWeight: 700, color: '#fff', fontSize: '0.95rem' }}>{row.subject}</div>
+                <div style={{ fontWeight: 700, color: 'var(--text-primary)', fontSize: '0.95rem' }}>{row.subject}</div>
                 <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginTop: '2px' }}>Department of CS & IT</div>
               </div>
 
@@ -135,9 +135,9 @@ export function UniversityPortal() {
               <div>
                 <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.75rem', marginBottom: '4px' }}>
                   <span style={{ color: 'var(--text-muted)' }}>Curriculum Coverage:</span>
-                  <span style={{ color: '#fff', fontWeight: 600 }}>{row.curriculumCoverage}%</span>
+                  <span style={{ color: 'var(--text-primary)', fontWeight: 600 }}>{row.curriculumCoverage}%</span>
                 </div>
-                <div style={{ height: '6px', background: 'rgba(255, 255, 255, 0.08)', borderRadius: '999px', overflow: 'hidden' }}>
+                <div style={{ height: '6px', background: 'var(--track)', borderRadius: '999px', overflow: 'hidden' }}>
                   <div style={{ width: `${row.curriculumCoverage}%`, height: '100%', background: '#6366F1' }} />
                 </div>
               </div>
@@ -145,9 +145,9 @@ export function UniversityPortal() {
               <div>
                 <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.75rem', marginBottom: '4px' }}>
                   <span style={{ color: 'var(--text-muted)' }}>Industry Demand:</span>
-                  <span style={{ color: '#38BDF8', fontWeight: 600 }}>{row.industryDemand}%</span>
+                  <span style={{ color: 'var(--primary)', fontWeight: 600 }}>{row.industryDemand}%</span>
                 </div>
-                <div style={{ height: '6px', background: 'rgba(255, 255, 255, 0.08)', borderRadius: '999px', overflow: 'hidden' }}>
+                <div style={{ height: '6px', background: 'var(--track)', borderRadius: '999px', overflow: 'hidden' }}>
                   <div style={{ width: `${row.industryDemand}%`, height: '100%', background: '#38BDF8' }} />
                 </div>
               </div>
@@ -162,14 +162,14 @@ export function UniversityPortal() {
               {/* Recommendation row full width */}
               <div style={{
                 gridColumn: '1 / -1',
-                background: 'rgba(255, 255, 255, 0.015)',
+                background: 'var(--surface-tint)',
                 padding: '10px 14px',
                 borderRadius: 'var(--radius-sm)',
                 fontSize: '0.8rem',
                 color: 'var(--text-secondary)',
                 borderLeft: row.status === 'Aligned' ? '3px solid #10B981' : '3px solid #F59E0B'
               }}>
-                <strong style={{ color: '#fff' }}>Recommended Action: </strong>
+                <strong style={{ color: 'var(--text-primary)' }}>Recommended Action: </strong>
                 {row.recommendation}
               </div>
             </div>

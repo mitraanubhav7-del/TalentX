@@ -1,377 +1,231 @@
-import React from 'react';
-import { 
-  Sparkles, 
-  User, 
-  Briefcase, 
-  GraduationCap, 
-  Network, 
-  Presentation, 
-  CheckCircle2, 
-  Bell, 
+import React, { useState } from 'react';
+import {
+  Home,
+  Users,
+  Briefcase,
+  GraduationCap,
+  TrendingUp,
+  Presentation,
+  Bell,
   Search,
-  Layers,
+  CheckCircle2,
+  Sparkles,
   Compass,
-  Code2,
   Cpu,
   Share2,
-  TrendingUp
+  Code2,
 } from 'lucide-react';
 
-export function Navbar({ 
-  activeView, 
-  setActiveView, 
-  talentTab, 
-  setTalentTab, 
-  user, 
-  unreadNotifications, 
+export function Navbar({
+  activeView,
+  setActiveView,
+  talentTab,
+  setTalentTab,
+  user,
+  unreadNotifications,
   setShowNotifications,
-  openResumeParser,
-  openVerificationModal
+  openResumeParser
 }) {
+  const [query, setQuery] = useState('');
+
+  const goHome = () => {
+    setActiveView('talent');
+    setTalentTab('networking');
+  };
+
+  const goProfile = () => {
+    setActiveView('talent');
+    setTalentTab('profile');
+  };
+
+  const topNav = [
+    { id: 'talent', label: 'Home', icon: Home, action: goHome },
+    { id: 'network', label: 'Network', icon: Users, action: () => { setActiveView('talent'); setTalentTab('networking'); }, active: activeView === 'talent' && talentTab === 'networking' },
+    { id: 'jobs', label: 'Jobs', icon: Briefcase, action: () => { setActiveView('talent'); setTalentTab('opportunities'); }, active: activeView === 'talent' && talentTab === 'opportunities' },
+    { id: 'employer', label: 'Hiring', icon: CheckCircle2, action: () => setActiveView('employer'), active: activeView === 'employer' },
+    { id: 'university', label: 'Campus', icon: GraduationCap, action: () => setActiveView('university'), active: activeView === 'university' },
+    { id: 'skillgraph', label: 'Insights', icon: TrendingUp, action: () => setActiveView('skillgraph'), active: activeView === 'skillgraph' },
+  ];
+
+  const talentTabs = [
+    { id: 'career_ai', label: 'Career AI', icon: Compass },
+    { id: 'roadmap', label: 'Roadmap', icon: TrendingUp },
+    { id: 'simulator', label: 'Simulator', icon: Cpu },
+    { id: 'networking', label: 'Feed', icon: Share2 },
+    { id: 'projects', label: 'Projects', icon: Code2 },
+    { id: 'opportunities', label: 'Jobs', icon: Briefcase },
+  ];
+
+  const onSearch = (e) => {
+    e.preventDefault();
+    const q = query.trim().toLowerCase();
+    if (!q) return;
+    if (q.includes('job') || q.includes('hire') || q.includes('opportunit')) {
+      setActiveView('talent');
+      setTalentTab('opportunities');
+    } else if (q.includes('network') || q.includes('feed')) {
+      setActiveView('talent');
+      setTalentTab('networking');
+    } else if (q.includes('skill') || q.includes('verif')) {
+      setActiveView('talent');
+      setTalentTab('profile');
+    } else if (q.includes('project')) {
+      setActiveView('talent');
+      setTalentTab('projects');
+    } else if (q.includes('employer') || q.includes('hiring')) {
+      setActiveView('employer');
+    } else {
+      setActiveView('talent');
+      setTalentTab('networking');
+    }
+  };
+
   return (
     <header className="header-container">
-      {/* Top Banner for Bharat 2.0 / Hackathon Context */}
       <div style={{
-        background: 'linear-gradient(90deg, rgba(99, 102, 241, 0.25) 0%, rgba(6, 182, 212, 0.25) 50%, rgba(16, 185, 129, 0.25) 100%)',
-        borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
-        padding: '5px 24px',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        fontSize: '0.78rem',
-        color: '#E2E8F0'
-      }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <span style={{ 
-            background: 'var(--grad-primary)', 
-            color: '#fff', 
-            padding: '2px 8px', 
-            borderRadius: '4px', 
-            fontWeight: 800,
-            fontSize: '0.7rem',
-            letterSpacing: '0.05em'
-          }}>
-            BUILD FOR BHARAT 2.0
-          </span>
-          <span style={{ color: 'var(--text-secondary)' }}>
-            Problem Statement: Intelligent Talent & Workforce Ecosystem
-          </span>
-        </div>
-
-        <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-          <span style={{ color: 'var(--text-muted)' }}>
-            Tagline: <strong style={{ color: '#38BDF8' }}>Learn → Build → Verify → Connect → Discover → Get Hired → Grow</strong>
-          </span>
-          <button 
-            onClick={() => setActiveView('presentation')}
-            style={{
-              background: activeView === 'presentation' ? 'var(--primary)' : 'rgba(255, 255, 255, 0.1)',
-              color: '#fff',
-              padding: '2px 10px',
-              borderRadius: '999px',
-              fontSize: '0.72rem',
-              fontWeight: 700,
-              display: 'flex',
-              alignItems: 'center',
-              gap: '4px'
-            }}
-          >
-            <Presentation size={12} />
-            30-Slide Pitch Deck
-          </button>
-        </div>
-      </div>
-
-      {/* Main Navbar */}
-      <div style={{
-        maxWidth: '1440px',
+        maxWidth: '1128px',
         margin: '0 auto',
-        padding: '12px 24px',
+        padding: '10px 12px 8px',
         display: 'flex',
         alignItems: 'center',
-        justifyContent: 'space-between',
-        gap: '20px'
+        gap: '12px',
+        minHeight: '72px'
       }}>
-        {/* Brand Logo */}
-        <div 
-          onClick={() => setActiveView('talent')}
-          style={{ display: 'flex', alignItems: 'center', gap: '10px', cursor: 'pointer', flexShrink: 0 }}
-        >
+        <button onClick={goHome} style={{ display: 'flex', alignItems: 'center', gap: '8px', background: 'none', flexShrink: 0 }}>
           <div style={{
-            width: '42px',
-            height: '42px',
-            borderRadius: '12px',
-            background: 'linear-gradient(135deg, #4F46E5 0%, #06B6D4 100%)',
+            width: '34px',
+            height: '34px',
+            borderRadius: '6px',
+            background: '#1ba83a',
+            color: '#fff',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            boxShadow: '0 0 20px rgba(99, 102, 241, 0.5)',
-            border: '1px solid rgba(255, 255, 255, 0.2)'
+            fontFamily: 'var(--font-heading)',
+            fontWeight: 800,
+            fontSize: '1.05rem',
+            letterSpacing: '-0.04em'
           }}>
-            <Sparkles size={22} color="#fff" />
+            tX
           </div>
-          <div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-              <span style={{ 
-                fontFamily: 'var(--font-heading)', 
-                fontSize: '1.45rem', 
-                fontWeight: 900, 
-                letterSpacing: '-0.03em',
-                color: '#fff'
-              }}>
-                Talent<span style={{ color: '#06B6D4' }}>X</span>
-              </span>
-              <span className="badge-pill badge-verified" style={{ padding: '2px 6px', fontSize: '0.65rem' }}>
-                AI INTELLIGENCE
-              </span>
+          <div style={{ lineHeight: 1.1, textAlign: 'left' }}>
+            <div style={{ fontWeight: 800, fontSize: '1.15rem', letterSpacing: '-0.04em', color: '#0A66C2' }}>
+              TalentX
             </div>
-            <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)', lineHeight: 1 }}>
-              Intelligent Talent Ecosystem
+            <div style={{ fontSize: '0.62rem', color: 'var(--text-muted)', fontWeight: 600, letterSpacing: '0.04em' }}>
+              PROFESSIONAL NETWORK
             </div>
           </div>
-        </div>
+        </button>
 
-        {/* Stakeholder View Modes Switcher */}
-        <nav style={{
-          display: 'flex',
-          alignItems: 'center',
-          background: 'rgba(15, 23, 42, 0.7)',
-          padding: '4px',
-          borderRadius: 'var(--radius-full)',
-          border: '1px solid var(--border-subtle)',
-          gap: '2px'
-        }}>
-          <button
-            onClick={() => setActiveView('talent')}
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '6px',
-              padding: '8px 16px',
-              borderRadius: 'var(--radius-full)',
-              fontSize: '0.86rem',
-              fontWeight: 600,
-              background: activeView === 'talent' ? 'var(--grad-primary)' : 'transparent',
-              color: activeView === 'talent' ? '#fff' : 'var(--text-secondary)',
-              boxShadow: activeView === 'talent' ? '0 2px 10px rgba(99, 102, 241, 0.4)' : 'none'
-            }}
-          >
-            <User size={15} />
-            Talent Portal
-          </button>
+        <form className="nav-search" onSubmit={onSearch}>
+          <Search size={16} color="#666666" />
+          <input
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            placeholder="Search jobs, people, skills"
+            aria-label="Search"
+          />
+        </form>
+
+        <nav style={{ display: 'flex', alignItems: 'stretch', marginLeft: 'auto', height: '100%' }}>
+          {topNav.map(item => {
+            const Icon = item.icon;
+            return (
+              <button
+                key={item.id}
+                className={`nav-item${item.active ? ' active' : ''}`}
+                onClick={item.action}
+              >
+                <Icon className="nav-icon" size={22} strokeWidth={item.active ? 2.2 : 1.8} />
+                <span className="label">{item.label}</span>
+              </button>
+            );
+          })}
 
           <button
-            onClick={() => setActiveView('employer')}
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '6px',
-              padding: '8px 16px',
-              borderRadius: 'var(--radius-full)',
-              fontSize: '0.86rem',
-              fontWeight: 600,
-              background: activeView === 'employer' ? 'var(--grad-primary)' : 'transparent',
-              color: activeView === 'employer' ? '#fff' : 'var(--text-secondary)',
-              boxShadow: activeView === 'employer' ? '0 2px 10px rgba(99, 102, 241, 0.4)' : 'none'
-            }}
+            className="nav-item"
+            onClick={() => setShowNotifications(prev => !prev)}
+            style={{ position: 'relative' }}
           >
-            <Briefcase size={15} />
-            Employer Portal
-          </button>
-
-          <button
-            onClick={() => setActiveView('university')}
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '6px',
-              padding: '8px 16px',
-              borderRadius: 'var(--radius-full)',
-              fontSize: '0.86rem',
-              fontWeight: 600,
-              background: activeView === 'university' ? 'var(--grad-primary)' : 'transparent',
-              color: activeView === 'university' ? '#fff' : 'var(--text-secondary)',
-              boxShadow: activeView === 'university' ? '0 2px 10px rgba(99, 102, 241, 0.4)' : 'none'
-            }}
-          >
-            <GraduationCap size={15} />
-            University Intelligence
-          </button>
-
-          <button
-            onClick={() => setActiveView('skillgraph')}
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '6px',
-              padding: '8px 16px',
-              borderRadius: 'var(--radius-full)',
-              fontSize: '0.86rem',
-              fontWeight: 600,
-              background: activeView === 'skillgraph' ? 'var(--grad-primary)' : 'transparent',
-              color: activeView === 'skillgraph' ? '#fff' : 'var(--text-secondary)',
-              boxShadow: activeView === 'skillgraph' ? '0 2px 10px rgba(99, 102, 241, 0.4)' : 'none'
-            }}
-          >
-            <Network size={15} />
-            Skill Graph & Market
-          </button>
-        </nav>
-
-        {/* Right Action Bar */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-          {/* User Verified Status Pill */}
-          <div 
-            onClick={openVerificationModal}
-            className="badge-pill badge-verified" 
-            style={{ 
-              cursor: 'pointer',
-              padding: '6px 12px',
-              boxShadow: '0 0 12px rgba(16, 185, 129, 0.2)' 
-            }}
-            title="Click to verify a new skill"
-          >
-            <CheckCircle2 size={14} color="#10B981" />
-            <span>{user.verifiedBadgeCount} Verified Skills</span>
-          </div>
-
-          {/* Quick Resume Upload Button */}
-          <button
-            onClick={openResumeParser}
-            className="btn-secondary"
-            style={{ padding: '7px 12px', fontSize: '0.8rem', borderRadius: 'var(--radius-full)' }}
-            title="Upload and parse resume with AI"
-          >
-            <Sparkles size={14} color="#A855F7" />
-            AI Resume Parser
-          </button>
-
-          {/* Notification Bell */}
-          <div style={{ position: 'relative' }}>
-            <button
-              onClick={() => setShowNotifications(prev => !prev)}
-              style={{
-                width: '38px',
-                height: '38px',
-                borderRadius: '50%',
-                background: 'rgba(255, 255, 255, 0.06)',
-                border: '1px solid var(--border-subtle)',
-                color: 'var(--text-secondary)',
+            <Bell className="nav-icon" size={22} strokeWidth={1.8} />
+            <span className="label">Alerts</span>
+            {unreadNotifications > 0 && (
+              <span style={{
+                position: 'absolute',
+                top: '4px',
+                right: '18px',
+                minWidth: '16px',
+                height: '16px',
+                padding: '0 4px',
+                background: '#CC1016',
+                color: '#fff',
+                borderRadius: '8px',
+                fontSize: '0.62rem',
+                fontWeight: 800,
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center'
-              }}
-            >
-              <Bell size={18} />
-              {unreadNotifications > 0 && (
-                <span style={{
-                  position: 'absolute',
-                  top: '2px',
-                  right: '2px',
-                  width: '16px',
-                  height: '16px',
-                  background: 'var(--accent-rose)',
-                  color: '#fff',
-                  borderRadius: '50%',
-                  fontSize: '0.65rem',
-                  fontWeight: 800,
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center'
-                }}>
-                  {unreadNotifications}
-                </span>
-              )}
-            </button>
-          </div>
+              }}>
+                {unreadNotifications}
+              </span>
+            )}
+          </button>
 
-          {/* User Mini Avatar */}
-          <div 
-            onClick={() => { setActiveView('talent'); setTalentTab('profile'); }}
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '8px',
-              cursor: 'pointer',
-              padding: '3px 8px 3px 4px',
-              borderRadius: 'var(--radius-full)',
-              border: '1px solid var(--border-subtle)',
-              background: 'rgba(255, 255, 255, 0.04)'
-            }}
+          <button
+            className={`nav-item${activeView === 'presentation' ? ' active' : ''}`}
+            onClick={() => setActiveView('presentation')}
           >
-            <img 
-              src={user.avatar} 
-              alt={user.name} 
-              style={{ width: '32px', height: '32px', borderRadius: '50%', objectFit: 'cover' }}
+            <Presentation className="nav-icon" size={22} strokeWidth={activeView === 'presentation' ? 2.2 : 1.8} />
+            <span className="label">Deck</span>
+          </button>
+
+          <button
+            onClick={goProfile}
+            className={`nav-item${activeView === 'talent' && talentTab === 'profile' ? ' active' : ''}`}
+            style={{ borderLeft: '1px solid var(--border-subtle)', minWidth: '64px' }}
+          >
+            <img
+              src={user.avatar}
+              alt={user.name}
+              style={{ width: '24px', height: '24px', borderRadius: '50%', objectFit: 'cover' }}
             />
-            <span style={{ fontSize: '0.85rem', fontWeight: 600, color: '#fff' }}>
-              {user.name.split(' ')[0]}
-            </span>
-          </div>
-        </div>
+            <span className="label">Profile</span>
+          </button>
+        </nav>
       </div>
 
-      {/* Sub-navigation bar when inside Talent Portal */}
       {activeView === 'talent' && (
-        <div style={{
-          borderTop: '1px solid rgba(255, 255, 255, 0.05)',
-          background: 'rgba(10, 15, 28, 0.95)',
-          padding: '0 24px'
-        }}>
+        <div style={{ borderTop: '1px solid var(--border-subtle)', background: '#FFFFFF' }}>
           <div style={{
-            maxWidth: '1440px',
+            maxWidth: '1128px',
             margin: '0 auto',
+            padding: '0 12px',
             display: 'flex',
             alignItems: 'center',
-            gap: '8px',
-            overflowX: 'auto',
-            scrollbarWidth: 'none',
-            padding: '8px 0'
+            gap: '4px',
+            overflowX: 'auto'
           }}>
-            {[
-              { id: 'profile', label: 'Intelligent Profile', icon: User, badge: 'Slide 6' },
-              { id: 'verification', label: 'Skill Verification', icon: CheckCircle2, badge: 'Slide 8' },
-              { id: 'career_ai', label: 'Career AI & Gaps', icon: Compass, badge: 'Slide 9-10' },
-              { id: 'roadmap', label: 'Action Roadmap', icon: TrendingUp, badge: 'Slide 11' },
-              { id: 'simulator', label: 'Career Simulator', icon: Cpu, badge: 'Slide 12' },
-              { id: 'networking', label: 'Network & Feed', icon: Share2, badge: 'Slide 13' },
-              { id: 'projects', label: 'Project & Team Hub', icon: Code2, badge: 'Slide 14' },
-              { id: 'opportunities', label: 'Smart Opportunities', icon: Briefcase, badge: 'Slide 15' }
-            ].map(tab => {
+            {talentTabs.map(tab => {
               const Icon = tab.icon;
               const isActive = talentTab === tab.id;
               return (
                 <button
                   key={tab.id}
+                  className={`subnav-link${isActive ? ' active' : ''}`}
                   onClick={() => setTalentTab(tab.id)}
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '6px',
-                    padding: '6px 14px',
-                    borderRadius: 'var(--radius-md)',
-                    fontSize: '0.82rem',
-                    fontWeight: isActive ? 700 : 500,
-                    whiteSpace: 'nowrap',
-                    background: isActive ? 'rgba(99, 102, 241, 0.16)' : 'transparent',
-                    color: isActive ? '#818CF8' : 'var(--text-secondary)',
-                    border: isActive ? '1px solid rgba(99, 102, 241, 0.35)' : '1px solid transparent'
-                  }}
                 >
-                  <Icon size={14} color={isActive ? '#818CF8' : '#94A3B8'} />
-                  <span>{tab.label}</span>
-                  <span style={{
-                    fontSize: '0.65rem',
-                    padding: '1px 5px',
-                    borderRadius: '4px',
-                    background: isActive ? 'rgba(99, 102, 241, 0.3)' : 'rgba(255, 255, 255, 0.06)',
-                    color: isActive ? '#C7D2FE' : 'var(--text-muted)'
-                  }}>
-                    {tab.badge}
-                  </span>
+                  <Icon size={15} strokeWidth={isActive ? 2.3 : 1.8} />
+                  {tab.label}
                 </button>
               );
             })}
+
+            <div style={{ marginLeft: 'auto', display: 'flex', gap: '8px', padding: '8px 0' }}>
+              <button onClick={openResumeParser} className="btn-secondary" style={{ padding: '6px 12px', fontSize: '0.78rem' }}>
+                <Sparkles size={14} /> Upload resume
+              </button>
+            </div>
           </div>
         </div>
       )}

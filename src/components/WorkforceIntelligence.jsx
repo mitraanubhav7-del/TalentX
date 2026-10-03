@@ -57,12 +57,12 @@ export function WorkforceIntelligence() {
             <TrendingUp size={22} color="#FBBF24" />
             <span className="badge-pill badge-warning">Slide 19 — Workforce Intelligence</span>
           </div>
-          <h2 style={{ fontSize: '1.5rem', color: '#fff', marginBottom: '6px' }}>
+          <h2 style={{ fontSize: '1.5rem', color: 'var(--text-primary)', marginBottom: '6px' }}>
             Enterprise Workforce Planning: Current vs Future Demand
           </h2>
           <p style={{ fontSize: '0.88rem', color: 'var(--text-secondary)', maxWidth: '700px' }}>
             Compare active internal workforce competencies against multi-year project requirements. TalentX synthesizes skill telemetry to optimize capital allocation across: 
-            <strong style={{ color: '#38BDF8' }}> HIRE → RESKILL → UPSKILL</strong>.
+            <strong style={{ color: 'var(--primary)' }}> HIRE → RESKILL → UPSKILL</strong>.
           </p>
         </div>
 
@@ -80,7 +80,7 @@ export function WorkforceIntelligence() {
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '16px' }}>
         <div className="glass-panel" style={{ padding: '20px' }}>
           <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>CURRENT CAPABILITY INDEX</div>
-          <div style={{ fontSize: '2.2rem', fontWeight: 900, color: '#38BDF8' }}>{avgCurrent}%</div>
+          <div style={{ fontSize: '2.2rem', fontWeight: 900, color: 'var(--primary)' }}>{avgCurrent}%</div>
           <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', marginTop: '4px' }}>Across 1,240 Engineers</div>
         </div>
 
@@ -98,7 +98,7 @@ export function WorkforceIntelligence() {
 
         <div className="glass-panel" style={{ padding: '20px' }}>
           <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>INTERNAL UPSKILL TARGETS</div>
-          <div style={{ fontSize: '2.2rem', fontWeight: 900, color: '#34D399' }}>84 Engineers</div>
+          <div style={{ fontSize: '2.2rem', fontWeight: 900, color: 'var(--accent-emerald)' }}>84 Engineers</div>
           <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', marginTop: '4px' }}>Saved ₹2.4 Cr in hiring fees</div>
         </div>
       </div>
@@ -107,7 +107,7 @@ export function WorkforceIntelligence() {
       <div className="glass-panel" style={{ padding: '24px' }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '20px', flexWrap: 'wrap', gap: '12px' }}>
           <div>
-            <h3 style={{ fontSize: '1.25rem', color: '#fff', marginBottom: '4px' }}>
+            <h3 style={{ fontSize: '1.25rem', color: 'var(--text-primary)', marginBottom: '4px' }}>
               Current Workforce Skills vs Future Project Requirements
             </h3>
             <p style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>
@@ -133,7 +133,7 @@ export function WorkforceIntelligence() {
             <div
               key={idx}
               style={{
-                background: 'rgba(255, 255, 255, 0.02)',
+                background: 'var(--surface-tint)',
                 padding: '16px',
                 borderRadius: 'var(--radius-md)',
                 border: '1px solid var(--border-subtle)'
@@ -141,7 +141,7 @@ export function WorkforceIntelligence() {
             >
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '10px' }}>
                 <div>
-                  <span style={{ fontWeight: 700, color: '#fff', fontSize: '0.95rem' }}>{item.skill}</span>
+                  <span style={{ fontWeight: 700, color: 'var(--text-primary)', fontSize: '0.95rem' }}>{item.skill}</span>
                   <span style={{ fontSize: '0.78rem', color: item.gapDelta > 30 ? '#FB7185' : '#34D399', marginLeft: '10px', fontWeight: 600 }}>
                     {item.gapDelta > 30 ? `Critical Gap (${item.gapDelta}%)` : `Manageable Gap (${item.gapDelta}%)`}
                   </span>
@@ -158,7 +158,7 @@ export function WorkforceIntelligence() {
                   <span>Current Capability:</span>
                   <span>{item.currentWorkforce}%</span>
                 </div>
-                <div style={{ height: '8px', background: 'rgba(255, 255, 255, 0.08)', borderRadius: '999px', overflow: 'hidden' }}>
+                <div style={{ height: '8px', background: 'var(--track)', borderRadius: '999px', overflow: 'hidden' }}>
                   <div style={{ width: `${item.currentWorkforce}%`, height: '100%', background: '#6366F1', borderRadius: '999px' }} />
                 </div>
               </div>
@@ -169,7 +169,7 @@ export function WorkforceIntelligence() {
                   <span>Future Demand Target:</span>
                   <span>{item.futureDemand}%</span>
                 </div>
-                <div style={{ height: '8px', background: 'rgba(255, 255, 255, 0.08)', borderRadius: '999px', overflow: 'hidden' }}>
+                <div style={{ height: '8px', background: 'var(--track)', borderRadius: '999px', overflow: 'hidden' }}>
                   <div style={{ width: `${item.futureDemand}%`, height: '100%', background: '#F59E0B', borderRadius: '999px' }} />
                 </div>
               </div>

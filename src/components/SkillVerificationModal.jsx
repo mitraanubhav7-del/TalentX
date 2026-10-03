@@ -129,7 +129,7 @@ export function SkillVerificationModal({ isOpen, onClose, defaultSkill = "Machin
             position: 'absolute',
             top: '20px',
             right: '20px',
-            background: 'rgba(255, 255, 255, 0.08)',
+            background: 'var(--track)',
             border: 'none',
             color: 'var(--text-secondary)',
             width: '32px',
@@ -159,7 +159,7 @@ export function SkillVerificationModal({ isOpen, onClose, defaultSkill = "Machin
                 <ShieldCheck size={26} color="#042f1a" />
               </div>
               <div>
-                <h2 style={{ fontSize: '1.4rem', color: '#fff' }}>
+                <h2 style={{ fontSize: '1.4rem', color: 'var(--text-primary)' }}>
                   Skill Verification Engine <span className="badge-pill badge-verified">Slide 8</span>
                 </h2>
                 <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
@@ -170,7 +170,7 @@ export function SkillVerificationModal({ isOpen, onClose, defaultSkill = "Machin
 
             {/* Select Skill to Verify */}
             <div style={{
-              background: 'rgba(255, 255, 255, 0.03)',
+              background: 'var(--surface-tint)',
               borderRadius: 'var(--radius-md)',
               padding: '16px',
               border: '1px solid var(--border-subtle)',
@@ -209,21 +209,21 @@ export function SkillVerificationModal({ isOpen, onClose, defaultSkill = "Machin
               border: '1px solid var(--border-subtle)',
               marginBottom: '24px'
             }}>
-              <h4 style={{ fontSize: '0.95rem', color: '#fff', marginBottom: '12px' }}>
+              <h4 style={{ fontSize: '0.95rem', color: 'var(--text-primary)', marginBottom: '12px' }}>
                 {selectedSkill} Verification Standard
               </h4>
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '12px', textAlign: 'center' }}>
-                <div style={{ background: 'rgba(255, 255, 255, 0.02)', padding: '10px', borderRadius: 'var(--radius-sm)' }}>
+                <div style={{ background: 'var(--surface-tint)', padding: '10px', borderRadius: 'var(--radius-sm)' }}>
                   <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Questions</div>
-                  <div style={{ fontSize: '1.2rem', fontWeight: 700, color: '#fff' }}>{activeTest.questions.length} Scenario MCQs</div>
+                  <div style={{ fontSize: '1.2rem', fontWeight: 700, color: 'var(--text-primary)' }}>{activeTest.questions.length} Scenario MCQs</div>
                 </div>
-                <div style={{ background: 'rgba(255, 255, 255, 0.02)', padding: '10px', borderRadius: 'var(--radius-sm)' }}>
+                <div style={{ background: 'var(--surface-tint)', padding: '10px', borderRadius: 'var(--radius-sm)' }}>
                   <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Duration</div>
-                  <div style={{ fontSize: '1.2rem', fontWeight: 700, color: '#38BDF8' }}>{activeTest.durationMinutes} Minutes</div>
+                  <div style={{ fontSize: '1.2rem', fontWeight: 700, color: 'var(--primary)' }}>{activeTest.durationMinutes} Minutes</div>
                 </div>
-                <div style={{ background: 'rgba(255, 255, 255, 0.02)', padding: '10px', borderRadius: 'var(--radius-sm)' }}>
+                <div style={{ background: 'var(--surface-tint)', padding: '10px', borderRadius: 'var(--radius-sm)' }}>
                   <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Passing Score</div>
-                  <div style={{ fontSize: '1.2rem', fontWeight: 700, color: '#34D399' }}>{activeTest.passingScore}% (Score ≥ 70)</div>
+                  <div style={{ fontSize: '1.2rem', fontWeight: 700, color: 'var(--accent-emerald)' }}>{activeTest.passingScore}% (Score ≥ 70)</div>
                 </div>
               </div>
 
@@ -260,7 +260,7 @@ export function SkillVerificationModal({ isOpen, onClose, defaultSkill = "Machin
                 <span className="badge-pill badge-verified" style={{ marginBottom: '4px' }}>
                   {selectedSkill} Verification in Progress
                 </span>
-                <h3 style={{ fontSize: '1.1rem', color: '#fff' }}>
+                <h3 style={{ fontSize: '1.1rem', color: 'var(--text-primary)' }}>
                   Question {currentQuestionIndex + 1} of {activeTest.questions.length}
                 </h3>
               </div>
@@ -290,10 +290,10 @@ export function SkillVerificationModal({ isOpen, onClose, defaultSkill = "Machin
                   <div style={{
                     fontSize: '1.05rem',
                     fontWeight: 600,
-                    color: '#fff',
+                    color: 'var(--text-primary)',
                     lineHeight: 1.5,
                     marginBottom: '20px',
-                    background: 'rgba(255, 255, 255, 0.02)',
+                    background: 'var(--surface-tint)',
                     padding: '16px',
                     borderRadius: 'var(--radius-md)',
                     border: '1px solid var(--border-subtle)'
@@ -333,7 +333,7 @@ export function SkillVerificationModal({ isOpen, onClose, defaultSkill = "Machin
                             justifyContent: 'center',
                             fontSize: '0.75rem',
                             fontWeight: 700,
-                            color: '#fff',
+                            color: 'var(--text-primary)',
                             flexShrink: 0
                           }}>
                             {String.fromCharCode(65 + optIdx)}
@@ -414,7 +414,7 @@ export function SkillVerificationModal({ isOpen, onClose, defaultSkill = "Machin
                 }}>
                   <Award size={42} color="#042f1a" />
                 </div>
-                <h2 style={{ fontSize: '1.6rem', color: '#fff', marginBottom: '4px' }}>
+                <h2 style={{ fontSize: '1.6rem', color: 'var(--text-primary)', marginBottom: '4px' }}>
                   Skill Verified: {scoreResult.skill}
                 </h2>
                 <div className="badge-pill badge-verified" style={{ fontSize: '0.85rem', padding: '4px 14px', marginBottom: '16px' }}>
@@ -436,14 +436,14 @@ export function SkillVerificationModal({ isOpen, onClose, defaultSkill = "Machin
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                       <ShieldCheck size={20} color="#10B981" />
-                      <span style={{ fontSize: '0.75rem', fontWeight: 800, letterSpacing: '0.08em', color: '#34D399', textTransform: 'uppercase' }}>
+                      <span style={{ fontSize: '0.75rem', fontWeight: 800, letterSpacing: '0.08em', color: 'var(--accent-emerald)', textTransform: 'uppercase' }}>
                         TalentX Verified Credential
                       </span>
                     </div>
                     <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>{scoreResult.date}</span>
                   </div>
 
-                  <div style={{ fontSize: '1.25rem', fontWeight: 800, color: '#fff', marginBottom: '4px' }}>
+                  <div style={{ fontSize: '1.25rem', fontWeight: 800, color: 'var(--text-primary)', marginBottom: '4px' }}>
                     {scoreResult.skill} — {scoreResult.level}
                   </div>
                   <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', marginBottom: '14px' }}>
@@ -461,7 +461,7 @@ export function SkillVerificationModal({ isOpen, onClose, defaultSkill = "Machin
                     <span style={{ color: 'var(--text-muted)', fontFamily: 'var(--font-mono)' }}>
                       ID: {scoreResult.certId}
                     </span>
-                    <span style={{ color: '#38BDF8', fontWeight: 600 }}>Tamper-Proof Ledger ✓</span>
+                    <span style={{ color: 'var(--primary)', fontWeight: 600 }}>Tamper-Proof Ledger ✓</span>
                   </div>
                 </div>
 
@@ -486,21 +486,21 @@ export function SkillVerificationModal({ isOpen, onClose, defaultSkill = "Machin
                 }}>
                   <AlertCircle size={40} color="#FB7185" />
                 </div>
-                <h2 style={{ fontSize: '1.5rem', color: '#fff', marginBottom: '4px' }}>
+                <h2 style={{ fontSize: '1.5rem', color: 'var(--text-primary)', marginBottom: '4px' }}>
                   Verification Unsuccessful
                 </h2>
                 <p style={{ fontSize: '0.9rem', color: 'var(--text-secondary)', maxWidth: '420px', margin: '0 auto 16px' }}>
                   You scored {scoreResult.score}/100. The verification cutoff for {scoreResult.skill} is {activeTest.passingScore}%.
                 </p>
                 <div style={{
-                  background: 'rgba(255, 255, 255, 0.03)',
+                  background: 'var(--surface-tint)',
                   padding: '16px',
                   borderRadius: 'var(--radius-md)',
                   maxWidth: '460px',
                   margin: '0 auto 24px',
                   textAlign: 'left'
                 }}>
-                  <div style={{ fontSize: '0.85rem', fontWeight: 600, color: '#fff', marginBottom: '6px' }}>
+                  <div style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--text-primary)', marginBottom: '6px' }}>
                     Recommended Next Steps:
                   </div>
                   <ul style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', paddingLeft: '20px', lineHeight: 1.6 }}>

@@ -60,7 +60,7 @@ export function PitchDeckViewer({ onNavigateToFeature }) {
       }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
           <Presentation size={20} color="#818CF8" />
-          <span style={{ fontWeight: 700, color: '#fff', fontSize: '1rem' }}>
+          <span style={{ fontWeight: 700, color: 'var(--text-primary)', fontSize: '1rem' }}>
             Build for Bharat 2.0 Pitch Deck
           </span>
           <span className="badge-pill badge-indigo">
@@ -74,8 +74,8 @@ export function PitchDeckViewer({ onNavigateToFeature }) {
             value={currentSlideIndex}
             onChange={(e) => setCurrentSlideIndex(Number(e.target.value))}
             style={{
-              background: 'rgba(255, 255, 255, 0.06)',
-              color: '#fff',
+              background: 'var(--surface-tint)',
+              color: 'var(--text-primary)',
               border: '1px solid var(--border-medium)',
               padding: '6px 14px',
               borderRadius: 'var(--radius-md)',
@@ -85,7 +85,7 @@ export function PitchDeckViewer({ onNavigateToFeature }) {
             }}
           >
             {SLIDES_DATA.map((s, idx) => (
-              <option key={s.number} value={idx} style={{ background: '#0F172A', color: '#fff' }}>
+              <option key={s.number} value={idx} style={{ background: '#FFFFFF', color: 'var(--text-primary)' }}>
                 Slide {s.number}: {s.title.substring(0, 38)}...
               </option>
             ))}
@@ -145,7 +145,7 @@ export function PitchDeckViewer({ onNavigateToFeature }) {
 
           <h1 style={{
             fontSize: '2.4rem',
-            color: '#fff',
+            color: 'var(--text-primary)',
             lineHeight: 1.2,
             marginBottom: '12px',
             fontFamily: 'var(--font-heading)'
@@ -155,7 +155,7 @@ export function PitchDeckViewer({ onNavigateToFeature }) {
 
           <div style={{
             fontSize: '1.2rem',
-            color: '#38BDF8',
+            color: 'var(--primary)',
             fontWeight: 600,
             marginBottom: '28px'
           }}>
@@ -170,7 +170,7 @@ export function PitchDeckViewer({ onNavigateToFeature }) {
               borderRadius: 'var(--radius-sm)',
               fontSize: '1.1rem',
               fontWeight: 800,
-              color: '#A5B4FC',
+              color: 'var(--primary)',
               marginBottom: '28px'
             }}>
               {slide.tagline}
@@ -186,7 +186,7 @@ export function PitchDeckViewer({ onNavigateToFeature }) {
                   display: 'flex',
                   alignItems: 'flex-start',
                   gap: '14px',
-                  background: 'rgba(255, 255, 255, 0.02)',
+                  background: 'var(--surface-tint)',
                   padding: '16px 20px',
                   borderRadius: 'var(--radius-md)',
                   border: '1px solid var(--border-subtle)',
@@ -203,7 +203,7 @@ export function PitchDeckViewer({ onNavigateToFeature }) {
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  color: '#818CF8',
+                  color: 'var(--primary)',
                   fontSize: '0.8rem',
                   fontWeight: 800,
                   flexShrink: 0,

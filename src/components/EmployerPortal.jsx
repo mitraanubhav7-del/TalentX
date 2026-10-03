@@ -63,7 +63,7 @@ export function EmployerPortal() {
             <Briefcase size={22} color="#818CF8" />
             <span className="badge-pill badge-indigo">Slide 16-18 — Intelligent Recruitment</span>
           </div>
-          <h2 style={{ fontSize: '1.5rem', color: '#fff', marginBottom: '6px' }}>
+          <h2 style={{ fontSize: '1.5rem', color: 'var(--text-primary)', marginBottom: '6px' }}>
             Enterprise Talent Portal: Skill-Based Hiring
           </h2>
           <p style={{ fontSize: '0.88rem', color: 'var(--text-secondary)', maxWidth: '680px' }}>
@@ -74,7 +74,7 @@ export function EmployerPortal() {
         {/* Sub-nav switcher */}
         <div style={{
           display: 'flex',
-          background: 'rgba(15, 23, 42, 0.7)',
+          background: 'var(--surface-tint)',
           padding: '4px',
           borderRadius: 'var(--radius-full)',
           border: '1px solid var(--border-subtle)',
@@ -109,7 +109,7 @@ export function EmployerPortal() {
                   padding: '1px 5px',
                   borderRadius: '4px',
                   background: isActive ? 'rgba(255,255,255,0.2)' : 'rgba(255,255,255,0.06)',
-                  color: '#fff'
+                  color: 'var(--text-primary)'
                 }}>
                   {tab.badge}
                 </span>
@@ -123,20 +123,20 @@ export function EmployerPortal() {
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '16px' }}>
         <div className="glass-panel" style={{ padding: '18px' }}>
           <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>OPEN REQUISITIONS</div>
-          <div style={{ fontSize: '1.8rem', fontWeight: 800, color: '#fff' }}>4 Positions</div>
+          <div style={{ fontSize: '1.8rem', fontWeight: 800, color: 'var(--text-primary)' }}>4 Positions</div>
           <div style={{ fontSize: '0.75rem', color: '#10B981', marginTop: '4px' }}>Active TalentX Matching</div>
         </div>
 
         <div className="glass-panel" style={{ padding: '18px' }}>
           <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>VERIFIED CANDIDATES</div>
-          <div style={{ fontSize: '1.8rem', fontWeight: 800, color: '#38BDF8' }}>248 Evaluated</div>
+          <div style={{ fontSize: '1.8rem', fontWeight: 800, color: 'var(--primary)' }}>248 Evaluated</div>
           <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', marginTop: '4px' }}>Across Tier 1/2 Institutes</div>
         </div>
 
         <div className="glass-panel" style={{ padding: '18px' }}>
           <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>SCREENING TIME SAVED</div>
-          <div style={{ fontSize: '1.8rem', fontWeight: 900, color: '#34D399' }}>68% Faster</div>
-          <div style={{ fontSize: '0.75rem', color: '#34D399', marginTop: '4px' }}>Zero resume fraud detected</div>
+          <div style={{ fontSize: '1.8rem', fontWeight: 900, color: 'var(--accent-emerald)' }}>68% Faster</div>
+          <div style={{ fontSize: '0.75rem', color: 'var(--accent-emerald)', marginTop: '4px' }}>Zero resume fraud detected</div>
         </div>
 
         <div className="glass-panel" style={{ padding: '18px' }}>
@@ -160,7 +160,7 @@ export function EmployerPortal() {
           }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
               <Sparkles size={18} color="#38BDF8" />
-              <span style={{ fontSize: '0.85rem', fontWeight: 700, color: '#38BDF8' }}>
+              <span style={{ fontSize: '0.85rem', fontWeight: 700, color: 'var(--primary)' }}>
                 Slide 18 Principle: Explainable Candidate Matching — Not Just "87% Match"
               </span>
             </div>
@@ -197,7 +197,7 @@ export function EmployerPortal() {
                       />
                       <div>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                          <h3 style={{ fontSize: '1.25rem', color: '#fff' }}>{candidate.name}</h3>
+                          <h3 style={{ fontSize: '1.25rem', color: 'var(--text-primary)' }}>{candidate.name}</h3>
                           <span className="badge-pill badge-verified" style={{ fontSize: '0.7rem' }}>
                             {candidate.status}
                           </span>
@@ -221,7 +221,7 @@ export function EmployerPortal() {
                     display: 'grid',
                     gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))',
                     gap: '10px',
-                    background: 'rgba(255, 255, 255, 0.02)',
+                    background: 'var(--surface-tint)',
                     padding: '12px',
                     borderRadius: 'var(--radius-md)',
                     border: '1px solid var(--border-subtle)'
@@ -258,7 +258,7 @@ export function EmployerPortal() {
                   {/* Matched Skills vs Gaps Breakdown */}
                   <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
                     <div style={{ background: 'rgba(16, 185, 129, 0.05)', padding: '10px 14px', borderRadius: 'var(--radius-sm)' }}>
-                      <div style={{ fontSize: '0.75rem', fontWeight: 700, color: '#34D399', marginBottom: '6px' }}>
+                      <div style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--accent-emerald)', marginBottom: '6px' }}>
                         MATCHED SKILLS:
                       </div>
                       <div style={{ display: 'flex', flexWrap: 'wrap', gap: '5px' }}>
@@ -291,13 +291,13 @@ export function EmployerPortal() {
                     padding: '12px 14px',
                     borderLeft: '3px solid #818CF8'
                   }}>
-                    <div style={{ fontSize: '0.75rem', fontWeight: 800, color: '#A5B4FC', marginBottom: '4px' }}>
+                    <div style={{ fontSize: '0.75rem', fontWeight: 800, color: 'var(--primary)', marginBottom: '4px' }}>
                       TRANSPARENT MATCHING REASONING:
                     </div>
                     <p style={{ fontSize: '0.82rem', color: '#E2E8F0', lineHeight: 1.45, marginBottom: '6px' }}>
                       {candidate.explainabilitySummary}
                     </p>
-                    <div style={{ fontSize: '0.78rem', color: '#38BDF8', fontWeight: 700 }}>
+                    <div style={{ fontSize: '0.78rem', color: 'var(--primary)', fontWeight: 700 }}>
                       Recommendation: {candidate.hiringRecommendation}
                     </div>
                   </div>
@@ -313,7 +313,7 @@ export function EmployerPortal() {
                     gap: '10px'
                   }}>
                     <span style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>
-                      Current Stage: <strong style={{ color: '#fff' }}>{candidate.status}</strong>
+                      Current Stage: <strong style={{ color: 'var(--text-primary)' }}>{candidate.status}</strong>
                     </span>
 
                     <div style={{ display: 'flex', gap: '8px' }}>
@@ -351,7 +351,7 @@ export function EmployerPortal() {
         <div className="glass-panel" style={{ padding: '28px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
             <Sliders size={20} color="#818CF8" />
-            <h3 style={{ fontSize: '1.35rem', color: '#fff' }}>
+            <h3 style={{ fontSize: '1.35rem', color: 'var(--text-primary)' }}>
               Company-Specific Assessment Standards (Slide 17)
             </h3>
           </div>
@@ -361,10 +361,10 @@ export function EmployerPortal() {
 
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '24px', marginBottom: '28px' }}>
             {/* Criteria 1: Python Minimum */}
-            <div style={{ background: 'rgba(255, 255, 255, 0.02)', padding: '18px', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-subtle)' }}>
+            <div style={{ background: 'var(--surface-tint)', padding: '18px', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-subtle)' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px' }}>
-                <span style={{ fontWeight: 600, color: '#fff', fontSize: '0.9rem' }}>Python Proficiency Cutoff</span>
-                <span style={{ fontWeight: 800, color: '#818CF8' }}>≥ {criteria.minPython}%</span>
+                <span style={{ fontWeight: 600, color: 'var(--text-primary)', fontSize: '0.9rem' }}>Python Proficiency Cutoff</span>
+                <span style={{ fontWeight: 800, color: 'var(--primary)' }}>≥ {criteria.minPython}%</span>
               </div>
               <input
                 type="range"
@@ -380,10 +380,10 @@ export function EmployerPortal() {
             </div>
 
             {/* Criteria 2: SQL Minimum */}
-            <div style={{ background: 'rgba(255, 255, 255, 0.02)', padding: '18px', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-subtle)' }}>
+            <div style={{ background: 'var(--surface-tint)', padding: '18px', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-subtle)' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px' }}>
-                <span style={{ fontWeight: 600, color: '#fff', fontSize: '0.9rem' }}>SQL Benchmark Cutoff</span>
-                <span style={{ fontWeight: 800, color: '#06B6D4' }}>≥ {criteria.minSql}%</span>
+                <span style={{ fontWeight: 600, color: 'var(--text-primary)', fontSize: '0.9rem' }}>SQL Benchmark Cutoff</span>
+                <span style={{ fontWeight: 800, color: 'var(--primary)' }}>≥ {criteria.minSql}%</span>
               </div>
               <input
                 type="range"
@@ -399,9 +399,9 @@ export function EmployerPortal() {
             </div>
 
             {/* Criteria 3: Aptitude Minimum */}
-            <div style={{ background: 'rgba(255, 255, 255, 0.02)', padding: '18px', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-subtle)' }}>
+            <div style={{ background: 'var(--surface-tint)', padding: '18px', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-subtle)' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px' }}>
-                <span style={{ fontWeight: 600, color: '#fff', fontSize: '0.9rem' }}>Aptitude & Problem Solving</span>
+                <span style={{ fontWeight: 600, color: 'var(--text-primary)', fontSize: '0.9rem' }}>Aptitude & Problem Solving</span>
                 <span style={{ fontWeight: 800, color: '#FBBF24' }}>≥ {criteria.minAptitude}%</span>
               </div>
               <input
@@ -418,9 +418,9 @@ export function EmployerPortal() {
             </div>
 
             {/* Criteria 4: Coding Test */}
-            <div style={{ background: 'rgba(255, 255, 255, 0.02)', padding: '18px', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-subtle)' }}>
+            <div style={{ background: 'var(--surface-tint)', padding: '18px', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-subtle)' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px' }}>
-                <span style={{ fontWeight: 600, color: '#fff', fontSize: '0.9rem' }}>Coding Challenge Score</span>
+                <span style={{ fontWeight: 600, color: 'var(--text-primary)', fontSize: '0.9rem' }}>Coding Challenge Score</span>
                 <span style={{ fontWeight: 800, color: '#10B981' }}>≥ {criteria.minCoding}%</span>
               </div>
               <input
@@ -450,7 +450,7 @@ export function EmployerPortal() {
           }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
               <CheckCircle2 size={18} color="#34D399" />
-              <span style={{ fontSize: '0.85rem', color: '#fff' }}>
+              <span style={{ fontSize: '0.85rem', color: 'var(--text-primary)' }}>
                 Current criteria matches <strong>{candidates.filter(c => c.assessmentScores.python >= criteria.minPython && c.assessmentScores.sql >= criteria.minSql && c.assessmentScores.coding >= criteria.minCoding).length} of {candidates.length}</strong> available candidates.
               </span>
             </div>
@@ -471,7 +471,7 @@ export function EmployerPortal() {
         <div className="glass-panel" style={{ padding: '28px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
             <Sparkles size={20} color="#818CF8" />
-            <h3 style={{ fontSize: '1.35rem', color: '#fff' }}>
+            <h3 style={{ fontSize: '1.35rem', color: 'var(--text-primary)' }}>
               Create Job with AI Skill Extraction (Slide 16)
             </h3>
           </div>
@@ -490,11 +490,11 @@ export function EmployerPortal() {
                 onChange={(e) => setJobTitle(e.target.value)}
                 style={{
                   width: '100%',
-                  background: 'rgba(255, 255, 255, 0.05)',
+                  background: 'var(--surface-tint)',
                   border: '1px solid var(--border-medium)',
                   borderRadius: 'var(--radius-md)',
                   padding: '10px 14px',
-                  color: '#fff',
+                  color: 'var(--text-primary)',
                   fontSize: '0.9rem'
                 }}
               />
@@ -510,11 +510,11 @@ export function EmployerPortal() {
                 onChange={(e) => setJobDesc(e.target.value)}
                 style={{
                   width: '100%',
-                  background: 'rgba(255, 255, 255, 0.05)',
+                  background: 'var(--surface-tint)',
                   border: '1px solid var(--border-medium)',
                   borderRadius: 'var(--radius-md)',
                   padding: '12px 14px',
-                  color: '#fff',
+                  color: 'var(--text-primary)',
                   fontSize: '0.9rem',
                   resize: 'none'
                 }}
@@ -523,7 +523,7 @@ export function EmployerPortal() {
 
             {/* AI Extracted Skills preview */}
             <div>
-              <label style={{ fontSize: '0.85rem', fontWeight: 600, color: '#38BDF8', display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '8px' }}>
+              <label style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--primary)', display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '8px' }}>
                 <Sparkles size={14} /> AI-Extracted Core Competencies:
               </label>
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
@@ -563,7 +563,7 @@ export function EmployerPortal() {
                 style={{ padding: '16px', minWidth: '240px', background: 'rgba(15, 23, 42, 0.5)' }}
               >
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '14px' }}>
-                  <span style={{ fontSize: '0.88rem', fontWeight: 700, color: '#fff' }}>{col}</span>
+                  <span style={{ fontSize: '0.88rem', fontWeight: 700, color: 'var(--text-primary)' }}>{col}</span>
                   <span className="badge-pill badge-indigo" style={{ padding: '2px 8px', fontSize: '0.7rem' }}>
                     {colCandidates.length}
                   </span>
@@ -574,7 +574,7 @@ export function EmployerPortal() {
                     <div
                       key={cand.id}
                       style={{
-                        background: 'rgba(255, 255, 255, 0.03)',
+                        background: 'var(--surface-tint)',
                         border: '1px solid var(--border-subtle)',
                         borderRadius: 'var(--radius-md)',
                         padding: '12px'
@@ -582,7 +582,7 @@ export function EmployerPortal() {
                     >
                       <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px' }}>
                         <img src={cand.avatar} alt={cand.name} style={{ width: '28px', height: '28px', borderRadius: '50%' }} />
-                        <span style={{ fontWeight: 600, color: '#fff', fontSize: '0.85rem' }}>{cand.name}</span>
+                        <span style={{ fontWeight: 600, color: 'var(--text-primary)', fontSize: '0.85rem' }}>{cand.name}</span>
                       </div>
                       <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>{cand.university}</div>
                       <div style={{ fontSize: '0.75rem', color: '#10B981', fontWeight: 700, marginTop: '4px' }}>

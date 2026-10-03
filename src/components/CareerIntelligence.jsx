@@ -78,7 +78,7 @@ export function CareerIntelligence({
         paddingBottom: '16px'
       }}>
         <div>
-          <h2 style={{ fontSize: '1.6rem', color: '#fff', display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <h2 style={{ fontSize: '1.6rem', color: 'var(--text-primary)', display: 'flex', alignItems: 'center', gap: '8px' }}>
             <Compass size={24} color="#818CF8" /> AI Career Intelligence & Gap Analysis
           </h2>
           <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
@@ -89,7 +89,7 @@ export function CareerIntelligence({
         {/* Sub Navigation Pills */}
         <div style={{
           display: 'flex',
-          background: 'rgba(15, 23, 42, 0.7)',
+          background: 'var(--surface-tint)',
           padding: '4px',
           borderRadius: 'var(--radius-full)',
           border: '1px solid var(--border-subtle)',
@@ -124,7 +124,7 @@ export function CareerIntelligence({
                   padding: '1px 5px',
                   borderRadius: '4px',
                   background: isActive ? 'rgba(255,255,255,0.2)' : 'rgba(255,255,255,0.06)',
-                  color: '#fff'
+                  color: 'var(--text-primary)'
                 }}>
                   {tab.badge}
                 </span>
@@ -151,11 +151,11 @@ export function CareerIntelligence({
             <div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px' }}>
                 <Sparkles size={18} color="#38BDF8" />
-                <span style={{ fontSize: '0.9rem', fontWeight: 800, color: '#38BDF8', letterSpacing: '0.04em' }}>
+                <span style={{ fontSize: '0.9rem', fontWeight: 800, color: 'var(--primary)', letterSpacing: '0.04em' }}>
                   AI RECOMMENDATION ENGINE (SLIDE 9)
                 </span>
               </div>
-              <h3 style={{ fontSize: '1.25rem', color: '#fff', marginBottom: '4px' }}>
+              <h3 style={{ fontSize: '1.25rem', color: 'var(--text-primary)', marginBottom: '4px' }}>
                 "What Career Fits Me?"
               </h3>
               <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', maxWidth: '650px' }}>
@@ -165,7 +165,7 @@ export function CareerIntelligence({
 
             <div style={{ textAlign: 'right', flexShrink: 0 }}>
               <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>CURRENT READINESS</div>
-              <div style={{ fontSize: '1.8rem', fontWeight: 900, color: '#34D399' }}>
+              <div style={{ fontSize: '1.8rem', fontWeight: 900, color: 'var(--accent-emerald)' }}>
                 {user.careerReadiness}%
               </div>
               <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>Target: {targetRole}</div>
@@ -203,7 +203,7 @@ export function CareerIntelligence({
                     <span style={{ fontSize: '0.75rem', color: '#10B981', fontWeight: 700 }}>{role.hiringDemand}</span>
                   </div>
 
-                  <h3 style={{ fontSize: '1.2rem', color: '#fff', marginBottom: '4px' }}>
+                  <h3 style={{ fontSize: '1.2rem', color: 'var(--text-primary)', marginBottom: '4px' }}>
                     {role.title}
                   </h3>
 
@@ -216,7 +216,7 @@ export function CareerIntelligence({
 
                   {/* Compensation benchmark */}
                   <div style={{
-                    background: 'rgba(255, 255, 255, 0.03)',
+                    background: 'var(--surface-tint)',
                     padding: '8px 12px',
                     borderRadius: 'var(--radius-sm)',
                     fontSize: '0.8rem',
@@ -225,7 +225,7 @@ export function CareerIntelligence({
                     justifyContent: 'space-between'
                   }}>
                     <span style={{ color: 'var(--text-muted)' }}>Avg. India Comp:</span>
-                    <span style={{ color: '#fff', fontWeight: 600 }}>{role.averageSalaryIndia}</span>
+                    <span style={{ color: 'var(--text-primary)', fontWeight: 600 }}>{role.averageSalaryIndia}</span>
                   </div>
 
                   {/* Transparent Why Recommended (Slide 9 requirement) */}
@@ -236,7 +236,7 @@ export function CareerIntelligence({
                     borderLeft: '3px solid #6366F1',
                     marginBottom: '16px'
                   }}>
-                    <div style={{ fontSize: '0.75rem', fontWeight: 800, color: '#A5B4FC', marginBottom: '4px', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                    <div style={{ fontSize: '0.75rem', fontWeight: 800, color: 'var(--primary)', marginBottom: '4px', display: 'flex', alignItems: 'center', gap: '4px' }}>
                       <Info size={13} /> WHY TALENTX RECOMMENDS THIS:
                     </div>
                     <p style={{ fontSize: '0.78rem', color: '#E2E8F0', lineHeight: 1.45 }}>
@@ -315,8 +315,8 @@ export function CareerIntelligence({
                 value={targetRole}
                 onChange={(e) => setTargetRole(e.target.value)}
                 style={{
-                  background: 'rgba(255, 255, 255, 0.06)',
-                  color: '#fff',
+                  background: 'var(--surface-tint)',
+                  color: 'var(--text-primary)',
                   border: '1px solid var(--border-medium)',
                   padding: '8px 16px',
                   borderRadius: 'var(--radius-md)',
@@ -325,7 +325,7 @@ export function CareerIntelligence({
                 }}
               >
                 {Object.keys(ROLES_CATALOG).map(roleKey => (
-                  <option key={roleKey} value={roleKey} style={{ background: '#0F172A', color: '#fff' }}>
+                  <option key={roleKey} value={roleKey} style={{ background: '#FFFFFF', color: 'var(--text-primary)' }}>
                     {roleKey}
                   </option>
                 ))}
@@ -354,7 +354,7 @@ export function CareerIntelligence({
             {/* CURRENT MATCHED SKILLS */}
             <div className="glass-panel" style={{ padding: '24px', borderTop: '4px solid #10B981' }}>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px' }}>
-                <h3 style={{ fontSize: '1.15rem', color: '#fff', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <h3 style={{ fontSize: '1.15rem', color: 'var(--text-primary)', display: 'flex', alignItems: 'center', gap: '8px' }}>
                   <CheckCircle2 size={20} color="#10B981" /> Current Skills ({matchedTargetSkills.length})
                 </h3>
                 <span className="badge-pill badge-verified">Ready</span>
@@ -392,7 +392,7 @@ export function CareerIntelligence({
                           <Check size={14} color="#34D399" />
                         </div>
                         <div>
-                          <div style={{ fontWeight: 600, color: '#fff', fontSize: '0.9rem' }}>{skill}</div>
+                          <div style={{ fontWeight: 600, color: 'var(--text-primary)', fontSize: '0.9rem' }}>{skill}</div>
                           <div style={{ fontSize: '0.72rem', color: '#6EE7B7' }}>
                             {userSkill?.verified ? `Verified (${userSkill.score}%) • ${userSkill.level}` : 'Claimed on Profile'}
                           </div>
@@ -421,7 +421,7 @@ export function CareerIntelligence({
             {/* IDENTIFIED SKILL GAPS */}
             <div className="glass-panel" style={{ padding: '24px', borderTop: '4px solid #F59E0B' }}>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px' }}>
-                <h3 style={{ fontSize: '1.15rem', color: '#fff', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <h3 style={{ fontSize: '1.15rem', color: 'var(--text-primary)', display: 'flex', alignItems: 'center', gap: '8px' }}>
                   <AlertTriangle size={20} color="#F59E0B" /> Skill Gaps ({missingTargetSkills.length})
                 </h3>
                 <span className="badge-pill badge-warning">High Impact</span>
@@ -460,7 +460,7 @@ export function CareerIntelligence({
                         ⚠
                       </div>
                       <div>
-                        <div style={{ fontWeight: 600, color: '#fff', fontSize: '0.9rem' }}>{gap}</div>
+                        <div style={{ fontWeight: 600, color: 'var(--text-primary)', fontSize: '0.9rem' }}>{gap}</div>
                         <div style={{ fontSize: '0.72rem', color: '#FCD34D' }}>
                           Missing in 82% of entry candidate applications
                         </div>
@@ -508,18 +508,18 @@ export function CareerIntelligence({
           }}>
             <div>
               <span className="badge-pill badge-indigo" style={{ marginBottom: '6px' }}>Slide 11 — From Skill Gap → Action</span>
-              <h3 style={{ fontSize: '1.25rem', color: '#fff' }}>
+              <h3 style={{ fontSize: '1.25rem', color: 'var(--text-primary)' }}>
                 Actionable Learning & Verification Roadmap
               </h3>
               <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
-                Targeting: <strong style={{ color: '#38BDF8' }}>{targetRole}</strong>. Check off completed milestones to update your platform readiness score.
+                Targeting: <strong style={{ color: 'var(--primary)' }}>{targetRole}</strong>. Check off completed milestones to update your platform readiness score.
               </p>
             </div>
 
             <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
               <div style={{ textAlign: 'right' }}>
                 <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Roadmap Progress</div>
-                <div style={{ fontSize: '1.4rem', fontWeight: 800, color: '#34D399' }}>{roadmapReadiness}%</div>
+                <div style={{ fontSize: '1.4rem', fontWeight: 800, color: 'var(--accent-emerald)' }}>{roadmapReadiness}%</div>
               </div>
               <div style={{
                 width: '120px',
@@ -639,7 +639,7 @@ export function CareerIntelligence({
 
                     <h4 style={{
                       fontSize: '1.05rem',
-                      color: '#fff',
+                      color: 'var(--text-primary)',
                       marginBottom: '4px',
                       textDecoration: isChecked ? 'line-through' : 'none',
                       opacity: isChecked ? 0.9 : 1
@@ -651,7 +651,7 @@ export function CareerIntelligence({
                       {item.description}
                     </p>
 
-                    <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)', background: 'rgba(255, 255, 255, 0.02)', padding: '6px 10px', borderRadius: '4px', display: 'inline-block' }}>
+                    <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)', background: 'var(--surface-tint)', padding: '6px 10px', borderRadius: '4px', display: 'inline-block' }}>
                       💡 {item.details}
                     </div>
                   </div>
@@ -684,7 +684,7 @@ export function CareerIntelligence({
               <Cpu size={20} color="#38BDF8" />
               <span className="badge-pill badge-indigo">Slide 12 — Career Simulator Sandbox</span>
             </div>
-            <h3 style={{ fontSize: '1.4rem', color: '#fff', marginBottom: '6px' }}>
+            <h3 style={{ fontSize: '1.4rem', color: 'var(--text-primary)', marginBottom: '6px' }}>
               "What If I Learn This Skill?"
             </h3>
             <p style={{ fontSize: '0.88rem', color: 'var(--text-secondary)', maxWidth: '680px' }}>
@@ -754,11 +754,11 @@ export function CareerIntelligence({
                   {baseMatchPercent}%
                 </span>
                 <ArrowRight size={18} color="#38BDF8" />
-                <span style={{ fontSize: '2.4rem', fontWeight: 900, color: '#34D399' }}>
+                <span style={{ fontSize: '2.4rem', fontWeight: 900, color: 'var(--accent-emerald)' }}>
                   {simulatedMatchPercent}%
                 </span>
               </div>
-              <div style={{ fontSize: '0.78rem', color: '#34D399', fontWeight: 600, marginTop: '4px' }}>
+              <div style={{ fontSize: '0.78rem', color: 'var(--accent-emerald)', fontWeight: 600, marginTop: '4px' }}>
                 +{simulatedMatchPercent - baseMatchPercent}% match boost with simulated skills
               </div>
             </div>
@@ -768,7 +768,7 @@ export function CareerIntelligence({
               <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginBottom: '4px' }}>
                 POTENTIAL ROLES UNLOCKED
               </div>
-              <div style={{ fontSize: '2.4rem', fontWeight: 900, color: '#38BDF8' }}>
+              <div style={{ fontSize: '2.4rem', fontWeight: 900, color: 'var(--primary)' }}>
                 +{simulatedSkills.length > 0 ? simulatedSkills.length + 1 : 0} Roles
               </div>
               <div style={{ fontSize: '0.78rem', color: 'var(--text-secondary)', marginTop: '4px' }}>
@@ -804,7 +804,7 @@ export function CareerIntelligence({
               gap: '12px'
             }}>
               <div>
-                <div style={{ fontWeight: 700, color: '#34D399', fontSize: '0.9rem' }}>
+                <div style={{ fontWeight: 700, color: 'var(--accent-emerald)', fontSize: '0.9rem' }}>
                   Ready to turn this simulation into reality?
                 </div>
                 <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>

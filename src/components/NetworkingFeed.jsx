@@ -87,11 +87,11 @@ export function NetworkingFeed({ user }) {
               rows={3}
               style={{
                 flex: 1,
-                background: 'rgba(255, 255, 255, 0.04)',
+                background: 'var(--surface-tint)',
                 border: '1px solid var(--border-medium)',
                 borderRadius: 'var(--radius-md)',
                 padding: '12px 14px',
-                color: '#fff',
+                color: 'var(--text-primary)',
                 fontSize: '0.9rem',
                 resize: 'none'
               }}
@@ -155,7 +155,7 @@ export function NetworkingFeed({ user }) {
                   />
                   <div>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                      <span style={{ fontWeight: 700, color: '#fff', fontSize: '0.95rem' }}>
+                      <span style={{ fontWeight: 700, color: 'var(--text-primary)', fontSize: '0.95rem' }}>
                         {post.author.name}
                       </span>
                       {post.author.verified && (
@@ -190,7 +190,7 @@ export function NetworkingFeed({ user }) {
               {/* Project Card (if present) */}
               {post.projectCard && (
                 <div style={{
-                  background: 'rgba(255, 255, 255, 0.03)',
+                  background: 'var(--surface-tint)',
                   border: '1px solid var(--border-subtle)',
                   borderRadius: 'var(--radius-md)',
                   padding: '12px 16px',
@@ -201,7 +201,7 @@ export function NetworkingFeed({ user }) {
                 }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                     <Code size={18} color="#38BDF8" />
-                    <span style={{ fontWeight: 600, color: '#fff', fontSize: '0.88rem' }}>
+                    <span style={{ fontWeight: 600, color: 'var(--text-primary)', fontSize: '0.88rem' }}>
                       {post.projectCard.title}
                     </span>
                     <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
@@ -223,7 +223,7 @@ export function NetworkingFeed({ user }) {
               {/* Tags */}
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', marginBottom: '16px' }}>
                 {post.tags.map((tag, tIdx) => (
-                  <span key={tIdx} style={{ fontSize: '0.75rem', color: '#818CF8', fontWeight: 600 }}>
+                  <span key={tIdx} style={{ fontSize: '0.75rem', color: 'var(--primary)', fontWeight: 600 }}>
                     {tag}
                   </span>
                 ))}
@@ -292,12 +292,12 @@ export function NetworkingFeed({ user }) {
         <div className="glass-panel" style={{ padding: '20px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px' }}>
             <Sparkles size={18} color="#38BDF8" />
-            <h3 style={{ fontSize: '1.05rem', color: '#fff' }}>
+            <h3 style={{ fontSize: '1.05rem', color: 'var(--text-primary)' }}>
               People You Should Meet
             </h3>
           </div>
           <p style={{ fontSize: '0.78rem', color: 'var(--text-secondary)', marginBottom: '16px' }}>
-            Matched on: <strong style={{ color: '#A5B4FC' }}>Skills + Career Goals + Projects + Hackathon Synergy</strong>
+            Matched on: <strong style={{ color: 'var(--primary)' }}>Skills + Career Goals + Projects + Hackathon Synergy</strong>
           </p>
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
@@ -307,7 +307,7 @@ export function NetworkingFeed({ user }) {
                 <div
                   key={person.id}
                   style={{
-                    background: 'rgba(255, 255, 255, 0.02)',
+                    background: 'var(--surface-tint)',
                     border: '1px solid var(--border-subtle)',
                     borderRadius: 'var(--radius-md)',
                     padding: '14px',
@@ -324,7 +324,7 @@ export function NetworkingFeed({ user }) {
                     />
                     <div style={{ flex: 1 }}>
                       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                        <span style={{ fontWeight: 700, color: '#fff', fontSize: '0.9rem' }}>
+                        <span style={{ fontWeight: 700, color: 'var(--text-primary)', fontSize: '0.9rem' }}>
                           {person.name}
                         </span>
                         <span className="badge-pill badge-verified" style={{ fontSize: '0.65rem' }}>
@@ -343,7 +343,7 @@ export function NetworkingFeed({ user }) {
                     borderRadius: 'var(--radius-sm)',
                     padding: '8px 10px',
                     fontSize: '0.73rem',
-                    color: '#C7D2FE',
+                    color: 'var(--primary)',
                     lineHeight: 1.4
                   }}>
                     💡 {person.matchReason}

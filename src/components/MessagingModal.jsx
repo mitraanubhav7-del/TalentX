@@ -70,7 +70,7 @@ export function MessagingModal({ isOpen, onClose, recipient }) {
             />
             <div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                <span style={{ fontSize: '0.95rem', fontWeight: 700, color: '#fff' }}>{recipient.name}</span>
+                <span style={{ fontSize: '0.95rem', fontWeight: 700, color: 'var(--text-primary)' }}>{recipient.name}</span>
                 <span className="badge-pill badge-verified" style={{ padding: '1px 6px', fontSize: '0.65rem' }}>
                   {recipient.connectionType || 'Verified'}
                 </span>
@@ -82,7 +82,7 @@ export function MessagingModal({ isOpen, onClose, recipient }) {
           <button
             onClick={onClose}
             style={{
-              background: 'rgba(255, 255, 255, 0.08)',
+              background: 'var(--track)',
               border: 'none',
               color: 'var(--text-secondary)',
               width: '30px',
@@ -103,7 +103,7 @@ export function MessagingModal({ isOpen, onClose, recipient }) {
           borderBottom: '1px solid rgba(99, 102, 241, 0.2)',
           padding: '8px 16px',
           fontSize: '0.75rem',
-          color: '#A5B4FC',
+          color: 'var(--primary)',
           display: 'flex',
           alignItems: 'center',
           gap: '6px'
@@ -131,7 +131,7 @@ export function MessagingModal({ isOpen, onClose, recipient }) {
             >
               <div style={{
                 background: m.sender === 'me' ? 'var(--grad-primary)' : 'rgba(255, 255, 255, 0.06)',
-                color: '#fff',
+                color: 'var(--text-primary)',
                 padding: '10px 14px',
                 borderRadius: m.sender === 'me' ? '16px 16px 2px 16px' : '16px 16px 16px 2px',
                 fontSize: '0.85rem',
@@ -168,11 +168,11 @@ export function MessagingModal({ isOpen, onClose, recipient }) {
             onKeyDown={(e) => e.key === 'Enter' && handleSendMessage()}
             style={{
               flex: 1,
-              background: 'rgba(255, 255, 255, 0.06)',
+              background: 'var(--surface-tint)',
               border: '1px solid var(--border-medium)',
               borderRadius: 'var(--radius-md)',
               padding: '10px 14px',
-              color: '#fff',
+              color: 'var(--text-primary)',
               fontSize: '0.85rem'
             }}
           />

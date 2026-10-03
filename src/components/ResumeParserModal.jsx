@@ -163,7 +163,7 @@ export function ResumeParserModal({ isOpen, onClose, onSyncProfile }) {
             position: 'absolute',
             top: '20px',
             right: '20px',
-            background: 'rgba(255, 255, 255, 0.08)',
+            background: 'var(--track)',
             border: 'none',
             color: 'var(--text-secondary)',
             width: '32px',
@@ -191,7 +191,7 @@ export function ResumeParserModal({ isOpen, onClose, onSyncProfile }) {
             <Sparkles size={22} color="#fff" />
           </div>
           <div>
-            <h2 style={{ fontSize: '1.4rem', color: '#fff' }}>
+            <h2 style={{ fontSize: '1.4rem', color: 'var(--text-primary)' }}>
               AI Resume Parser <span className="badge-pill badge-indigo">Slide 6</span>
             </h2>
             <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
@@ -230,7 +230,7 @@ export function ResumeParserModal({ isOpen, onClose, onSyncProfile }) {
               }}>
                 <UploadCloud size={30} color="#818CF8" />
               </div>
-              <h3 style={{ fontSize: '1.1rem', color: '#fff', marginBottom: '6px' }}>
+              <h3 style={{ fontSize: '1.1rem', color: 'var(--text-primary)', marginBottom: '6px' }}>
                 Drop your resume here or click to browse
               </h3>
               <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', marginBottom: '16px' }}>
@@ -243,7 +243,7 @@ export function ResumeParserModal({ isOpen, onClose, onSyncProfile }) {
 
             {/* Quick Demo Pre-sets */}
             <div style={{
-              background: 'rgba(255, 255, 255, 0.03)',
+              background: 'var(--surface-tint)',
               borderRadius: 'var(--radius-md)',
               padding: '16px',
               border: '1px solid var(--border-subtle)'
@@ -273,13 +273,13 @@ export function ResumeParserModal({ isOpen, onClose, onSyncProfile }) {
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    color: '#818CF8',
+                    color: 'var(--primary)',
                     fontWeight: 700
                   }}>
                     PS
                   </div>
                   <div>
-                    <div style={{ fontSize: '0.88rem', fontWeight: 600, color: '#fff' }}>Priya Sharma</div>
+                    <div style={{ fontSize: '0.88rem', fontWeight: 600, color: 'var(--text-primary)' }}>Priya Sharma</div>
                     <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>NITK • Final Year • AI/Data Aspirant</div>
                   </div>
                 </button>
@@ -305,13 +305,13 @@ export function ResumeParserModal({ isOpen, onClose, onSyncProfile }) {
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    color: '#06B6D4',
+                    color: 'var(--primary)',
                     fontWeight: 700
                   }}>
                     DV
                   </div>
                   <div>
-                    <div style={{ fontSize: '0.88rem', fontWeight: 600, color: '#fff' }}>Devendra Verma</div>
+                    <div style={{ fontSize: '0.88rem', fontWeight: 600, color: 'var(--text-primary)' }}>Devendra Verma</div>
                     <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>IIT Roorkee • ML Systems Engineer</div>
                   </div>
                 </button>
@@ -337,8 +337,8 @@ export function ResumeParserModal({ isOpen, onClose, onSyncProfile }) {
               <Loader2 size={38} color="#38BDF8" className="animate-spin" />
             </div>
 
-            <h3 style={{ fontSize: '1.25rem', color: '#fff', marginBottom: '8px' }}>
-              Parsing <span style={{ color: '#38BDF8' }}>{fileName}</span>...
+            <h3 style={{ fontSize: '1.25rem', color: 'var(--text-primary)', marginBottom: '8px' }}>
+              Parsing <span style={{ color: 'var(--primary)' }}>{fileName}</span>...
             </h3>
             <p style={{ fontSize: '0.9rem', color: 'var(--text-secondary)', maxWidth: '420px', margin: '0 auto 20px' }}>
               Extracting entities via TalentX NLP Parser: Normalizing skills, indexing project repositories, and validating chronological milestones.
@@ -367,7 +367,7 @@ export function ResumeParserModal({ isOpen, onClose, onSyncProfile }) {
             }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                 <CheckCircle2 size={18} color="#34D399" />
-                <span style={{ fontSize: '0.88rem', fontWeight: 600, color: '#34D399' }}>
+                <span style={{ fontSize: '0.88rem', fontWeight: 600, color: 'var(--accent-emerald)' }}>
                   Successfully extracted from {fileName}
                 </span>
               </div>
@@ -379,7 +379,7 @@ export function ResumeParserModal({ isOpen, onClose, onSyncProfile }) {
             {/* Extracted Skills Section */}
             <div style={{ marginBottom: '20px' }}>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '10px' }}>
-                <h4 style={{ fontSize: '0.95rem', color: '#fff', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                <h4 style={{ fontSize: '0.95rem', color: 'var(--text-primary)', display: 'flex', alignItems: 'center', gap: '6px' }}>
                   <Code size={16} color="#818CF8" /> Extracted Skills ({extractedData.skills.length})
                 </h4>
                 <div style={{ display: 'flex', gap: '6px' }}>
@@ -390,11 +390,11 @@ export function ResumeParserModal({ isOpen, onClose, onSyncProfile }) {
                     onChange={(e) => setNewSkillInput(e.target.value)}
                     onKeyDown={(e) => e.key === 'Enter' && handleAddSkill()}
                     style={{
-                      background: 'rgba(255, 255, 255, 0.06)',
+                      background: 'var(--surface-tint)',
                       border: '1px solid var(--border-medium)',
                       padding: '4px 10px',
                       borderRadius: 'var(--radius-sm)',
-                      color: '#fff',
+                      color: 'var(--text-primary)',
                       fontSize: '0.8rem',
                       width: '180px'
                     }}
@@ -428,8 +428,8 @@ export function ResumeParserModal({ isOpen, onClose, onSyncProfile }) {
                       fontSize: '0.82rem'
                     }}
                   >
-                    <span style={{ color: '#fff', fontWeight: 600 }}>{skill.name}</span>
-                    <span style={{ fontSize: '0.7rem', color: '#A5B4FC' }}>({skill.level})</span>
+                    <span style={{ color: 'var(--text-primary)', fontWeight: 600 }}>{skill.name}</span>
+                    <span style={{ fontSize: '0.7rem', color: 'var(--primary)' }}>({skill.level})</span>
                     <button
                       onClick={() => handleRemoveSkill(idx)}
                       style={{ background: 'none', border: 'none', color: '#FB7185', display: 'flex', alignItems: 'center' }}
@@ -444,18 +444,18 @@ export function ResumeParserModal({ isOpen, onClose, onSyncProfile }) {
 
             {/* Extracted Projects */}
             <div style={{ marginBottom: '20px' }}>
-              <h4 style={{ fontSize: '0.95rem', color: '#fff', display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '10px' }}>
+              <h4 style={{ fontSize: '0.95rem', color: 'var(--text-primary)', display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '10px' }}>
                 <Code size={16} color="#06B6D4" /> Extracted Projects ({extractedData.projects.length})
               </h4>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                 {extractedData.projects.map((proj, idx) => (
                   <div key={idx} style={{
-                    background: 'rgba(255, 255, 255, 0.03)',
+                    background: 'var(--surface-tint)',
                     padding: '12px',
                     borderRadius: 'var(--radius-md)',
                     border: '1px solid var(--border-subtle)'
                   }}>
-                    <div style={{ fontWeight: 600, color: '#fff', fontSize: '0.9rem' }}>{proj.title}</div>
+                    <div style={{ fontWeight: 600, color: 'var(--text-primary)', fontSize: '0.9rem' }}>{proj.title}</div>
                     <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', margin: '4px 0' }}>{proj.summary}</div>
                     <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
                       {proj.techStack.map((tech, tIdx) => (
@@ -472,7 +472,7 @@ export function ResumeParserModal({ isOpen, onClose, onSyncProfile }) {
             {/* Extracted Experience & Education Summary */}
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginBottom: '24px' }}>
               <div style={{
-                background: 'rgba(255, 255, 255, 0.03)',
+                background: 'var(--surface-tint)',
                 padding: '12px',
                 borderRadius: 'var(--radius-md)',
                 border: '1px solid var(--border-subtle)'
@@ -482,14 +482,14 @@ export function ResumeParserModal({ isOpen, onClose, onSyncProfile }) {
                 </div>
                 {extractedData.experience.map((exp, idx) => (
                   <div key={idx}>
-                    <div style={{ fontWeight: 600, color: '#fff', fontSize: '0.85rem' }}>{exp.role}</div>
+                    <div style={{ fontWeight: 600, color: 'var(--text-primary)', fontSize: '0.85rem' }}>{exp.role}</div>
                     <div style={{ fontSize: '0.78rem', color: 'var(--text-secondary)' }}>{exp.company} • {exp.period}</div>
                   </div>
                 ))}
               </div>
 
               <div style={{
-                background: 'rgba(255, 255, 255, 0.03)',
+                background: 'var(--surface-tint)',
                 padding: '12px',
                 borderRadius: 'var(--radius-md)',
                 border: '1px solid var(--border-subtle)'
@@ -499,7 +499,7 @@ export function ResumeParserModal({ isOpen, onClose, onSyncProfile }) {
                 </div>
                 {extractedData.education.map((edu, idx) => (
                   <div key={idx}>
-                    <div style={{ fontWeight: 600, color: '#fff', fontSize: '0.85rem' }}>{edu.degree}</div>
+                    <div style={{ fontWeight: 600, color: 'var(--text-primary)', fontSize: '0.85rem' }}>{edu.degree}</div>
                     <div style={{ fontSize: '0.78rem', color: 'var(--text-secondary)' }}>{edu.institution} ({edu.cgpa})</div>
                   </div>
                 ))}

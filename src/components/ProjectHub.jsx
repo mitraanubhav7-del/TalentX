@@ -88,13 +88,13 @@ export function ProjectHub({ user }) {
             <Code2 size={22} color="#06B6D4" />
             <span className="badge-pill badge-cyan">Slide 14 — Project & Collaboration Hub</span>
           </div>
-          <h2 style={{ fontSize: '1.5rem', color: '#fff', marginBottom: '6px' }}>
+          <h2 style={{ fontSize: '1.5rem', color: 'var(--text-primary)', marginBottom: '6px' }}>
             Learn by Building: Complementary Skill Team Formation
           </h2>
           <p style={{ fontSize: '0.88rem', color: 'var(--text-secondary)', maxWidth: '680px' }}>
             Find multi-disciplinary collaborators with complementary skills for national hackathons, research publications, and open-source systems.
             <br />
-            <strong style={{ color: '#38BDF8' }}>AI Developer + UI/UX Designer + Backend Developer + Data Analyst = Winning Team</strong>
+            <strong style={{ color: 'var(--primary)' }}>AI Developer + UI/UX Designer + Backend Developer + Data Analyst = Winning Team</strong>
           </p>
         </div>
 
@@ -126,7 +126,7 @@ export function ProjectHub({ user }) {
                     Deadline: {project.deadline}
                   </span>
                 </div>
-                <h3 style={{ fontSize: '1.25rem', color: '#fff' }}>
+                <h3 style={{ fontSize: '1.25rem', color: 'var(--text-primary)' }}>
                   {project.title}
                 </h3>
               </div>
@@ -158,7 +158,7 @@ export function ProjectHub({ user }) {
 
             {/* COMPLEMENTARY SKILL TEAM SLOTS (Slide 14 Architecture) */}
             <div style={{
-              background: 'rgba(255, 255, 255, 0.02)',
+              background: 'var(--surface-tint)',
               borderRadius: 'var(--radius-md)',
               padding: '16px',
               border: '1px solid var(--border-subtle)'
@@ -194,7 +194,7 @@ export function ProjectHub({ user }) {
                       }}
                     >
                       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '4px' }}>
-                        <span style={{ fontSize: '0.85rem', fontWeight: 700, color: '#fff' }}>
+                        <span style={{ fontSize: '0.85rem', fontWeight: 700, color: 'var(--text-primary)' }}>
                           {slot.role}
                         </span>
                         {slot.filled ? (
@@ -247,7 +247,7 @@ export function ProjectHub({ user }) {
             border: '1px solid rgba(6, 182, 212, 0.4)',
             borderRadius: 'var(--radius-xl)'
           }}>
-            <h3 style={{ fontSize: '1.3rem', color: '#fff', marginBottom: '8px' }}>
+            <h3 style={{ fontSize: '1.3rem', color: 'var(--text-primary)', marginBottom: '8px' }}>
               Create New Collaboration Project
             </h3>
             <p style={{ fontSize: '0.82rem', color: 'var(--text-secondary)', marginBottom: '16px' }}>
@@ -264,11 +264,11 @@ export function ProjectHub({ user }) {
                   onChange={(e) => setNewTitle(e.target.value)}
                   style={{
                     width: '100%',
-                    background: 'rgba(255, 255, 255, 0.05)',
+                    background: 'var(--surface-tint)',
                     border: '1px solid var(--border-medium)',
                     borderRadius: 'var(--radius-sm)',
                     padding: '10px 12px',
-                    color: '#fff',
+                    color: 'var(--text-primary)',
                     fontSize: '0.9rem'
                   }}
                 />
@@ -283,11 +283,11 @@ export function ProjectHub({ user }) {
                   onChange={(e) => setNewDescription(e.target.value)}
                   style={{
                     width: '100%',
-                    background: 'rgba(255, 255, 255, 0.05)',
+                    background: 'var(--surface-tint)',
                     border: '1px solid var(--border-medium)',
                     borderRadius: 'var(--radius-sm)',
                     padding: '10px 12px',
-                    color: '#fff',
+                    color: 'var(--text-primary)',
                     fontSize: '0.9rem',
                     resize: 'none'
                   }}
@@ -302,11 +302,11 @@ export function ProjectHub({ user }) {
                   onChange={(e) => setNewEvent(e.target.value)}
                   style={{
                     width: '100%',
-                    background: 'rgba(255, 255, 255, 0.05)',
+                    background: 'var(--surface-tint)',
                     border: '1px solid var(--border-medium)',
                     borderRadius: 'var(--radius-sm)',
                     padding: '10px 12px',
-                    color: '#fff',
+                    color: 'var(--text-primary)',
                     fontSize: '0.9rem'
                   }}
                 />
