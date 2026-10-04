@@ -86,13 +86,13 @@ export function WorkforceIntelligence() {
 
         <div className="glass-panel" style={{ padding: '20px' }}>
           <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>FUTURE PROJECT DEMAND</div>
-          <div style={{ fontSize: '2.2rem', fontWeight: 900, color: '#FBBF24' }}>{avgFuture}%</div>
+          <div style={{ fontSize: '2.2rem', fontWeight: 900, color: '#B45309' }}>{avgFuture}%</div>
           <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', marginTop: '4px' }}>Target for FY 2026-27</div>
         </div>
 
         <div className="glass-panel" style={{ padding: '20px' }}>
           <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>RECOMMENDED EXTERNAL HIRES</div>
-          <div style={{ fontSize: '2.2rem', fontWeight: 900, color: '#FB7185' }}>18 Roles</div>
+          <div style={{ fontSize: '2.2rem', fontWeight: 900, color: '#BE123C' }}>18 Roles</div>
           <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', marginTop: '4px' }}>MLOps, Cloud Native</div>
         </div>
 

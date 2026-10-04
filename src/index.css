@@ -4,39 +4,39 @@
   --font-body: 'Inter', 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
   --font-mono: 'JetBrains Mono', ui-monospace, monospace;
 
-  --bg-primary: #F3F2EF;
-  --bg-secondary: #EEF3F8;
+  --bg-primary: #F1F3F5;
+  --bg-secondary: #E2E8F0;
   --bg-card: #FFFFFF;
-  --bg-card-hover: #F9FAFB;
+  --bg-card-hover: #F8FAFC;
   --bg-glass: #FFFFFF;
   --bg-glass-heavy: #FFFFFF;
-  --surface-tint: #F4F6F8;
-  --track: #E8ECF0;
+  --surface-tint: #F1F5F9;
+  --track: #E2E8F0;
 
-  --border-subtle: #E0DFDC;
-  --border-medium: #D0CECB;
-  --border-glow: rgba(22, 115, 70, 0.28);
+  --border-subtle: #CBD5E1;
+  --border-medium: #94A3B8;
+  --border-glow: rgba(21, 128, 61, 0.28);
 
-  --text-primary: #191919;
-  --text-secondary: #666666;
-  --text-muted: #8C8C8C;
-  --text-highlight: #166534;
+  --text-primary: #0F172A;
+  --text-secondary: #334155;
+  --text-muted: #475569;
+  --text-highlight: #15803D;
 
-  --primary: #166534;
-  --primary-hover: #104D28;
-  --primary-glow: rgba(22, 101, 52, 0.18);
+  --primary: #15803D;
+  --primary-hover: #166534;
+  --primary-glow: rgba(21, 128, 61, 0.2);
 
-  --accent-cyan: #21804A;
-  --accent-emerald: #057642;
-  --accent-amber: #B24020;
-  --accent-rose: #CC1016;
-  --accent-violet: #21804A;
-  --accent-purple: #21804A;
+  --accent-cyan: #0D9488;
+  --accent-emerald: #047857;
+  --accent-amber: #B45309;
+  --accent-rose: #BE123C;
+  --accent-violet: #15803D;
+  --accent-purple: #15803D;
 
-  --grad-primary: linear-gradient(135deg, #166534 0%, #21804A 100%);
-  --grad-brand: linear-gradient(135deg, #166534 0%, #2F9B60 100%);
-  --grad-verified: linear-gradient(135deg, #057642 0%, #0D9B5D 100%);
-  --grad-gold: linear-gradient(135deg, #C37D16 0%, #E7A33E 100%);
+  --grad-primary: linear-gradient(135deg, #15803D 0%, #166534 100%);
+  --grad-brand: linear-gradient(135deg, #15803D 0%, #22C55E 100%);
+  --grad-verified: linear-gradient(135deg, #047857 0%, #059669 100%);
+  --grad-gold: linear-gradient(135deg, #B45309 0%, #D97706 100%);
   --grad-card: #FFFFFF;
   --grad-glow: none;
 
@@ -1029,7 +1029,7 @@ input, textarea, select {
   color: var(--text-primary);
 }
 .nav-search input::placeholder {
-  color: #8C8C8C;
+  color: #64748B;
 }
 
 .nav-item {
@@ -1041,19 +1041,19 @@ input, textarea, select {
   min-width: 76px;
   padding: 6px 10px 8px;
   background: transparent;
-  color: #666666;
-  font-size: 0.72rem;
-  font-weight: 500;
+  color: #334155;
+  font-size: 0.74rem;
+  font-weight: 600;
   border-bottom: 2px solid transparent;
   border-radius: 0;
 }
 .nav-item:hover {
-  color: #191919;
+  color: #0F172A;
 }
 .nav-item.active {
-  color: #191919;
-  border-bottom-color: #191919;
-  font-weight: 650;
+  color: #0F172A;
+  border-bottom-color: #0F172A;
+  font-weight: 700;
 }
 .nav-item .nav-icon {
   width: 24px;

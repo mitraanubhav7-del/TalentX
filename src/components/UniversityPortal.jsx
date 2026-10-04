@@ -69,14 +69,14 @@ export function UniversityPortal() {
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '16px' }}>
         <div className="glass-panel" style={{ padding: '20px' }}>
           <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>CURRICULUM ALIGNMENT</div>
-          <div style={{ fontSize: '2.2rem', fontWeight: 900, color: '#FBBF24' }}>{alignmentScore}% Aligned</div>
-          <div style={{ fontSize: '0.75rem', color: '#FBBF24', marginTop: '4px' }}>3 Core subjects meet 2026 standards</div>
+          <div style={{ fontSize: '2.2rem', fontWeight: 900, color: '#B45309' }}>{alignmentScore}% Aligned</div>
+          <div style={{ fontSize: '0.75rem', color: '#B45309', marginTop: '4px', fontWeight: 600 }}>3 Core subjects meet 2026 standards</div>
         </div>
 
         <div className="glass-panel" style={{ padding: '20px' }}>
           <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>CRITICAL CURRICULUM GAPS</div>
-          <div style={{ fontSize: '2.2rem', fontWeight: 900, color: '#FB7185' }}>{criticalGapCount} Subjects</div>
-          <div style={{ fontSize: '0.75rem', color: '#FB7185', marginTop: '4px' }}>Cloud Architecture, MLOps, GenAI</div>
+          <div style={{ fontSize: '2.2rem', fontWeight: 900, color: '#BE123C' }}>{criticalGapCount} Subjects</div>
+          <div style={{ fontSize: '0.75rem', color: '#BE123C', marginTop: '4px', fontWeight: 600 }}>Cloud Architecture, MLOps, GenAI</div>
         </div>
 
         <div className="glass-panel" style={{ padding: '20px' }}>
