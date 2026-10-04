@@ -5,7 +5,6 @@ import {
   Briefcase,
   GraduationCap,
   TrendingUp,
-  Presentation,
   Bell,
   LogOut,
   Search,
@@ -13,7 +12,6 @@ import {
   Sparkles,
   Compass,
   Cpu,
-  Share2,
   Code2,
   MoreHorizontal,
 } from 'lucide-react';
@@ -39,7 +37,7 @@ export function Navbar({
       setActiveView('employer');
     } else {
       setActiveView('talent');
-      setTalentTab('networking');
+      setTalentTab('career_ai');
     }
   };
 
@@ -53,9 +51,27 @@ export function Navbar({
   };
 
   const topNav = [
-    { id: 'talent', label: 'Home', icon: Home, action: goHome },
-    { id: 'network', label: 'Network', icon: Users, action: () => { setActiveView('talent'); setTalentTab('networking'); }, active: activeView === 'talent' && talentTab === 'networking' },
-    { id: 'jobs', label: 'Jobs', icon: Briefcase, action: () => { setActiveView('talent'); setTalentTab('opportunities'); }, active: activeView === 'talent' && talentTab === 'opportunities' },
+    {
+      id: 'talent',
+      label: 'Home',
+      icon: Home,
+      action: goHome,
+      active: activeView === 'talent' && talentTab !== 'networking' && talentTab !== 'opportunities' && talentTab !== 'profile',
+    },
+    {
+      id: 'network',
+      label: 'Network',
+      icon: Users,
+      action: () => { setActiveView('talent'); setTalentTab('networking'); },
+      active: activeView === 'talent' && talentTab === 'networking',
+    },
+    {
+      id: 'jobs',
+      label: 'Jobs',
+      icon: Briefcase,
+      action: () => { setActiveView('talent'); setTalentTab('opportunities'); },
+      active: activeView === 'talent' && talentTab === 'opportunities',
+    },
     { id: 'employer', label: 'Hiring', icon: CheckCircle2, action: () => setActiveView('employer'), active: activeView === 'employer' },
     { id: 'university', label: 'Campus', icon: GraduationCap, action: () => setActiveView('university'), active: activeView === 'university' },
     { id: 'skillgraph', label: 'Insights', icon: TrendingUp, action: () => setActiveView('skillgraph'), active: activeView === 'skillgraph' },
@@ -68,9 +84,7 @@ export function Navbar({
     { id: 'career_ai', label: 'Career AI', icon: Compass },
     { id: 'roadmap', label: 'Roadmap', icon: TrendingUp },
     { id: 'simulator', label: 'Simulator', icon: Cpu },
-    { id: 'networking', label: 'Feed', icon: Share2 },
     { id: 'projects', label: 'Projects', icon: Code2 },
-    { id: 'opportunities', label: 'Jobs', icon: Briefcase },
   ];
 
   const onSearch = (e) => {
@@ -93,7 +107,7 @@ export function Navbar({
       setActiveView('employer');
     } else {
       setActiveView('talent');
-      setTalentTab('networking');
+      setTalentTab('career_ai');
     }
   };
 
@@ -194,14 +208,6 @@ export function Navbar({
               </button>
 
               <button
-                className={`nav-item${activeView === 'presentation' ? ' active' : ''}`}
-                onClick={() => setActiveView('presentation')}
-              >
-                <Presentation className="nav-icon" size={22} strokeWidth={activeView === 'presentation' ? 2.2 : 1.8} />
-                <span className="label">Deck</span>
-              </button>
-
-              <button
                 onClick={goProfile}
                 className={`nav-item${activeView === 'talent' && talentTab === 'profile' ? ' active' : ''}`}
                 style={{ borderLeft: '1px solid var(--border-subtle)', minWidth: '64px' }}
@@ -238,7 +244,7 @@ export function Navbar({
         </nav>
       </div>
 
-      {activeView === 'talent' && (
+      {activeView === 'talent' && (talentTab === 'career_ai' || talentTab === 'roadmap' || talentTab === 'simulator' || talentTab === 'projects') && (
         <div className="subnav-wrapper" style={{ borderTop: '1px solid var(--border-subtle)', background: '#FFFFFF' }}>
           <div className="subnav-scroll" style={{
             maxWidth: '1128px',
@@ -284,9 +290,6 @@ export function Navbar({
             <button onClick={() => { setActiveView('skillgraph'); setIsMoreMenuOpen(false); }}>
               <TrendingUp size={18} /> Insights
             </button>
-            <button onClick={() => { setActiveView('presentation'); setIsMoreMenuOpen(false); }}>
-              <Presentation size={18} /> Pitch deck
-            </button>
             <button onClick={() => { setShowNotifications(true); setIsMoreMenuOpen(false); }}>
               <Bell size={18} /> Alerts
               {unreadNotifications > 0 && <span className="mobile-alert-count">{unreadNotifications}</span>}
@@ -305,7 +308,7 @@ export function Navbar({
         {role === 'candidate' ? (
           <>
             <button
-              className={`mobile-tab${activeView === 'talent' && talentTab === 'career_ai' ? ' active' : ''}`}
+              className={`mobile-tab${activeView === 'talent' && talentTab !== 'networking' && talentTab !== 'opportunities' && talentTab !== 'profile' ? ' active' : ''}`}
               onClick={() => { setActiveView('talent'); setTalentTab('career_ai'); }}
               aria-label="Home"
             >
@@ -315,10 +318,10 @@ export function Navbar({
             <button
               className={`mobile-tab${activeView === 'talent' && talentTab === 'networking' ? ' active' : ''}`}
               onClick={() => { setActiveView('talent'); setTalentTab('networking'); }}
-              aria-label="Feed"
+              aria-label="Network"
             >
               <Users size={21} />
-              <span>Feed</span>
+              <span>Network</span>
             </button>
             <button
               className={`mobile-tab${activeView === 'talent' && talentTab === 'opportunities' ? ' active' : ''}`}

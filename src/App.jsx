@@ -13,7 +13,6 @@ import { OpportunitiesView } from './components/OpportunitiesView';
 import { EmployerPortal } from './components/EmployerPortal';
 import { UniversityPortal } from './components/UniversityPortal';
 import { SkillGraphView } from './components/SkillGraphView';
-import { PitchDeckViewer } from './components/PitchDeckViewer';
 import { INITIAL_USER } from './data/mockData';
 import { authApi } from './services/auth';
 import { profileIsComplete } from './utils/profile';
@@ -30,8 +29,8 @@ export function App() {
   const [authError, setAuthError] = useState('');
   const [capacityNotice, setCapacityNotice] = useState('');
   const [isEditingProfile, setIsEditingProfile] = useState(false);
-  const [activeView, setActiveView] = useState('talent'); // 'talent' | 'employer' | 'university' | 'skillgraph' | 'presentation'
-  const [talentTab, setTalentTab] = useState('networking');
+  const [activeView, setActiveView] = useState('talent'); // 'talent' | 'employer' | 'university' | 'skillgraph'
+  const [talentTab, setTalentTab] = useState('career_ai');
 
   useEffect(() => {
     let isCurrent = true;
@@ -47,7 +46,7 @@ export function App() {
         } else {
           setUser(prev => ({ ...prev, ...currentUser.profile, name: currentUser.name }));
           setActiveView('talent');
-          setTalentTab('networking');
+          setTalentTab('career_ai');
         }
       })
       .catch(error => {
@@ -77,7 +76,7 @@ export function App() {
     } else {
       setUser(prev => ({ ...prev, ...authenticatedUser.profile, name: authenticatedUser.name }));
       setActiveView('talent');
-      setTalentTab('networking');
+      setTalentTab('career_ai');
     }
   };
 
@@ -89,7 +88,7 @@ export function App() {
       setActiveView('employer');
     } else {
       setActiveView('talent');
-      setTalentTab('networking');
+      setTalentTab('career_ai');
     }
   };
 
@@ -260,53 +259,6 @@ export function App() {
     ]);
   };
 
-  // Navigation dispatcher for Slide Deck live feature buttons
-  const handleFeatureNavigate = (action) => {
-    if (action === 'openResumeParser') {
-      setActiveView('talent');
-      setTalentTab('networking');
-      setIsResumeParserOpen(true);
-    } else if (action === 'openSkillVerification') {
-      setActiveView('talent');
-      setTalentTab('profile');
-      handleOpenVerification("Machine Learning");
-    } else if (action === 'openCareerIntelligence') {
-      setActiveView('talent');
-      setTalentTab('career_ai');
-    } else if (action === 'openSkillGap') {
-      setActiveView('talent');
-      setTalentTab('career_ai');
-    } else if (action === 'openRoadmap') {
-      setActiveView('talent');
-      setTalentTab('roadmap');
-    } else if (action === 'openSimulator') {
-      setActiveView('talent');
-      setTalentTab('simulator');
-    } else if (action === 'openNetwork') {
-      setActiveView('talent');
-      setTalentTab('networking');
-    } else if (action === 'openProjects') {
-      setActiveView('talent');
-      setTalentTab('projects');
-    } else if (action === 'openOpportunities') {
-      setActiveView('talent');
-      setTalentTab('opportunities');
-    } else if (action === 'openEmployer') {
-      if (authUser.role === 'recruiter') setActiveView('employer');
-    } else if (action === 'openWorkforce') {
-      if (authUser.role === 'recruiter') setActiveView('employer');
-    } else if (action === 'openUniversity') {
-      setActiveView('university');
-    } else if (action === 'openSkillGraph') {
-      setActiveView('skillgraph');
-    } else if (action === 'openMarketAnalytics') {
-      setActiveView('skillgraph');
-    } else {
-      setActiveView('talent');
-      setTalentTab('networking');
-    }
-  };
-
   if (isCheckingSession) return <AuthLoading />;
   if (authError && !authUser && !capacityNotice) {
     return (
@@ -429,11 +381,6 @@ export function App() {
         {/* VIEW 4: SKILL GRAPH & MARKET DEMAND */}
         {activeView === 'skillgraph' && (
           <SkillGraphView onNavigateToVerify={handleOpenVerification} />
-        )}
-
-        {/* VIEW 5: INTERACTIVE 30-SLIDE PITCH DECK */}
-        {activeView === 'presentation' && (
-          <PitchDeckViewer onNavigateToFeature={handleFeatureNavigate} />
         )}
       </main>
 
