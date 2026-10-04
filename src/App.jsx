@@ -365,6 +365,26 @@ export function App() {
               />
             )}
 
+            {talentTab === 'roadmap' && (
+              <CareerIntelligence
+                user={user}
+                openVerificationModal={handleOpenVerification}
+                navigateToProjects={() => setTalentTab('projects')}
+                navigateToOpportunities={() => setTalentTab('opportunities')}
+                initialTab="roadmap"
+              />
+            )}
+
+            {talentTab === 'simulator' && (
+              <CareerIntelligence
+                user={user}
+                openVerificationModal={handleOpenVerification}
+                navigateToProjects={() => setTalentTab('projects')}
+                navigateToOpportunities={() => setTalentTab('opportunities')}
+                initialTab="simulator"
+              />
+            )}
+
             {talentTab === 'networking' && (
               <NetworkingFeed user={user} />
             )}

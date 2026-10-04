@@ -3,7 +3,6 @@ import {
   Home,
   Users,
   Briefcase,
-  GraduationCap,
   TrendingUp,
   Bell,
   LogOut,
@@ -11,9 +10,11 @@ import {
   CheckCircle2,
   Sparkles,
   Compass,
+  Cpu,
   Code2,
   MoreHorizontal,
   BarChart2,
+  Map,
 } from 'lucide-react';
 
 export function Navbar({
@@ -50,13 +51,14 @@ export function Navbar({
     }
   };
 
-  const topNav = [
+  // All candidate nav items - completely flat, no subnav
+  const candidateNav = [
     {
-      id: 'talent',
+      id: 'home',
       label: 'Home',
       icon: Home,
       action: goHome,
-      active: activeView === 'talent' && talentTab !== 'networking' && talentTab !== 'opportunities' && talentTab !== 'profile',
+      active: activeView === 'talent' && talentTab === 'career_ai',
     },
     {
       id: 'network',
@@ -72,18 +74,48 @@ export function Navbar({
       action: () => { setActiveView('talent'); setTalentTab('opportunities'); },
       active: activeView === 'talent' && talentTab === 'opportunities',
     },
-    { id: 'employer', label: 'Hiring', icon: CheckCircle2, action: () => setActiveView('employer'), active: activeView === 'employer' },
-    { id: 'university', label: 'Campus', icon: GraduationCap, action: () => setActiveView('university'), active: activeView === 'university' },
-    { id: 'skillgraph', label: 'Insights', icon: TrendingUp, action: () => setActiveView('skillgraph'), active: activeView === 'skillgraph' },
-  ];
-  const visibleTopNav = role === 'recruiter'
-    ? topNav.filter(item => item.id === 'employer')
-    : topNav.filter(item => item.id !== 'employer' && item.id !== 'university');
-
-  const talentTabs = [
-    { id: 'career_ai', label: 'Career AI', icon: Compass },
-    { id: 'projects', label: 'Projects', icon: Code2 },
-    { id: 'skill_gap', label: 'Skill Gap Matrix', icon: BarChart2 },
+    {
+      id: 'career_ai',
+      label: 'Career AI',
+      icon: Compass,
+      action: () => { setActiveView('talent'); setTalentTab('career_ai'); },
+      active: activeView === 'talent' && talentTab === 'career_ai',
+    },
+    {
+      id: 'roadmap',
+      label: 'Roadmap',
+      icon: Map,
+      action: () => { setActiveView('talent'); setTalentTab('roadmap'); },
+      active: activeView === 'talent' && talentTab === 'roadmap',
+    },
+    {
+      id: 'simulator',
+      label: 'Simulator',
+      icon: Cpu,
+      action: () => { setActiveView('talent'); setTalentTab('simulator'); },
+      active: activeView === 'talent' && talentTab === 'simulator',
+    },
+    {
+      id: 'skill_gap',
+      label: 'Skill Gap',
+      icon: BarChart2,
+      action: () => { setActiveView('talent'); setTalentTab('skill_gap'); },
+      active: activeView === 'talent' && talentTab === 'skill_gap',
+    },
+    {
+      id: 'projects',
+      label: 'Projects',
+      icon: Code2,
+      action: () => { setActiveView('talent'); setTalentTab('projects'); },
+      active: activeView === 'talent' && talentTab === 'projects',
+    },
+    {
+      id: 'insights',
+      label: 'Insights',
+      icon: TrendingUp,
+      action: () => setActiveView('skillgraph'),
+      active: activeView === 'skillgraph',
+    },
   ];
 
   const onSearch = (e) => {
@@ -91,40 +123,42 @@ export function Navbar({
     const q = query.trim().toLowerCase();
     if (!q) return;
     if (q.includes('job') || q.includes('hire') || q.includes('opportunit')) {
-      setActiveView('talent');
-      setTalentTab('opportunities');
+      setActiveView('talent'); setTalentTab('opportunities');
     } else if (q.includes('network') || q.includes('feed')) {
-      setActiveView('talent');
-      setTalentTab('networking');
-    } else if (q.includes('skill') || q.includes('verif')) {
-      setActiveView('talent');
-      setTalentTab('profile');
+      setActiveView('talent'); setTalentTab('networking');
+    } else if (q.includes('skill gap')) {
+      setActiveView('talent'); setTalentTab('skill_gap');
+    } else if (q.includes('roadmap')) {
+      setActiveView('talent'); setTalentTab('roadmap');
+    } else if (q.includes('simulator')) {
+      setActiveView('talent'); setTalentTab('simulator');
     } else if (q.includes('project')) {
-      setActiveView('talent');
-      setTalentTab('projects');
+      setActiveView('talent'); setTalentTab('projects');
     } else if (q.includes('employer') || q.includes('hiring')) {
       setActiveView('employer');
+    } else if (q.includes('insight') || q.includes('graph')) {
+      setActiveView('skillgraph');
     } else {
-      setActiveView('talent');
-      setTalentTab('career_ai');
+      setActiveView('talent'); setTalentTab('career_ai');
     }
   };
 
   return (
     <header className="header-container">
       <div className="header-main-row" style={{
-        maxWidth: '1128px',
+        maxWidth: '1400px',
         margin: '0 auto',
-        padding: '10px 12px 8px',
+        padding: '0 12px',
         display: 'flex',
-        alignItems: 'center',
-        gap: '12px',
-        minHeight: '72px'
+        alignItems: 'stretch',
+        gap: '0',
+        minHeight: '60px'
       }}>
-        <button className="header-brand" onClick={goHome} style={{ display: 'flex', alignItems: 'center', gap: '8px', background: 'none', flexShrink: 0 }}>
+        {/* Brand Logo */}
+        <button className="header-brand" onClick={goHome} style={{ display: 'flex', alignItems: 'center', gap: '8px', background: 'none', flexShrink: 0, paddingRight: '12px' }}>
           <div style={{
-            width: '34px',
-            height: '34px',
+            width: '32px',
+            height: '32px',
             borderRadius: '6px',
             background: '#1ba83a',
             color: '#fff',
@@ -133,181 +167,140 @@ export function Navbar({
             justifyContent: 'center',
             fontFamily: 'var(--font-heading)',
             fontWeight: 800,
-            fontSize: '1.05rem',
+            fontSize: '1rem',
             letterSpacing: '-0.04em'
           }}>
             tX
           </div>
           <div style={{ lineHeight: 1.1, textAlign: 'left' }}>
-            <div style={{ fontWeight: 800, fontSize: '1.15rem', letterSpacing: '-0.04em', color: 'var(--primary)' }}>
+            <div style={{ fontWeight: 800, fontSize: '1.1rem', letterSpacing: '-0.04em', color: 'var(--primary)' }}>
               TalentX
-            </div>
-            <div style={{ fontSize: '0.62rem', color: 'var(--text-muted)', fontWeight: 600, letterSpacing: '0.04em' }}>
-              PROFESSIONAL NETWORK
             </div>
           </div>
         </button>
 
+        {/* Search */}
         {role === 'candidate' && (
-          <form className="nav-search" onSubmit={onSearch}>
-            <Search size={16} color="#666666" />
+          <form className="nav-search" onSubmit={onSearch} style={{ margin: '0 8px' }}>
+            <Search size={15} color="#666666" />
             <input
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              placeholder="Search jobs, people, skills"
+              placeholder="Search..."
               aria-label="Search"
             />
           </form>
         )}
 
-        <nav className="primary-nav" style={{ display: 'flex', alignItems: 'stretch', marginLeft: 'auto', height: '100%' }}>
-          {visibleTopNav.map(item => {
-            const Icon = item.icon;
-            return (
-              <button
-                key={item.id}
-                className={`nav-item${item.active ? ' active' : ''}`}
-                onClick={item.action}
-              >
-                <Icon className="nav-icon" size={22} strokeWidth={item.active ? 2.2 : 1.8} />
-                <span className="label">{item.label}</span>
-              </button>
-            );
-          })}
-
-          {role === 'candidate' && (
-            <>
-              <button
-                className="nav-item"
-                onClick={() => setShowNotifications(prev => !prev)}
-                style={{ position: 'relative' }}
-              >
-                <Bell className="nav-icon" size={22} strokeWidth={1.8} />
-                <span className="label">Alerts</span>
-                {unreadNotifications > 0 && (
-                  <span style={{
-                    position: 'absolute',
-                    top: '4px',
-                    right: '18px',
-                    minWidth: '16px',
-                    height: '16px',
-                    padding: '0 4px',
-                    background: '#CC1016',
-                    color: '#fff',
-                    borderRadius: '8px',
-                    fontSize: '0.62rem',
-                    fontWeight: 800,
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center'
-                  }}>
-                    {unreadNotifications}
-                  </span>
-                )}
-              </button>
-
-              <button
-                onClick={goProfile}
-                className={`nav-item${activeView === 'talent' && talentTab === 'profile' ? ' active' : ''}`}
-                style={{ borderLeft: '1px solid var(--border-subtle)', minWidth: '64px' }}
-              >
-                <img
-                  src={user.avatar}
-                  alt={authUser.name}
-                  style={{ width: '24px', height: '24px', borderRadius: '50%', objectFit: 'cover' }}
-                />
-                <span className="label">Profile</span>
-              </button>
-            </>
-          )}
-
-          {role === 'recruiter' && (
-            <button
-              onClick={goProfile}
-              className={`nav-item${activeView === 'recruiter-profile' ? ' active' : ''}`}
-              style={{ borderLeft: '1px solid var(--border-subtle)', minWidth: '64px' }}
-            >
-              <img
-                src={user.avatar}
-                alt={authUser.name}
-                style={{ width: '24px', height: '24px', borderRadius: '50%', objectFit: 'cover' }}
-              />
-              <span className="label">Profile</span>
-            </button>
-          )}
-
-          <button onClick={onLogout} className="nav-item" title={`Sign out ${authUser.email}`}>
-            <LogOut className="nav-icon" size={20} />
-            <span className="label">Sign out</span>
-          </button>
-        </nav>
-      </div>
-
-      {activeView === 'talent' && (talentTab === 'career_ai' || talentTab === 'projects' || talentTab === 'skill_gap') && (
-        <div className="subnav-wrapper" style={{ borderTop: '1px solid var(--border-subtle)', background: '#FFFFFF' }}>
-          <div className="subnav-scroll" style={{
-            maxWidth: '1128px',
-            margin: '0 auto',
-            padding: '0 12px',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '4px',
-            overflowX: 'auto'
-          }}>
-            {talentTabs.map(tab => {
-              const Icon = tab.icon;
-              const isActive = talentTab === tab.id;
+        {/* Flat nav - ALL items in one row */}
+        {role === 'candidate' && (
+          <nav className="primary-nav" style={{ display: 'flex', alignItems: 'stretch', flex: 1 }}>
+            {candidateNav.map(item => {
+              const Icon = item.icon;
               return (
                 <button
-                  key={tab.id}
-                  className={`subnav-link${isActive ? ' active' : ''}`}
-                  onClick={() => setTalentTab(tab.id)}
+                  key={item.id}
+                  className={`nav-item${item.active ? ' active' : ''}`}
+                  onClick={item.action}
+                  style={{ minWidth: 'unset', padding: '0 10px' }}
                 >
-                  <Icon size={15} strokeWidth={isActive ? 2.3 : 1.8} />
-                  {tab.label}
+                  <Icon className="nav-icon" size={20} strokeWidth={item.active ? 2.2 : 1.8} />
+                  <span className="label" style={{ fontSize: '0.72rem' }}>{item.label}</span>
                 </button>
               );
             })}
 
-            <div className="subnav-utility" style={{ marginLeft: 'auto', display: 'flex', gap: '8px', padding: '8px 0' }}>
-              <button onClick={openResumeParser} className="btn-secondary" style={{ padding: '6px 12px', fontSize: '0.78rem' }}>
-                <Sparkles size={14} /> Upload resume
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+            {/* Upload Resume */}
+            <button
+              onClick={openResumeParser}
+              className="nav-item"
+              style={{ minWidth: 'unset', padding: '0 10px' }}
+            >
+              <Sparkles className="nav-icon" size={20} strokeWidth={1.8} />
+              <span className="label" style={{ fontSize: '0.72rem' }}>Resume</span>
+            </button>
 
-      {isMoreMenuOpen && (
-        <>
-          <button
-            className="mobile-menu-backdrop"
-            aria-label="Close more menu"
-            onClick={() => setIsMoreMenuOpen(false)}
-          />
-          <div className="mobile-more-menu" role="group" aria-label="More navigation">
-            <button onClick={() => { setActiveView('skillgraph'); setIsMoreMenuOpen(false); }}>
-              <TrendingUp size={18} /> Insights
+            {/* Alerts */}
+            <button
+              className="nav-item"
+              onClick={() => setShowNotifications(prev => !prev)}
+              style={{ position: 'relative', minWidth: 'unset', padding: '0 10px' }}
+            >
+              <Bell className="nav-icon" size={20} strokeWidth={1.8} />
+              <span className="label" style={{ fontSize: '0.72rem' }}>Alerts</span>
+              {unreadNotifications > 0 && (
+                <span style={{
+                  position: 'absolute',
+                  top: '6px',
+                  right: '4px',
+                  minWidth: '15px',
+                  height: '15px',
+                  padding: '0 3px',
+                  background: '#CC1016',
+                  color: '#fff',
+                  borderRadius: '8px',
+                  fontSize: '0.58rem',
+                  fontWeight: 800,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center'
+                }}>
+                  {unreadNotifications}
+                </span>
+              )}
             </button>
-            <button onClick={() => { setShowNotifications(true); setIsMoreMenuOpen(false); }}>
-              <Bell size={18} /> Alerts
-              {unreadNotifications > 0 && <span className="mobile-alert-count">{unreadNotifications}</span>}
-            </button>
-            <button onClick={() => { openResumeParser(); setIsMoreMenuOpen(false); }}>
-              <Sparkles size={18} /> Upload resume
-            </button>
-            <button onClick={onLogout}>
-              <LogOut size={18} /> Sign out
-            </button>
-          </div>
-        </>
-      )}
 
+            {/* Profile */}
+            <button
+              onClick={goProfile}
+              className={`nav-item${activeView === 'talent' && talentTab === 'profile' ? ' active' : ''}`}
+              style={{ borderLeft: '1px solid var(--border-subtle)', minWidth: 'unset', padding: '0 10px' }}
+            >
+              <img
+                src={user.avatar}
+                alt={authUser.name}
+                style={{ width: '22px', height: '22px', borderRadius: '50%', objectFit: 'cover' }}
+              />
+              <span className="label" style={{ fontSize: '0.72rem' }}>Profile</span>
+            </button>
+
+            {/* Sign out */}
+            <button onClick={onLogout} className="nav-item" style={{ minWidth: 'unset', padding: '0 10px' }}>
+              <LogOut className="nav-icon" size={19} />
+              <span className="label" style={{ fontSize: '0.72rem' }}>Sign out</span>
+            </button>
+          </nav>
+        )}
+
+        {/* Recruiter nav */}
+        {role === 'recruiter' && (
+          <nav className="primary-nav" style={{ display: 'flex', alignItems: 'stretch', marginLeft: 'auto' }}>
+            <button className={`nav-item${activeView === 'employer' ? ' active' : ''}`} onClick={goHome}>
+              <CheckCircle2 className="nav-icon" size={22} strokeWidth={1.8} />
+              <span className="label">Hiring</span>
+            </button>
+            <button
+              onClick={goProfile}
+              className={`nav-item${activeView === 'recruiter-profile' ? ' active' : ''}`}
+              style={{ borderLeft: '1px solid var(--border-subtle)' }}
+            >
+              <img src={user.avatar} alt={authUser.name} style={{ width: '24px', height: '24px', borderRadius: '50%', objectFit: 'cover' }} />
+              <span className="label">Profile</span>
+            </button>
+            <button onClick={onLogout} className="nav-item">
+              <LogOut className="nav-icon" size={20} />
+              <span className="label">Sign out</span>
+            </button>
+          </nav>
+        )}
+      </div>
+
+      {/* Mobile bottom nav */}
       <nav className="mobile-bottom-nav" aria-label="Mobile navigation">
         {role === 'candidate' ? (
           <>
             <button
-              className={`mobile-tab${activeView === 'talent' && talentTab !== 'networking' && talentTab !== 'opportunities' && talentTab !== 'profile' ? ' active' : ''}`}
+              className={`mobile-tab${activeView === 'talent' && talentTab === 'career_ai' ? ' active' : ''}`}
               onClick={() => { setActiveView('talent'); setTalentTab('career_ai'); }}
               aria-label="Home"
             >
@@ -365,6 +358,46 @@ export function Navbar({
           </>
         )}
       </nav>
+
+      {isMoreMenuOpen && (
+        <>
+          <button
+            className="mobile-menu-backdrop"
+            aria-label="Close more menu"
+            onClick={() => setIsMoreMenuOpen(false)}
+          />
+          <div className="mobile-more-menu" role="group" aria-label="More navigation">
+            <button onClick={() => { setActiveView('talent'); setTalentTab('career_ai'); setIsMoreMenuOpen(false); }}>
+              <Compass size={18} /> Career AI
+            </button>
+            <button onClick={() => { setActiveView('talent'); setTalentTab('roadmap'); setIsMoreMenuOpen(false); }}>
+              <Map size={18} /> Roadmap
+            </button>
+            <button onClick={() => { setActiveView('talent'); setTalentTab('simulator'); setIsMoreMenuOpen(false); }}>
+              <Cpu size={18} /> Simulator
+            </button>
+            <button onClick={() => { setActiveView('talent'); setTalentTab('skill_gap'); setIsMoreMenuOpen(false); }}>
+              <BarChart2 size={18} /> Skill Gap
+            </button>
+            <button onClick={() => { setActiveView('talent'); setTalentTab('projects'); setIsMoreMenuOpen(false); }}>
+              <Code2 size={18} /> Projects
+            </button>
+            <button onClick={() => { setActiveView('skillgraph'); setIsMoreMenuOpen(false); }}>
+              <TrendingUp size={18} /> Insights
+            </button>
+            <button onClick={() => { setShowNotifications(true); setIsMoreMenuOpen(false); }}>
+              <Bell size={18} /> Alerts
+              {unreadNotifications > 0 && <span className="mobile-alert-count">{unreadNotifications}</span>}
+            </button>
+            <button onClick={() => { openResumeParser(); setIsMoreMenuOpen(false); }}>
+              <Sparkles size={18} /> Upload resume
+            </button>
+            <button onClick={onLogout}>
+              <LogOut size={18} /> Sign out
+            </button>
+          </div>
+        </>
+      )}
     </header>
   );
 }
