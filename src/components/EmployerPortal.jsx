@@ -257,26 +257,26 @@ export function EmployerPortal() {
 
                   {/* Matched Skills vs Gaps Breakdown */}
                   <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
-                    <div style={{ background: 'rgba(16, 185, 129, 0.05)', padding: '10px 14px', borderRadius: 'var(--radius-sm)' }}>
-                      <div style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--accent-emerald)', marginBottom: '6px' }}>
+                    <div style={{ background: 'rgba(16, 185, 129, 0.08)', padding: '10px 14px', borderRadius: 'var(--radius-sm)' }}>
+                      <div style={{ fontSize: '0.75rem', fontWeight: 700, color: '#047857', marginBottom: '6px' }}>
                         MATCHED SKILLS:
                       </div>
                       <div style={{ display: 'flex', flexWrap: 'wrap', gap: '5px' }}>
                         {candidate.matchedSkills.map((sk, sIdx) => (
-                          <span key={sIdx} style={{ fontSize: '0.72rem', padding: '2px 8px', borderRadius: '4px', background: 'rgba(16, 185, 129, 0.15)', color: '#6EE7B7' }}>
+                          <span key={sIdx} style={{ fontSize: '0.72rem', padding: '2px 8px', borderRadius: '4px', background: '#ECFDF5', color: '#047857', fontWeight: 600 }}>
                             ✓ {sk}
                           </span>
                         ))}
                       </div>
                     </div>
 
-                    <div style={{ background: 'rgba(245, 158, 11, 0.05)', padding: '10px 14px', borderRadius: 'var(--radius-sm)' }}>
-                      <div style={{ fontSize: '0.75rem', fontWeight: 700, color: '#FBBF24', marginBottom: '6px' }}>
+                    <div style={{ background: 'rgba(245, 158, 11, 0.08)', padding: '10px 14px', borderRadius: 'var(--radius-sm)' }}>
+                      <div style={{ fontSize: '0.75rem', fontWeight: 700, color: '#B45309', marginBottom: '6px' }}>
                         SKILL GAPS:
                       </div>
                       <div style={{ display: 'flex', flexWrap: 'wrap', gap: '5px' }}>
                         {candidate.skillGaps.map((gap, gIdx) => (
-                          <span key={gIdx} style={{ fontSize: '0.72rem', padding: '2px 8px', borderRadius: '4px', background: 'rgba(245, 158, 11, 0.15)', color: '#FCD34D' }}>
+                          <span key={gIdx} style={{ fontSize: '0.72rem', padding: '2px 8px', borderRadius: '4px', background: '#FFFBEB', color: '#B45309', fontWeight: 600 }}>
                             ⚠ {gap}
                           </span>
                         ))}
@@ -286,15 +286,15 @@ export function EmployerPortal() {
 
                   {/* Explainable AI Hiring Recommendation Summary (Slide 18) */}
                   <div style={{
-                    background: 'rgba(34, 128, 74, 0.07)',
+                    background: 'rgba(21, 128, 61, 0.08)',
                     borderRadius: 'var(--radius-sm)',
                     padding: '12px 14px',
-                    borderLeft: '3px solid #35A36A'
+                    borderLeft: '3px solid var(--primary)'
                   }}>
                     <div style={{ fontSize: '0.75rem', fontWeight: 800, color: 'var(--primary)', marginBottom: '4px' }}>
                       TRANSPARENT MATCHING REASONING:
                     </div>
-                    <p style={{ fontSize: '0.82rem', color: '#E2E8F0', lineHeight: 1.45, marginBottom: '6px' }}>
+                    <p style={{ fontSize: '0.82rem', color: 'var(--text-secondary)', lineHeight: 1.5, marginBottom: '6px', fontWeight: 500 }}>
                       {candidate.explainabilitySummary}
                     </p>
                     <div style={{ fontSize: '0.78rem', color: 'var(--primary)', fontWeight: 700 }}>

@@ -187,8 +187,8 @@ export function CareerIntelligence({
                   className="glass-panel glass-panel-interactive"
                   style={{
                     padding: '24px',
-                    border: isTarget ? '1px solid #21804A' : '1px solid var(--border-subtle)',
-                    background: isTarget ? 'linear-gradient(180deg, rgba(34, 128, 74, 0.12) 0%, rgba(15, 23, 42, 0.75) 100%)' : 'var(--bg-card)',
+                    border: isTarget ? '2px solid var(--primary)' : '1px solid var(--border-subtle)',
+                    background: isTarget ? '#F0FDF4' : 'var(--bg-card)',
                     position: 'relative'
                   }}
                 >
@@ -200,7 +200,7 @@ export function CareerIntelligence({
 
                   <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
                     <span className="badge-pill badge-cyan" style={{ fontSize: '0.7rem' }}>{role.category}</span>
-                    <span style={{ fontSize: '0.75rem', color: '#10B981', fontWeight: 700 }}>{role.hiringDemand}</span>
+                    <span style={{ fontSize: '0.75rem', color: '#047857', fontWeight: 700 }}>{role.hiringDemand}</span>
                   </div>
 
                   <h3 style={{ fontSize: '1.2rem', color: 'var(--text-primary)', marginBottom: '4px' }}>
@@ -208,7 +208,7 @@ export function CareerIntelligence({
                   </h3>
 
                   <div style={{ display: 'flex', alignItems: 'baseline', gap: '8px', marginBottom: '16px' }}>
-                    <div style={{ fontSize: '1.7rem', fontWeight: 900, color: score > 75 ? '#34D399' : '#F59E0B' }}>
+                    <div style={{ fontSize: '1.7rem', fontWeight: 900, color: score > 75 ? '#047857' : '#B45309' }}>
                       {score}%
                     </div>
                     <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>Capability Alignment</span>
@@ -230,16 +230,16 @@ export function CareerIntelligence({
 
                   {/* Transparent Why Recommended (Slide 9 requirement) */}
                   <div style={{
-                    background: 'rgba(34, 128, 74, 0.08)',
+                    background: 'rgba(21, 128, 61, 0.08)',
                     borderRadius: 'var(--radius-sm)',
                     padding: '12px',
-                    borderLeft: '3px solid #21804A',
+                    borderLeft: '3px solid var(--primary)',
                     marginBottom: '16px'
                   }}>
                     <div style={{ fontSize: '0.75rem', fontWeight: 800, color: 'var(--primary)', marginBottom: '4px', display: 'flex', alignItems: 'center', gap: '4px' }}>
                       <Info size={13} /> WHY TALENTX RECOMMENDS THIS:
                     </div>
-                    <p style={{ fontSize: '0.78rem', color: '#E2E8F0', lineHeight: 1.45 }}>
+                    <p style={{ fontSize: '0.82rem', color: 'var(--text-secondary)', lineHeight: 1.5, fontWeight: 500 }}>
                       {role.whyRecommended}
                     </p>
                   </div>
@@ -393,7 +393,7 @@ export function CareerIntelligence({
                         </div>
                         <div>
                           <div style={{ fontWeight: 600, color: 'var(--text-primary)', fontSize: '0.9rem' }}>{skill}</div>
-                          <div style={{ fontSize: '0.72rem', color: '#6EE7B7' }}>
+                          <div style={{ fontSize: '0.72rem', color: '#047857', fontWeight: 600 }}>
                             {userSkill?.verified ? `Verified (${userSkill.score}%) • ${userSkill.level}` : 'Claimed on Profile'}
                           </div>
                         </div>
@@ -419,10 +419,10 @@ export function CareerIntelligence({
             </div>
 
             {/* IDENTIFIED SKILL GAPS */}
-            <div className="glass-panel" style={{ padding: '24px', borderTop: '4px solid #F59E0B' }}>
+            <div className="glass-panel" style={{ padding: '24px', borderTop: '4px solid #B45309' }}>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px' }}>
                 <h3 style={{ fontSize: '1.15rem', color: 'var(--text-primary)', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  <AlertTriangle size={20} color="#F59E0B" /> Skill Gaps ({missingTargetSkills.length})
+                  <AlertTriangle size={20} color="#B45309" /> Skill Gaps ({missingTargetSkills.length})
                 </h3>
                 <span className="badge-pill badge-warning">High Impact</span>
               </div>
@@ -453,7 +453,7 @@ export function CareerIntelligence({
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
-                        color: '#FBBF24',
+                        color: '#B45309',
                         fontSize: '0.8rem',
                         fontWeight: 700
                       }}>
@@ -461,7 +461,7 @@ export function CareerIntelligence({
                       </div>
                       <div>
                         <div style={{ fontWeight: 600, color: 'var(--text-primary)', fontSize: '0.9rem' }}>{gap}</div>
-                        <div style={{ fontSize: '0.72rem', color: '#FCD34D' }}>
+                        <div style={{ fontSize: '0.72rem', color: '#B45309', fontWeight: 600 }}>
                           Missing in 82% of entry candidate applications
                         </div>
                       </div>
@@ -781,10 +781,10 @@ export function CareerIntelligence({
               <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginBottom: '4px' }}>
                 PROJECTED COMPENSATION
               </div>
-              <div style={{ fontSize: '2.4rem', fontWeight: 900, color: '#FBBF24' }}>
+              <div style={{ fontSize: '2.4rem', fontWeight: 900, color: '#B45309' }}>
                 ₹{14 + simulatedSkills.length * 4} - {28 + simulatedSkills.length * 6} LPA
               </div>
-              <div style={{ fontSize: '0.78rem', color: '#FBBF24', fontWeight: 600, marginTop: '4px' }}>
+              <div style={{ fontSize: '0.78rem', color: '#B45309', fontWeight: 700, marginTop: '4px' }}>
                 Estimated market premium: +{simulatedSkills.length * 15}%
               </div>
             </div>

@@ -178,8 +178,8 @@ export function NetworkingFeed({ user }) {
 
               {/* Post Content */}
               <p style={{
-                fontSize: '0.9rem',
-                color: '#E2E8F0',
+                fontSize: '0.92rem',
+                color: 'var(--text-primary)',
                 lineHeight: 1.6,
                 whiteSpace: 'pre-line',
                 marginBottom: '14px'
