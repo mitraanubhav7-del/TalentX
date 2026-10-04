@@ -45,7 +45,7 @@ export function UniversityPortal() {
         <div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
             <GraduationCap size={22} color="#22A06B" />
-            <span className="badge-pill badge-cyan">Slide 20 — University Intelligence</span>
+            <span className="badge-pill badge-cyan">University Intelligence</span>
           </div>
           <h2 style={{ fontSize: '1.5rem', color: 'var(--text-primary)', marginBottom: '6px' }}>
             Connect Education With Industry: Curriculum Gap Telemetry

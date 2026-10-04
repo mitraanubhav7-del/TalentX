@@ -86,7 +86,7 @@ export function ProjectHub({ user }) {
         <div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
             <Code2 size={22} color="#22A06B" />
-            <span className="badge-pill badge-cyan">Slide 14 — Project & Collaboration Hub</span>
+            <span className="badge-pill badge-cyan">Project & Collaboration Hub</span>
           </div>
           <h2 style={{ fontSize: '1.5rem', color: 'var(--text-primary)', marginBottom: '6px' }}>
             Learn by Building: Complementary Skill Team Formation

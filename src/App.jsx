@@ -345,12 +345,23 @@ export function App() {
               />
             )}
 
-            {(talentTab === 'career_ai' || talentTab === 'roadmap' || talentTab === 'simulator') && (
+            {talentTab === 'career_ai' && (
               <CareerIntelligence
                 user={user}
                 openVerificationModal={handleOpenVerification}
                 navigateToProjects={() => setTalentTab('projects')}
                 navigateToOpportunities={() => setTalentTab('opportunities')}
+                initialTab="intelligence"
+              />
+            )}
+
+            {talentTab === 'skill_gap' && (
+              <CareerIntelligence
+                user={user}
+                openVerificationModal={handleOpenVerification}
+                navigateToProjects={() => setTalentTab('projects')}
+                navigateToOpportunities={() => setTalentTab('opportunities')}
+                initialTab="gap"
               />
             )}
 

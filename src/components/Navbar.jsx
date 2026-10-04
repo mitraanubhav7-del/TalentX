@@ -11,9 +11,9 @@ import {
   CheckCircle2,
   Sparkles,
   Compass,
-  Cpu,
   Code2,
   MoreHorizontal,
+  BarChart2,
 } from 'lucide-react';
 
 export function Navbar({
@@ -82,9 +82,8 @@ export function Navbar({
 
   const talentTabs = [
     { id: 'career_ai', label: 'Career AI', icon: Compass },
-    { id: 'roadmap', label: 'Roadmap', icon: TrendingUp },
-    { id: 'simulator', label: 'Simulator', icon: Cpu },
     { id: 'projects', label: 'Projects', icon: Code2 },
+    { id: 'skill_gap', label: 'Skill Gap Matrix', icon: BarChart2 },
   ];
 
   const onSearch = (e) => {
@@ -244,7 +243,7 @@ export function Navbar({
         </nav>
       </div>
 
-      {activeView === 'talent' && (talentTab === 'career_ai' || talentTab === 'roadmap' || talentTab === 'simulator' || talentTab === 'projects') && (
+      {activeView === 'talent' && (talentTab === 'career_ai' || talentTab === 'projects' || talentTab === 'skill_gap') && (
         <div className="subnav-wrapper" style={{ borderTop: '1px solid var(--border-subtle)', background: '#FFFFFF' }}>
           <div className="subnav-scroll" style={{
             maxWidth: '1128px',

@@ -141,7 +141,7 @@ export function SkillGraphView({ onNavigateToVerify }) {
         <div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
             <Network size={22} color="#22A06B" />
-            <span className="badge-pill badge-indigo">Slide 21 & 22 — Connected Skill Graph</span>
+            <span className="badge-pill badge-indigo">Connected Skill Graph</span>
           </div>
           <h2 style={{ fontSize: '1.5rem', color: 'var(--text-primary)', marginBottom: '6px' }}>
             The Intelligence Layer Behind TalentX
@@ -266,7 +266,7 @@ export function SkillGraphView({ onNavigateToVerify }) {
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '20px', flexWrap: 'wrap', gap: '12px' }}>
           <div>
             <h3 style={{ fontSize: '1.25rem', color: 'var(--text-primary)', marginBottom: '4px' }}>
-              Live Labor Market Intelligence & Trends (Slide 7 & 23)
+              Live Labor Market Intelligence & Trends
             </h3>
             <p style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>
               Data-driven analytics synthesized from 25,000+ national job postings, government datasets, and platform assessments.

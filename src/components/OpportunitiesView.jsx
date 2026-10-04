@@ -46,7 +46,7 @@ export function OpportunitiesView({ user }) {
         <div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
             <Briefcase size={22} color="#35A36A" />
-            <span className="badge-pill badge-indigo">Slide 15 — Smart Opportunities</span>
+            <span className="badge-pill badge-indigo">Smart Opportunities</span>
           </div>
           <h2 style={{ fontSize: '1.5rem', color: 'var(--text-primary)', marginBottom: '6px' }}>
             AI-Matched Opportunities: Jobs, Internships & Hackathons
@@ -261,7 +261,7 @@ export function OpportunitiesView({ user }) {
 
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
               <Sparkles size={18} color="#35B879" />
-              <span className="badge-pill badge-indigo">Slide 18 — Explainable AI Matching</span>
+              <span className="badge-pill badge-indigo">Explainable AI Matching</span>
             </div>
 
             <h3 style={{ fontSize: '1.35rem', color: 'var(--text-primary)', marginBottom: '4px' }}>

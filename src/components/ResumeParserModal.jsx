@@ -192,7 +192,7 @@ export function ResumeParserModal({ isOpen, onClose, onSyncProfile }) {
           </div>
           <div>
             <h2 style={{ fontSize: '1.4rem', color: 'var(--text-primary)' }}>
-              AI Resume Parser <span className="badge-pill badge-indigo">Slide 6</span>
+              AI Resume Parser
             </h2>
             <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
               Upload any PDF/DOCX resume — our NLP model automatically classifies Skills, Experience, Projects, and Education.

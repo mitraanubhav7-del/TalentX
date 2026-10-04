@@ -22,9 +22,10 @@ export function CareerIntelligence({
   user, 
   openVerificationModal, 
   navigateToProjects, 
-  navigateToOpportunities 
+  navigateToOpportunities,
+  initialTab = 'intelligence'
 }) {
-  const [activeSubTab, setActiveSubTab] = useState('intelligence'); // 'intelligence' | 'gap' | 'roadmap' | 'simulator'
+  const [activeSubTab, setActiveSubTab] = useState(initialTab); // 'intelligence' | 'gap' | 'roadmap' | 'simulator'
   const [targetRole, setTargetRole] = useState("Data Scientist");
 
   // Career Simulator State (Slide 12)
@@ -86,7 +87,6 @@ export function CareerIntelligence({
           </p>
         </div>
 
-        {/* Sub Navigation Pills */}
         <div style={{
           display: 'flex',
           background: 'var(--surface-tint)',
@@ -96,10 +96,10 @@ export function CareerIntelligence({
           gap: '4px'
         }}>
           {[
-            { id: 'intelligence', label: 'Career Fits', badge: 'Slide 9' },
-            { id: 'gap', label: 'Skill Gap Matrix', badge: 'Slide 10' },
-            { id: 'roadmap', label: 'Action Roadmap', badge: 'Slide 11' },
-            { id: 'simulator', label: 'Career Simulator', badge: 'Slide 12' },
+            { id: 'intelligence', label: 'Career AI' },
+            { id: 'gap', label: 'Skill Gap Matrix' },
+            { id: 'roadmap', label: 'Roadmap' },
+            { id: 'simulator', label: 'Simulator' },
           ].map(tab => {
             const isActive = activeSubTab === tab.id;
             return (
@@ -119,15 +119,6 @@ export function CareerIntelligence({
                 }}
               >
                 <span>{tab.label}</span>
-                <span style={{
-                  fontSize: '0.65rem',
-                  padding: '1px 5px',
-                  borderRadius: '4px',
-                  background: isActive ? 'rgba(255,255,255,0.2)' : 'rgba(255,255,255,0.06)',
-                  color: 'var(--text-primary)'
-                }}>
-                  {tab.badge}
-                </span>
               </button>
             );
           })}
@@ -152,7 +143,7 @@ export function CareerIntelligence({
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px' }}>
                 <Sparkles size={18} color="#35B879" />
                 <span style={{ fontSize: '0.9rem', fontWeight: 800, color: 'var(--primary)', letterSpacing: '0.04em' }}>
-                  AI RECOMMENDATION ENGINE (SLIDE 9)
+                  AI RECOMMENDATION ENGINE
                 </span>
               </div>
               <h3 style={{ fontSize: '1.25rem', color: 'var(--text-primary)', marginBottom: '4px' }}>
@@ -507,7 +498,7 @@ export function CareerIntelligence({
             gap: '16px'
           }}>
             <div>
-              <span className="badge-pill badge-indigo" style={{ marginBottom: '6px' }}>Slide 11 — From Skill Gap → Action</span>
+              <span className="badge-pill badge-indigo" style={{ marginBottom: '6px' }}>Personalized Action Plan</span>
               <h3 style={{ fontSize: '1.25rem', color: 'var(--text-primary)' }}>
                 Actionable Learning & Verification Roadmap
               </h3>
@@ -682,7 +673,7 @@ export function CareerIntelligence({
           }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
               <Cpu size={20} color="#35B879" />
-              <span className="badge-pill badge-indigo">Slide 12 — Career Simulator Sandbox</span>
+              <span className="badge-pill badge-indigo">Career Simulator Sandbox</span>
             </div>
             <h3 style={{ fontSize: '1.4rem', color: 'var(--text-primary)', marginBottom: '6px' }}>
               "What If I Learn This Skill?"

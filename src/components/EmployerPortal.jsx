@@ -61,7 +61,7 @@ export function EmployerPortal() {
         <div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
             <Briefcase size={22} color="#35A36A" />
-            <span className="badge-pill badge-indigo">Slide 16-18 — Intelligent Recruitment</span>
+            <span className="badge-pill badge-indigo">Intelligent Recruitment Portal</span>
           </div>
           <h2 style={{ fontSize: '1.5rem', color: 'var(--text-primary)', marginBottom: '6px' }}>
             Enterprise Talent Portal: Skill-Based Hiring
@@ -81,10 +81,10 @@ export function EmployerPortal() {
           gap: '4px'
         }}>
           {[
-            { id: 'candidates', label: 'Candidate Matcher', badge: 'Slide 18' },
-            { id: 'criteria', label: 'Assessment Criteria', badge: 'Slide 17' },
-            { id: 'post_job', label: 'Create Job Post', badge: 'Slide 16' },
-            { id: 'pipeline', label: 'Hiring Pipeline', badge: 'Kanban' }
+            { id: 'candidates', label: 'Candidate Matcher' },
+            { id: 'criteria', label: 'Assessment Criteria' },
+            { id: 'post_job', label: 'Create Job Post' },
+            { id: 'pipeline', label: 'Hiring Pipeline' }
           ].map(tab => {
             const isActive = activeSubTab === tab.id;
             return (
@@ -104,15 +104,6 @@ export function EmployerPortal() {
                 }}
               >
                 <span>{tab.label}</span>
-                <span style={{
-                  fontSize: '0.65rem',
-                  padding: '1px 5px',
-                  borderRadius: '4px',
-                  background: isActive ? 'rgba(255,255,255,0.2)' : 'rgba(255,255,255,0.06)',
-                  color: 'var(--text-primary)'
-                }}>
-                  {tab.badge}
-                </span>
               </button>
             );
           })}
@@ -161,7 +152,7 @@ export function EmployerPortal() {
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
               <Sparkles size={18} color="#35B879" />
               <span style={{ fontSize: '0.85rem', fontWeight: 700, color: 'var(--primary)' }}>
-                Slide 18 Principle: Explainable Candidate Matching — Not Just "87% Match"
+                Explainable Candidate Matching — Not Just "87% Match"
               </span>
             </div>
             <span style={{ fontSize: '0.78rem', color: 'var(--text-secondary)' }}>
@@ -352,7 +343,7 @@ export function EmployerPortal() {
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
             <Sliders size={20} color="#35A36A" />
             <h3 style={{ fontSize: '1.35rem', color: 'var(--text-primary)' }}>
-              Company-Specific Assessment Standards (Slide 17)
+              Company-Specific Assessment Standards
             </h3>
           </div>
           <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', marginBottom: '24px', maxWidth: '650px' }}>
@@ -472,7 +463,7 @@ export function EmployerPortal() {
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
             <Sparkles size={20} color="#35A36A" />
             <h3 style={{ fontSize: '1.35rem', color: 'var(--text-primary)' }}>
-              Create Job with AI Skill Extraction (Slide 16)
+              Create Job with AI Skill Extraction
             </h3>
           </div>
           <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', marginBottom: '24px' }}>

@@ -55,7 +55,7 @@ export function WorkforceIntelligence() {
         <div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
             <TrendingUp size={22} color="#FBBF24" />
-            <span className="badge-pill badge-warning">Slide 19 — Workforce Intelligence</span>
+            <span className="badge-pill badge-warning">Workforce Intelligence</span>
           </div>
           <h2 style={{ fontSize: '1.5rem', color: 'var(--text-primary)', marginBottom: '6px' }}>
             Enterprise Workforce Planning: Current vs Future Demand

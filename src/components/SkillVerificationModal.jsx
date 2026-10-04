@@ -160,7 +160,7 @@ export function SkillVerificationModal({ isOpen, onClose, defaultSkill = "Machin
               </div>
               <div>
                 <h2 style={{ fontSize: '1.4rem', color: 'var(--text-primary)' }}>
-                  Skill Verification Engine <span className="badge-pill badge-verified">Slide 8</span>
+                  Skill Verification Engine
                 </h2>
                 <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
                   "Don't Just Claim a Skill. Prove It." — Earn an evidence-backed verified badge on TalentX.
