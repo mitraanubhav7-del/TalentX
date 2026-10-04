@@ -1,15 +1,25 @@
 import 'dotenv/config';
 import pg from 'pg';
+import { newDb } from 'pg-mem';
 
 const { Pool } = pg;
 
-export const db = new Pool({
-  connectionString: process.env.DATABASE_URL,
-  ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : undefined,
-  max: Number(process.env.DB_POOL_SIZE || 5),
-  idleTimeoutMillis: 30_000,
-  connectionTimeoutMillis: 10_000,
-});
+function createDatabasePool() {
+  if (process.env.DATABASE_URL) {
+    return new Pool({
+      connectionString: process.env.DATABASE_URL,
+      ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : undefined,
+      max: Number(process.env.DB_POOL_SIZE || 5),
+      idleTimeoutMillis: 30_000,
+      connectionTimeoutMillis: 10_000,
+    });
+  }
+  const memory = newDb();
+  const MemPool = memory.adapters.createPg().Pool;
+  return new MemPool();
+}
+
+export const db = createDatabasePool();
 
 export async function initializeDatabase(pool = db) {
   await pool.query(`

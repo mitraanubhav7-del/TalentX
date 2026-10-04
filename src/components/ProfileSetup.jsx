@@ -3,7 +3,7 @@ import { Award, BriefcaseBusiness, Camera, GraduationCap, ImagePlus, Link, Plus,
 import { authApi } from '../services/auth';
 import { emptyProfile } from '../utils/profile';
 
-function ProfileField({ label, value, onChange, required = true, type = 'text', options, multiline = false, placeholder }) {
+function ProfileField({ label, value, onChange, required = false, type = 'text', options, multiline = false, placeholder }) {
   const shared = {
     value: value ?? '',
     required,
@@ -13,7 +13,7 @@ function ProfileField({ label, value, onChange, required = true, type = 'text', 
 
   return (
     <label className="profile-setup-field">
-      {label}
+      <span>{label} {!required && <small style={{ color: 'var(--text-muted)', fontWeight: 400 }}>(optional)</small>}</span>
       {options ? (
         <select {...shared}>
           <option value="" disabled>Select {label.toLowerCase()}</option>
@@ -114,9 +114,9 @@ const sections = [
       { key: 'techStack', label: 'Skills or technologies (comma-separated)', list: true },
       { key: 'github', label: 'Code URL', type: 'url', placeholder: 'https://github.com/…' },
       { key: 'demo', label: 'Live demo URL', type: 'url', placeholder: 'https://…' },
-      { key: 'hackathonAward', label: 'Award (optional)', required: false },
-      { key: 'stars', label: 'GitHub stars', type: 'number', required: false },
-      { key: 'collaborators', label: 'Collaborators', type: 'number', required: false },
+      { key: 'hackathonAward', label: 'Award (optional)' },
+      { key: 'stars', label: 'GitHub stars', type: 'number' },
+      { key: 'collaborators', label: 'Collaborators', type: 'number' },
     ],
   },
   {
@@ -138,6 +138,11 @@ export function ProfileSetup({ user, onSaved, onCancel, onLogout, isRequired }) 
     ...emptyProfile(),
     ...(user.profile || {}),
     socialLinks: { ...emptyProfile().socialLinks, ...(user.profile?.socialLinks || {}) },
+    skills: user.profile?.skills || [],
+    experience: user.profile?.experience || [],
+    education: user.profile?.education || [],
+    projects: user.profile?.projects || [],
+    certifications: user.profile?.certifications || [],
   }));
   const [error, setError] = useState('');
   const [imageError, setImageError] = useState('');
@@ -161,8 +166,14 @@ export function ProfileSetup({ user, onSaved, onCancel, onLogout, isRequired }) 
     }));
   };
   const addEntry = section => setProfile(current => {
-    const blank = emptyProfile()[section][0];
-    return { ...current, [section]: [...current[section], { ...blank }] };
+    const blank = {
+      skills: { name: '', level: 'Intermediate' },
+      experience: { role: '', company: '', period: '', description: '', skillsUsed: [] },
+      education: { degree: '', institution: '', period: '', grade: '', highlights: '' },
+      projects: { title: '', description: '', techStack: [], github: '', demo: '', stars: 0, collaborators: 0, hackathonAward: '' },
+      certifications: { title: '', issuer: '', date: '', credentialUrl: '' },
+    }[section] || {};
+    return { ...current, [section]: [...(current[section] || []), { ...blank }] };
   });
   const removeEntry = (section, index) => setProfile(current => ({
     ...current,
@@ -186,14 +197,25 @@ export function ProfileSetup({ user, onSaved, onCancel, onLogout, isRequired }) 
     try {
       const profileToSave = {
         ...profile,
-        skills: profile.skills.map(skill => ({ ...skill, verified: false, score: 0, certId: null })),
-        experience: profile.experience.map((item, index) => ({ ...item, id: `experience-${index + 1}` })),
-        projects: profile.projects.map((item, index) => ({
-          ...item,
-          id: `project-${index + 1}`,
-          stars: Number(item.stars) || 0,
-          collaborators: Number(item.collaborators) || 0,
-        })),
+        _completed: true,
+        skills: (profile.skills || [])
+          .filter(skill => skill.name && skill.name.trim())
+          .map(skill => ({ ...skill, verified: false, score: 0, certId: null })),
+        experience: (profile.experience || [])
+          .filter(item => (item.role && item.role.trim()) || (item.company && item.company.trim()))
+          .map((item, index) => ({ ...item, id: `experience-${index + 1}` })),
+        education: (profile.education || [])
+          .filter(item => (item.degree && item.degree.trim()) || (item.institution && item.institution.trim())),
+        projects: (profile.projects || [])
+          .filter(item => item.title && item.title.trim())
+          .map((item, index) => ({
+            ...item,
+            id: `project-${index + 1}`,
+            stars: Number(item.stars) || 0,
+            collaborators: Number(item.collaborators) || 0,
+          })),
+        certifications: (profile.certifications || [])
+          .filter(item => item.title && item.title.trim()),
       };
       const result = await authApi.updateProfile(profileToSave);
       onSaved(result.profile);
@@ -214,18 +236,16 @@ export function ProfileSetup({ user, onSaved, onCancel, onLogout, isRequired }) 
             ? `Welcome, ${user.name}. Let’s build your ${user.role === 'recruiter' ? 'recruiter ' : ''}profile.`
             : 'Edit your profile'}</h1>
           <p className="auth-description">
-            {isRequired
-              ? 'Complete every section to unlock your TalentX workspace. You can update your profile any time.'
-              : 'Keep your talent profile accurate and up to date.'}
+            Fill in your basic information to get started. All other sections and photos are optional and can be updated at any time.
           </p>
         </header>
 
         <section className="profile-setup-card">
-          <h2><UserRound size={19} /> About you</h2>
+          <h2><UserRound size={19} /> Basic information</h2>
           <div className="profile-setup-images">
             {[
-              { key: 'avatar', label: 'Profile photo', icon: Camera },
-              { key: 'banner', label: 'Cover photo', icon: ImagePlus },
+              { key: 'avatar', label: 'Profile photo (optional)', icon: Camera },
+              { key: 'banner', label: 'Cover photo (optional)', icon: ImagePlus },
             ].map(({ key, label, icon: Icon }) => (
               <label className="profile-image-upload" key={key}>
                 {profile[key] ? <img src={profile[key]} alt={`${label} preview`} /> : <Icon size={25} />}
@@ -233,7 +253,6 @@ export function ProfileSetup({ user, onSaved, onCancel, onLogout, isRequired }) 
                 <input
                   type="file"
                   accept="image/jpeg,image/png,image/webp"
-                  required={!profile[key]}
                   onChange={event => {
                     handleImage(key, event.target.files?.[0]);
                     event.target.value = '';
@@ -244,53 +263,81 @@ export function ProfileSetup({ user, onSaved, onCancel, onLogout, isRequired }) 
           </div>
           {imageError && <p className="profile-setup-error" role="alert">{imageError}</p>}
           <div className="profile-setup-grid">
-            <ProfileField label="Professional headline" value={profile.title} onChange={value => updateProfileField('title', value)} placeholder="e.g. Aspiring UX designer" />
-            <ProfileField label="Location" value={profile.location} onChange={value => updateProfileField('location', value)} placeholder="City, country" />
-            <ProfileField label="School or university" value={profile.university} onChange={value => updateProfileField('university', value)} />
-            <ProfileField label="Target role" value={profile.targetRole} onChange={value => updateProfileField('targetRole', value)} placeholder="e.g. Product designer" />
+            <ProfileField
+              label="Professional headline"
+              value={profile.title}
+              onChange={value => updateProfileField('title', value)}
+              required={true}
+              placeholder="e.g. Aspiring UX designer / Software Engineer"
+            />
+            <ProfileField
+              label="Target role"
+              value={profile.targetRole}
+              onChange={value => updateProfileField('targetRole', value)}
+              placeholder="e.g. Product designer"
+            />
+            <ProfileField
+              label="Location"
+              value={profile.location}
+              onChange={value => updateProfileField('location', value)}
+              placeholder="City, country"
+            />
+            <ProfileField
+              label="School or university"
+              value={profile.university}
+              onChange={value => updateProfileField('university', value)}
+            />
             <div className="profile-setup-wide">
-              <ProfileField label="About" value={profile.about} onChange={value => updateProfileField('about', value)} multiline placeholder="Tell people about your work, strengths, and goals." />
+              <ProfileField
+                label="About"
+                value={profile.about}
+                onChange={value => updateProfileField('about', value)}
+                multiline
+                placeholder="Tell people about your work, strengths, and goals."
+              />
             </div>
           </div>
         </section>
 
         <section className="profile-setup-card">
-          <h2><Link size={19} /> Social links</h2>
+          <h2><Link size={19} /> Social links (optional)</h2>
           <div className="profile-setup-grid">
-            <ProfileField label="GitHub URL" type="url" value={profile.socialLinks.github} onChange={value => updateSocialLink('github', value)} placeholder="https://github.com/…" />
-            <ProfileField label="LinkedIn URL" type="url" value={profile.socialLinks.linkedin} onChange={value => updateSocialLink('linkedin', value)} placeholder="https://linkedin.com/in/…" />
-            <ProfileField label="Portfolio URL" type="url" value={profile.socialLinks.portfolio} onChange={value => updateSocialLink('portfolio', value)} placeholder="https://…" />
+            <ProfileField label="GitHub URL" type="url" value={profile.socialLinks?.github} onChange={value => updateSocialLink('github', value)} placeholder="https://github.com/…" />
+            <ProfileField label="LinkedIn URL" type="url" value={profile.socialLinks?.linkedin} onChange={value => updateSocialLink('linkedin', value)} placeholder="https://linkedin.com/in/…" />
+            <ProfileField label="Portfolio URL" type="url" value={profile.socialLinks?.portfolio} onChange={value => updateSocialLink('portfolio', value)} placeholder="https://…" />
           </div>
         </section>
 
         {sections.map(({ key, title, itemLabel, icon: Icon, fields }) => (
           <section className="profile-setup-card" key={key}>
             <div className="profile-setup-section-heading">
-              <h2><Icon size={19} /> {title}</h2>
+              <h2><Icon size={19} /> {title} (optional)</h2>
               <button type="button" className="btn-secondary" onClick={() => addEntry(key)}>
                 <Plus size={15} /> Add {title.toLowerCase()}
               </button>
             </div>
-            {profile[key].length === 0 && <p className="profile-setup-hint">Add at least one {title.toLowerCase()} entry to continue.</p>}
-            {profile[key].map((entry, index) => (
+            {(!profile[key] || profile[key].length === 0) && (
+              <p className="profile-setup-hint" style={{ color: 'var(--text-muted)' }}>
+                No {title.toLowerCase()} added yet. Click "+ Add {title.toLowerCase()}" if you want to add any now, or skip this step.
+              </p>
+            )}
+            {(profile[key] || []).map((entry, index) => (
               <div className="profile-setup-entry" key={`${key}-${index}`}>
                 <div className="profile-setup-entry-heading">
                   <strong>{itemLabel} {index + 1}</strong>
-                  {profile[key].length > 1 && (
-                    <button type="button" className="profile-remove-entry" onClick={() => removeEntry(key, index)} aria-label={`Remove ${itemLabel.toLowerCase()} ${index + 1}`}>
-                      <Trash2 size={15} /> Remove
-                    </button>
-                  )}
+                  <button type="button" className="profile-remove-entry" onClick={() => removeEntry(key, index)} aria-label={`Remove ${itemLabel.toLowerCase()} ${index + 1}`}>
+                    <Trash2 size={15} /> Remove
+                  </button>
                 </div>
                 <div className="profile-setup-grid">
                   {fields.map(field => {
-                    const fieldValue = field.list ? (entry[field.key] || []).join(', ') : entry[field.key];
+                    const fieldValue = field.list ? (entry[field.key] || []).join(', ') : (entry[field.key] ?? '');
                     return (
                       <ProfileField
                         key={field.key}
                         label={field.label}
                         type={field.type}
-                        required={field.required !== false}
+                        required={false}
                         options={field.options}
                         multiline={field.multiline}
                         placeholder={field.placeholder}

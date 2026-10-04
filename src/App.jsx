@@ -510,31 +510,6 @@ export function App() {
           </div>
         </div>
       )}
-
-      {/* Modern Footer with Bharat 2.0 attribution */}
-      <footer style={{
-        borderTop: '1px solid var(--border-subtle)',
-        background: '#FFFFFF',
-        padding: '18px 24px',
-        textAlign: 'center',
-        fontSize: '0.8rem',
-        color: 'var(--text-muted)'
-      }}>
-        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '14px', flexWrap: 'wrap' }}>
-          <strong style={{ color: 'var(--primary)' }}>TalentX</strong>
-          <span>•</span>
-          <span>AI-powered talent intelligence</span>
-          <span>•</span>
-          <span>Build for Bharat 2.0</span>
-          <span>•</span>
-          <button
-            onClick={() => setActiveView('presentation')}
-            style={{ background: 'none', border: 'none', color: 'var(--primary)', fontWeight: 650 }}
-          >
-            Pitch deck
-          </button>
-        </div>
-      </footer>
     </div>
   );
 }

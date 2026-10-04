@@ -134,60 +134,50 @@ function publicUser(user) {
 }
 
 function validateProfile(profile) {
+  const optionalText = (value, maxLength) => (
+    value === undefined || value === null || value === '' || (typeof value === 'string' && value.trim().length <= maxLength)
+  );
   const requiredText = (value, maxLength) => (
     typeof value === 'string' && value.trim().length > 0 && value.trim().length <= maxLength
   );
-  const validUrl = value => {
-    if (!requiredText(value, 1_500)) return false;
+  const optionalUrl = value => {
+    if (!value || (typeof value === 'string' && value.trim() === '')) return true;
+    if (typeof value !== 'string' || value.trim().length > 1_500) return false;
     try {
-      return new URL(value).protocol === 'https:';
+      const parsed = new URL(value);
+      return parsed.protocol === 'https:' || parsed.protocol === 'http:';
     } catch {
       return false;
     }
   };
-  const validImage = value => (
-    typeof value === 'string'
-    && value.length <= 1_500_000
-    && /^data:image\/(?:jpeg|png|webp);base64,[\w+/]+=*$/.test(value)
+  const optionalImage = value => (
+    !value || (typeof value === 'string'
+      && value.length <= 1_500_000
+      && /^data:image\/(?:jpeg|png|webp);base64,[\w+/]+=*$/.test(value))
   );
-  const validEntries = (entries, requiredFields, maxCount) => (
-    Array.isArray(entries)
-    && entries.length > 0
-    && entries.length <= maxCount
-    && entries.every(entry => entry && typeof entry === 'object'
-      && requiredFields.every(([key, maxLength]) => requiredText(entry[key], maxLength)))
+  const validOptionalEntries = (entries, maxCount) => (
+    entries === undefined || entries === null || (
+      Array.isArray(entries)
+      && entries.length <= maxCount
+      && entries.every(entry => entry && typeof entry === 'object')
+    )
   );
 
   if (!profile || typeof profile !== 'object' || Array.isArray(profile)) return false;
-  if (!validImage(profile.avatar) || !validImage(profile.banner)) return false;
-  if (!requiredText(profile.title, 120)
-    || !requiredText(profile.location, 120)
-    || !requiredText(profile.university, 160)
-    || !requiredText(profile.targetRole, 120)
-    || !requiredText(profile.about, 2_000)) return false;
-  if (!profile.socialLinks || !['github', 'linkedin', 'portfolio']
-    .every(key => validUrl(profile.socialLinks[key]))) return false;
-  if (!validEntries(profile.skills, [['name', 80], ['level', 40]], 50)) return false;
-  if (!validEntries(profile.experience, [
-    ['role', 120], ['company', 120], ['period', 80], ['description', 1_000],
-  ], 20) || !profile.experience.every(entry => Array.isArray(entry.skillsUsed)
-    && entry.skillsUsed.length > 0
-    && entry.skillsUsed.length <= 20
-    && entry.skillsUsed.every(skill => requiredText(skill, 80)))) return false;
-  if (!validEntries(profile.education, [
-    ['degree', 120], ['institution', 160], ['period', 80], ['grade', 80], ['highlights', 1_000],
-  ], 20)) return false;
-  if (!validEntries(profile.projects, [
-    ['title', 120], ['description', 1_000],
-  ], 20) || !profile.projects.every(project => Array.isArray(project.techStack)
-    && project.techStack.length > 0
-    && project.techStack.length <= 20
-    && project.techStack.every(tech => requiredText(tech, 80))
-    && validUrl(project.github)
-    && validUrl(project.demo))) return false;
-  if (!validEntries(profile.certifications, [
-    ['title', 160], ['issuer', 120], ['date', 80],
-  ], 30) || !profile.certifications.every(cert => validUrl(cert.credentialUrl))) return false;
+  if (!optionalImage(profile.avatar) || !optionalImage(profile.banner)) return false;
+  if (!requiredText(profile.title || profile.targetRole || profile.name, 120)) return false;
+  if (!optionalText(profile.location, 120)
+    || !optionalText(profile.university, 160)
+    || !optionalText(profile.targetRole, 120)
+    || !optionalText(profile.about, 2_000)) return false;
+  if (profile.socialLinks && typeof profile.socialLinks === 'object') {
+    if (!['github', 'linkedin', 'portfolio'].every(key => optionalUrl(profile.socialLinks[key]))) return false;
+  }
+  if (!validOptionalEntries(profile.skills, 50)) return false;
+  if (!validOptionalEntries(profile.experience, 20)) return false;
+  if (!validOptionalEntries(profile.education, 20)) return false;
+  if (!validOptionalEntries(profile.projects, 20)) return false;
+  if (!validOptionalEntries(profile.certifications, 30)) return false;
   return true;
 }
 
