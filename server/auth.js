@@ -334,7 +334,7 @@ async function activateSession(pool, tokenHash, capacity) {
   }
 }
 
-export function authenticate(database, { userCapacity = Number(process.env.USER_CAPACITY || 4) } = {}) {
+export function authenticate(database, { userCapacity = Number(process.env.USER_CAPACITY || 50) } = {}) {
   return async (request, response, next) => {
     const token = cookieValue(request, SESSION_COOKIE);
     if (!token) return response.status(401).json({ error: 'Authentication required.' });
@@ -370,7 +370,7 @@ export function requireRole(role, { requireApproval = false } = {}) {
 }
 
 export function createAuthRouter(database, {
-  userCapacity = Number(process.env.USER_CAPACITY || 4),
+  userCapacity = Number(process.env.USER_CAPACITY || 50),
   otpSecret = process.env.EMAIL_OTP_SECRET ||
     (process.env.NODE_ENV === 'production' ? undefined : 'talentx-local-development-otp-secret'),
   sendOtp = sendVerificationCode,

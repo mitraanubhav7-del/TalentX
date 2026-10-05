@@ -1,77 +1,100 @@
-import React, { useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { 
   Share2, 
   Heart, 
   MessageSquare, 
-  Sparkles, 
   Send, 
   UserPlus, 
   Check, 
   Bookmark, 
-  Search, 
   ExternalLink,
   Code,
   ShieldCheck,
-  TrendingUp,
-  Award
 } from 'lucide-react';
-import { INITIAL_POSTS, AI_SUGGESTED_CONNECTIONS } from '../data/mockData';
 import { MessagingModal } from './MessagingModal';
+import { socialApi } from '../services/social';
 
-export function NetworkingFeed({ user }) {
-  const [posts, setPosts] = useState(INITIAL_POSTS);
+export function NetworkingFeed({ user, authUser }) {
+  const [posts, setPosts] = useState([]);
   const [newPostContent, setNewPostContent] = useState('');
-  const [connectedIds, setConnectedIds] = useState(['conn_3']); // connected to Karthik Raja initially
+  const [members, setMembers] = useState([]);
+  const [networkError, setNetworkError] = useState('');
+  const [networkLoading, setNetworkLoading] = useState(true);
+  const [feedLoading, setFeedLoading] = useState(true);
   const [selectedRecipient, setSelectedRecipient] = useState(null);
   const [activeCommunityFilter, setActiveCommunityFilter] = useState('All');
 
-  const handleCreatePost = () => {
+  const loadMembers = useCallback(async () => {
+    try {
+      const { members: currentMembers } = await socialApi.members();
+      setMembers(currentMembers);
+      setNetworkError('');
+    } catch (error) {
+      setNetworkError(error.message);
+    } finally {
+      setNetworkLoading(false);
+    }
+  }, []);
+
+  const loadFeed = useCallback(async () => {
+    try {
+      const { posts: currentPosts } = await socialApi.posts();
+      setPosts(currentPosts);
+      setNetworkError('');
+    } catch (error) {
+      setNetworkError(error.message);
+    } finally {
+      setFeedLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    loadMembers();
+    loadFeed();
+    const memberIntervalId = setInterval(loadMembers, 10_000);
+    const feedIntervalId = setInterval(loadFeed, 8_000);
+    return () => { clearInterval(memberIntervalId); clearInterval(feedIntervalId); };
+  }, [loadMembers, loadFeed]);
+
+  const handleCreatePost = async () => {
     if (!newPostContent.trim()) return;
-
-    const newPost = {
-      id: `post_${Date.now()}`,
-      author: {
-        name: user.name,
-        title: `${user.title} | TalentX Verified`,
-        avatar: user.avatar,
-        verified: true
-      },
-      timeAgo: "Just now",
-      content: newPostContent.trim(),
-      tags: ["#TalentXBuild", "#BuildForBharat", "#DataScience"],
-      likes: 1,
-      comments: 0,
-      shares: 0,
-      hasLiked: true
-    };
-
-    setPosts([newPost, ...posts]);
-    setNewPostContent('');
+    try {
+      await socialApi.createPost(newPostContent);
+      setNewPostContent('');
+      await loadFeed();
+    } catch (error) { setNetworkError(error.message); }
   };
 
-  const handleToggleLike = (postId) => {
-    setPosts(prev => prev.map(p => {
-      if (p.id === postId) {
-        return {
-          ...p,
-          likes: p.hasLiked ? p.likes - 1 : p.likes + 1,
-          hasLiked: !p.hasLiked
-        };
-      }
-      return p;
-    }));
+  const handleToggleLike = async postId => {
+    try {
+      await socialApi.toggleLike(postId);
+      await loadFeed();
+    } catch (error) { setNetworkError(error.message); }
   };
 
-  const handleToggleConnect = (id) => {
-    setConnectedIds(prev => 
-      prev.includes(id) ? prev.filter(item => item !== id) : [...prev, id]
-    );
+  const handleConnect = async member => {
+    try {
+      await socialApi.connect(member.id);
+      await loadMembers();
+    } catch (error) {
+      setNetworkError(error.message);
+    }
+  };
+
+  const handleConnectionResponse = async (member, status) => {
+    try {
+      await socialApi.respond(member.connectionId, status);
+      await loadMembers();
+    } catch (error) {
+      setNetworkError(error.message);
+    }
   };
 
   return (
     <div style={{ display: 'grid', gridTemplateColumns: '1fr 340px', gap: '24px', alignItems: 'flex-start' }}>
       {/* LEFT COLUMN: FEED & POSTS */}
       <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+        {networkError && <p role="alert" className="auth-error">{networkError}</p>}
         {/* POST CREATOR */}
         <div className="glass-panel" style={{ padding: '20px' }}>
           <div style={{ display: 'flex', gap: '14px', marginBottom: '14px' }}>
@@ -80,7 +103,8 @@ export function NetworkingFeed({ user }) {
               alt={user.name}
               style={{ width: '44px', height: '44px', borderRadius: '50%', objectFit: 'cover' }}
             />
-            <textarea
+                  <textarea
+              maxLength={2000}
               placeholder="Share a project breakthrough, verify a milestone, or ask for hackathon collaborators..."
               value={newPostContent}
               onChange={(e) => setNewPostContent(e.target.value)}
@@ -143,6 +167,8 @@ export function NetworkingFeed({ user }) {
 
         {/* FEED POSTS LIST */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+          {feedLoading && <div className="glass-panel" style={{ padding: 22, color: 'var(--text-muted)' }}>Loading the shared feed…</div>}
+          {!feedLoading && posts.length === 0 && <div className="glass-panel" style={{ padding: 22, color: 'var(--text-muted)' }}>No posts yet. Share the first update with the TalentX community.</div>}
           {posts.map(post => (
             <div key={post.id} className="glass-panel" style={{ padding: '22px' }}>
               {/* Post Author */}
@@ -166,7 +192,7 @@ export function NetworkingFeed({ user }) {
                       {post.author.title}
                     </div>
                     <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>
-                      {post.timeAgo}
+                      {formatPostTime(post.createdAt)}
                     </div>
                   </div>
                 </div>
@@ -287,22 +313,27 @@ export function NetworkingFeed({ user }) {
         </div>
       </div>
 
-      {/* RIGHT COLUMN: AI-POWERED "PEOPLE YOU SHOULD MEET" (Slide 13) */}
+      {/* RIGHT COLUMN: REAL MEMBER DIRECTORY AND CONNECTION REQUESTS */}
       <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
         <div className="glass-panel" style={{ padding: '20px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px' }}>
-            <Sparkles size={18} color="#35B879" />
+            <UserPlus size={18} color="#35B879" />
             <h3 style={{ fontSize: '1.05rem', color: 'var(--text-primary)' }}>
-              People You Should Meet
+              TalentX members
             </h3>
           </div>
           <p style={{ fontSize: '0.78rem', color: 'var(--text-secondary)', marginBottom: '16px' }}>
-            Matched on: <strong style={{ color: 'var(--primary)' }}>Skills + Career Goals + Projects + Hackathon Synergy</strong>
+            Connect with candidates and approved recruiters. Messaging opens after a connection is accepted.
           </p>
+          {networkError && <p role="alert" style={{ color: '#FB7185', fontSize: '.8rem' }}>{networkError}</p>}
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
-            {AI_SUGGESTED_CONNECTIONS.map(person => {
-              const isConnected = connectedIds.includes(person.id);
+            {networkLoading && <p style={{ color: 'var(--text-muted)', fontSize: '.82rem' }}>Loading members…</p>}
+            {!networkLoading && members.length === 0 && !networkError && <p style={{ color: 'var(--text-muted)', fontSize: '.82rem' }}>No other member profiles are available yet.</p>}
+            {members.map(person => {
+              const incoming = person.connectionStatus === 'pending' && person.requesterId !== authUser.id;
+              const outgoing = person.connectionStatus === 'pending' && person.requesterId === authUser.id;
+              const connected = person.connectionStatus === 'accepted';
               return (
                 <div
                   key={person.id}
@@ -317,55 +348,21 @@ export function NetworkingFeed({ user }) {
                   }}
                 >
                   <div style={{ display: 'flex', alignItems: 'flex-start', gap: '10px' }}>
-                    <img
-                      src={person.avatar}
-                      alt={person.name}
-                      style={{ width: '42px', height: '42px', borderRadius: '50%', objectFit: 'cover' }}
-                    />
+                    {person.avatar ? <img src={person.avatar} alt="" style={{ width: '42px', height: '42px', borderRadius: '50%', objectFit: 'cover' }} /> : <div style={{ width: 42, height: 42, borderRadius: '50%', background: 'var(--surface-tint)', display: 'grid', placeItems: 'center', color: 'var(--primary)', fontWeight: 800 }}>{person.name.slice(0, 1).toUpperCase()}</div>}
                     <div style={{ flex: 1 }}>
-                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                        <span style={{ fontWeight: 700, color: 'var(--text-primary)', fontSize: '0.9rem' }}>
-                          {person.name}
-                        </span>
-                        <span className="badge-pill badge-verified" style={{ fontSize: '0.65rem' }}>
-                          {person.compatibilityScore}% Synergy
-                        </span>
-                      </div>
-                      <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
-                        {person.title}
-                      </div>
+                      <span style={{ fontWeight: 700, color: 'var(--text-primary)', fontSize: '0.9rem' }}>{person.name}</span>
+                      <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>{person.title}{person.role === 'recruiter' ? ' · Recruiter' : ''}</div>
                     </div>
                   </div>
-
-                  {/* Explainable AI Match Reason (Slide 13) */}
-                  <div style={{
-                    background: 'rgba(34, 128, 74, 0.08)',
-                    borderRadius: 'var(--radius-sm)',
-                    padding: '8px 10px',
-                    fontSize: '0.73rem',
-                    color: 'var(--primary)',
-                    lineHeight: 1.4
-                  }}>
-                    💡 {person.matchReason}
-                  </div>
-
-                  {/* Actions */}
                   <div style={{ display: 'flex', gap: '8px' }}>
-                    <button
-                      onClick={() => handleToggleConnect(person.id)}
-                      className={isConnected ? "btn-secondary" : "btn-primary"}
-                      style={{ flex: 1, padding: '6px 10px', fontSize: '0.75rem' }}
-                    >
-                      {isConnected ? <><Check size={12} /> Connected</> : <><UserPlus size={12} /> Connect</>}
-                    </button>
-
-                    <button
-                      onClick={() => setSelectedRecipient(person)}
-                      className="btn-secondary"
-                      style={{ padding: '6px 12px', fontSize: '0.75rem' }}
-                    >
-                      Message
-                    </button>
+                    {incoming ? <>
+                      <button onClick={() => handleConnectionResponse(person, 'accepted')} className="btn-primary" style={{ flex: 1, padding: '6px 10px', fontSize: '.75rem' }}><Check size={12} /> Accept</button>
+                      <button onClick={() => handleConnectionResponse(person, 'declined')} className="btn-secondary" style={{ padding: '6px 10px', fontSize: '.75rem' }}>Decline</button>
+                    </> : outgoing ? <button disabled className="btn-secondary" style={{ flex: 1, padding: '6px 10px', fontSize: '.75rem' }}>Request sent</button>
+                      : connected ? <>
+                        <button disabled className="btn-secondary" style={{ flex: 1, padding: '6px 10px', fontSize: '.75rem' }}><Check size={12} /> Connected</button>
+                        <button onClick={() => setSelectedRecipient(person)} className="btn-primary" style={{ padding: '6px 12px', fontSize: '.75rem' }}>Message</button>
+                      </> : <button onClick={() => handleConnect(person)} className="btn-primary" style={{ flex: 1, padding: '6px 10px', fontSize: '.75rem' }}><UserPlus size={12} /> Connect</button>}
                   </div>
                 </div>
               );
@@ -379,7 +376,17 @@ export function NetworkingFeed({ user }) {
         isOpen={!!selectedRecipient}
         onClose={() => setSelectedRecipient(null)}
         recipient={selectedRecipient}
+        currentUserId={authUser.id}
       />
     </div>
   );
+}
+
+function formatPostTime(timestamp) {
+  const elapsedMinutes = Math.max(0, Math.floor((Date.now() - timestamp) / 60_000));
+  if (elapsedMinutes < 1) return 'Just now';
+  if (elapsedMinutes < 60) return `${elapsedMinutes} min ago`;
+  const hours = Math.floor(elapsedMinutes / 60);
+  if (hours < 24) return `${hours} hr ago`;
+  return new Date(timestamp).toLocaleDateString();
 }

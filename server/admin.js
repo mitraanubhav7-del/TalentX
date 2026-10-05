@@ -4,7 +4,7 @@ import { authenticate, requireRole } from './auth.js';
 export function createAdminRouter(database, options) {
   const router = Router();
   router.use(authenticate(database, options), requireRole('admin'));
-  const userCapacity = options?.userCapacity ?? Number(process.env.USER_CAPACITY || 4);
+  const userCapacity = options?.userCapacity ?? Number(process.env.USER_CAPACITY || 50);
 
   router.get('/recruiters', async (request, response, next) => {
     const status = request.query.status || 'pending';

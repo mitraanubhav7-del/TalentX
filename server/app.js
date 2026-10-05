@@ -4,11 +4,12 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { authenticate, createAuthRouter, requireRole } from './auth.js';
 import { createAdminRouter } from './admin.js';
+import { createSocialRouter } from './social.js';
 
 const projectRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
 export function createApp(database) {
-  const userCapacity = Number(process.env.USER_CAPACITY || 4);
+  const userCapacity = Number(process.env.USER_CAPACITY || 50);
   if (!Number.isSafeInteger(userCapacity) || userCapacity < 1) {
     throw new Error('USER_CAPACITY must be a positive whole number.');
   }
@@ -34,6 +35,7 @@ export function createApp(database) {
   app.use(express.json({ limit: '4mb' }));
   app.use('/api/auth', createAuthRouter(database, { userCapacity }));
   app.use('/api/admin', createAdminRouter(database, { userCapacity }));
+  app.use('/api/social', createSocialRouter(database, { userCapacity }));
 
   app.get('/api/health', (_request, response) => response.json({ status: 'ok' }));
 

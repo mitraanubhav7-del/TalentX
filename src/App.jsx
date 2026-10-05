@@ -386,7 +386,7 @@ export function App() {
             )}
 
             {talentTab === 'networking' && (
-              <NetworkingFeed user={user} />
+              <NetworkingFeed user={user} authUser={authUser} />
             )}
 
             {talentTab === 'projects' && (
@@ -401,7 +401,7 @@ export function App() {
 
         {/* VIEW 2: EMPLOYER PORTAL */}
         {activeView === 'employer' && (
-          <EmployerPortal />
+          <EmployerPortal currentUserId={authUser.id} />
         )}
 
         {/* VIEW 3: UNIVERSITY INTELLIGENCE */}

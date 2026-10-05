@@ -25,4 +25,4 @@ services:
       - key: EMAIL_OTP_SECRET
         generateValue: true
       - key: USER_CAPACITY
-        value: "4"
+        value: "50"

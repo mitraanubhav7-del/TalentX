@@ -65,6 +65,44 @@ export async function initializeDatabase(pool = db) {
     CREATE INDEX IF NOT EXISTS sessions_expiry_idx ON sessions(expires_at);
     CREATE INDEX IF NOT EXISTS recruiters_status_idx ON users(role, recruiter_status);
 
+    CREATE TABLE IF NOT EXISTS member_connections (
+      id SERIAL PRIMARY KEY,
+      left_user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+      right_user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+      requester_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+      status TEXT NOT NULL CHECK (status IN ('pending', 'accepted', 'declined')),
+      created_at BIGINT NOT NULL,
+      updated_at BIGINT NOT NULL,
+      CHECK (left_user_id < right_user_id),
+      CHECK (requester_id = left_user_id OR requester_id = right_user_id),
+      UNIQUE (left_user_id, right_user_id)
+    );
+    CREATE INDEX IF NOT EXISTS member_connections_right_status_idx ON member_connections(right_user_id, status);
+    CREATE INDEX IF NOT EXISTS member_connections_left_status_idx ON member_connections(left_user_id, status);
+
+    CREATE TABLE IF NOT EXISTS direct_messages (
+      id BIGSERIAL PRIMARY KEY,
+      connection_id INTEGER NOT NULL REFERENCES member_connections(id) ON DELETE CASCADE,
+      sender_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+      body TEXT NOT NULL CHECK (char_length(body) BETWEEN 1 AND 4000),
+      created_at BIGINT NOT NULL
+    );
+    CREATE INDEX IF NOT EXISTS direct_messages_connection_created_idx ON direct_messages(connection_id, created_at, id);
+
+    CREATE TABLE IF NOT EXISTS feed_posts (
+      id BIGSERIAL PRIMARY KEY,
+      author_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+      body TEXT NOT NULL CHECK (char_length(body) BETWEEN 1 AND 2000),
+      created_at BIGINT NOT NULL
+    );
+    CREATE INDEX IF NOT EXISTS feed_posts_created_idx ON feed_posts(created_at DESC, id DESC);
+    CREATE TABLE IF NOT EXISTS feed_post_likes (
+      post_id BIGINT NOT NULL REFERENCES feed_posts(id) ON DELETE CASCADE,
+      user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+      created_at BIGINT NOT NULL,
+      PRIMARY KEY (post_id, user_id)
+    );
+
     CREATE TABLE IF NOT EXISTS email_challenges (
       email TEXT NOT NULL,
       purpose TEXT NOT NULL CHECK (purpose IN ('signup', 'password_reset')),

@@ -1,13 +1,24 @@
 import assert from 'node:assert/strict';
 import { after, before, test } from 'node:test';
-import { newDb } from 'pg-mem';
+import { DataType, newDb } from 'pg-mem';
 import express from 'express';
 import { authenticate, createAuthRouter, createPasswordHash, requireRole } from './auth.js';
 import { createAdminRouter } from './admin.js';
 import { initializeDatabase } from './db.js';
 import { provisionAdmin } from './provision-admin.js';
 
-const memory = newDb();
+function createMemoryDb() {
+  const memory = newDb();
+  memory.public.registerFunction({
+    name: 'char_length',
+    args: [DataType.text],
+    returns: DataType.integer,
+    implementation: value => [...value].length,
+  });
+  return memory;
+}
+
+const memory = createMemoryDb();
 const Pool = memory.adapters.createPg().Pool;
 const database = new Pool();
 const otpCodes = new Map();
@@ -444,7 +455,7 @@ test('password reset uses email OTP and revokes existing sessions', async () => 
 });
 
 test('admin bootstrap is idempotent and only an explicit rotation changes the password', async () => {
-  const adminMemory = newDb();
+  const adminMemory = createMemoryDb();
   const AdminPool = adminMemory.adapters.createPg().Pool;
   const adminDatabase = new AdminPool();
   await initializeDatabase(adminDatabase);
@@ -482,7 +493,7 @@ test('admin bootstrap is idempotent and only an explicit rotation changes the pa
 });
 
 test('candidate accounts are capped at four active users and sign-out frees a slot', async () => {
-  const limitedMemory = newDb();
+  const limitedMemory = createMemoryDb();
   const LimitedPool = limitedMemory.adapters.createPg().Pool;
   const limitedDatabase = new LimitedPool();
   await initializeDatabase(limitedDatabase);

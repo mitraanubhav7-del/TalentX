@@ -73,7 +73,7 @@ PEOPLE ↔ SKILLS ↔ JOBS ↔ LEARNING ↔ NETWORK ↔ INDUSTRY DEMAND
 - Node.js v20+ (tested on v24)
 - npm v9+
 
-### Run locally for up to four users
+### Run locally for multiple users
 
 Create a PostgreSQL database (local or Supabase), copy `.env.example` to `.env`, and set `DATABASE_URL` to its connection string. For OTP email, create a Brevo account, generate an API key, and verify a sender email address in Brevo. Set `BREVO_API_KEY`, `BREVO_SENDER_EMAIL`, and a random `EMAIL_OTP_SECRET` (at least 32 characters). Set a private administrator name/email and a unique password of at least 14 characters.
 
@@ -89,7 +89,7 @@ npm run dev
 
 Visit **`http://localhost:5173/`**. The Vite development server proxies API requests to the PostgreSQL-backed Express server.
 
-The server permits four distinct, active candidate/recruiter accounts at once by default. Admin accounts do not use a user slot. Accounts release their slot when they sign out or when their browser has been inactive for five minutes; an open app tab refreshes its activity every minute. Set `USER_CAPACITY` in `.env` if you want to change this limit.
+The server permits up to 50 distinct, active candidate/recruiter accounts at once by default. Admin accounts do not use a user slot. Accounts release their slot when they sign out or when their browser has been inactive for five minutes; an open app tab refreshes its activity every minute. Set `USER_CAPACITY` in `.env` if you want to change this limit. Member profiles, connection requests, accepted connections, feed posts, likes, and direct messages are stored in PostgreSQL and shared between signed-in accounts.
 
 ### Authentication and role access
 
@@ -111,13 +111,13 @@ On the login tab, sign in using that admin email and password (admin is not a pu
 
 ### Free deployment (Render + Supabase)
 
-The repository includes a Render Blueprint in `render.yaml`. It configures the free Render web service, build/start commands, health check, four-user limit, and prompts for secrets without storing them in Git.
+The repository includes a Render Blueprint in `render.yaml`. It configures the free Render web service, build/start commands, health check, 50-user active-session limit, and prompts for secrets without storing them in Git.
 
 1. Create a Supabase project and open **Connect**. Copy its PostgreSQL **Session pooler** connection string. Keep the password private.
 2. In Brevo, create an API key and verify the sender email address you want TalentX to send from.
 3. In Render, create a **Blueprint** from this GitHub repository. In the setup form, provide `DATABASE_URL`, `ADMIN_NAME`, `ADMIN_EMAIL`, a unique `ADMIN_PASSWORD` (at least 14 characters), `BREVO_API_KEY`, and `BREVO_SENDER_EMAIL`. Set `EMAIL_OTP_SECRET` to a random secret of at least 32 characters (Render can generate one). Enter secrets directly into Render's private environment-variable fields, never into source files or chat.
 4. Confirm the free web service, then deploy. Render runs the production build and the service health check at `/api/health`. The first successful server start initializes the tables and provisions the admin from those environment variables.
-5. Open the Render URL, sign in as the administrator, and review recruiter requests. Four active candidate/recruiter accounts are allowed by default; set `USER_CAPACITY` in Render if needed.
+5. Open the Render URL, sign in as the administrator, and review recruiter requests. Up to 50 active candidate/recruiter accounts are allowed by default; set `USER_CAPACITY` in Render if needed.
 
 The free Render service may sleep when idle, and its local filesystem is ephemeral; PostgreSQL data remains in Supabase. Supabase's free database has size and inactivity limits and may pause after prolonged inactivity. This is suitable for a trial/demo, not a reliability or backup guarantee. Configure backups and a paid database/service before relying on it for important or production data. Existing local SQLite accounts are not copied; users must register again on the deployed site.
 
