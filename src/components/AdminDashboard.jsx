@@ -27,7 +27,7 @@ async function adminRequest(path, options = {}) {
 }
 
 export function AdminDashboard({ user, onLogout }) {
-  const [status, setStatus] = useState('pending');
+  const [status, setStatus] = useState('all');
   const [requests, setRequests] = useState([]);
   const [pendingCount, setPendingCount] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
@@ -101,7 +101,7 @@ export function AdminDashboard({ user, onLogout }) {
         <div className="admin-panel-heading">
           <div>
             <h2>Recruiter accounts</h2>
-            <p>Review each request and grant or decline access to the Hiring portal.</p>
+            <p>Review recruiter accounts and grant or decline access to the Hiring portal. New applications appear after email verification.</p>
           </div>
           <ShieldCheck size={24} color="var(--primary)" />
         </div>

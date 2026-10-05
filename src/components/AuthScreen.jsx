@@ -151,7 +151,7 @@ export function AuthScreen({ onAuthenticated, capacityNotice }) {
                 </button>
               </fieldset>
               {role === 'recruiter' && (
-                <p className="auth-note">Recruiter access is enabled after an administrator approves your account.</p>
+                <p className="auth-note">Verify your email to submit the request. An administrator can review it after verification and approve your recruiter access.</p>
               )}
               <label>
                 Full name

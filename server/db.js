@@ -14,6 +14,9 @@ function createDatabasePool() {
       connectionTimeoutMillis: 10_000,
     });
   }
+  if (process.env.NODE_ENV === 'production') {
+    throw new Error('DATABASE_URL is required in production; refusing to use an in-memory database that would lose accounts and recruiter requests on restart.');
+  }
   const memory = newDb();
   const MemPool = memory.adapters.createPg().Pool;
   return new MemPool();
