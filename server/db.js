@@ -1,8 +1,20 @@
 import 'dotenv/config';
 import pg from 'pg';
-import { newDb } from 'pg-mem';
+import { DataType, newDb } from 'pg-mem';
 
 const { Pool } = pg;
+
+function createMemoryDatabasePool() {
+  const memory = newDb();
+  memory.public.registerFunction({
+    name: 'char_length',
+    args: [DataType.text],
+    returns: DataType.integer,
+    implementation: value => (value == null ? 0 : String(value).length),
+  });
+  const MemPool = memory.adapters.createPg().Pool;
+  return new MemPool();
+}
 
 function createDatabasePool() {
   if (process.env.DATABASE_URL) {
@@ -17,9 +29,7 @@ function createDatabasePool() {
   if (process.env.NODE_ENV === 'production') {
     throw new Error('DATABASE_URL is required in production; refusing to use an in-memory database that would lose accounts and recruiter requests on restart.');
   }
-  const memory = newDb();
-  const MemPool = memory.adapters.createPg().Pool;
-  return new MemPool();
+  return createMemoryDatabasePool();
 }
 
 export const db = createDatabasePool();
