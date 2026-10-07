@@ -38,7 +38,7 @@ export function Navbar({
       setActiveView('employer');
     } else {
       setActiveView('talent');
-      setTalentTab('career_ai');
+      setTalentTab('home');
     }
   };
 
@@ -58,7 +58,7 @@ export function Navbar({
       label: 'Home',
       icon: Home,
       action: goHome,
-      active: activeView === 'talent' && talentTab === 'career_ai',
+      active: activeView === 'talent' && talentTab === 'home',
     },
     {
       id: 'network',
@@ -111,10 +111,10 @@ export function Navbar({
     },
     {
       id: 'insights',
-      label: 'Insights',
+      label: 'Market',
       icon: TrendingUp,
-      action: () => setActiveView('skillgraph'),
-      active: activeView === 'skillgraph',
+      action: () => setActiveView('market'),
+      active: activeView === 'market',
     },
   ];
 
@@ -134,10 +134,12 @@ export function Navbar({
       setActiveView('talent'); setTalentTab('simulator');
     } else if (q.includes('project')) {
       setActiveView('talent'); setTalentTab('projects');
+    } else if (q.includes('skill graph') || q.includes('network graph')) {
+      setActiveView('skillgraph');
     } else if (q.includes('employer') || q.includes('hiring')) {
       setActiveView('employer');
-    } else if (q.includes('insight') || q.includes('graph')) {
-      setActiveView('skillgraph');
+    } else if (q.includes('insight') || q.includes('graph') || q.includes('market')) {
+      setActiveView('market');
     } else {
       setActiveView('talent'); setTalentTab('career_ai');
     }
@@ -300,8 +302,8 @@ export function Navbar({
         {role === 'candidate' ? (
           <>
             <button
-              className={`mobile-tab${activeView === 'talent' && talentTab === 'career_ai' ? ' active' : ''}`}
-              onClick={() => { setActiveView('talent'); setTalentTab('career_ai'); }}
+              className={`mobile-tab${activeView === 'talent' && talentTab === 'home' ? ' active' : ''}`}
+              onClick={goHome}
               aria-label="Home"
             >
               <Home size={21} />
@@ -382,8 +384,11 @@ export function Navbar({
             <button onClick={() => { setActiveView('talent'); setTalentTab('projects'); setIsMoreMenuOpen(false); }}>
               <Code2 size={18} /> Projects
             </button>
+            <button onClick={() => { setActiveView('market'); setIsMoreMenuOpen(false); }}>
+              <TrendingUp size={18} /> Market insights
+            </button>
             <button onClick={() => { setActiveView('skillgraph'); setIsMoreMenuOpen(false); }}>
-              <TrendingUp size={18} /> Insights
+              <BarChart2 size={18} /> Skill graph
             </button>
             <button onClick={() => { setShowNotifications(true); setIsMoreMenuOpen(false); }}>
               <Bell size={18} /> Alerts

@@ -1,0 +1,264 @@
+.home-dashboard {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.home-welcome {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 8px 2px;
+}
+
+.home-welcome h1 {
+  margin: 8px 0 4px;
+  color: var(--text-primary);
+  font-size: clamp(1.65rem, 3vw, 2.1rem);
+  letter-spacing: -0.04em;
+}
+
+.home-welcome p,
+.home-card-copy {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  line-height: 1.55;
+}
+
+.home-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  color: var(--primary);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+}
+
+.home-welcome > button,
+.home-text-action,
+.home-verify-action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.home-overview-grid {
+  display: grid;
+  grid-template-columns: minmax(260px, 0.85fr) minmax(360px, 1.4fr);
+  gap: 16px;
+}
+
+.home-progress-card,
+.home-skills-card {
+  padding: 24px;
+}
+
+.home-card-heading {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.home-icon-well {
+  display: inline-flex;
+  width: 36px;
+  height: 36px;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  border-radius: 10px;
+  color: var(--primary);
+  background: #e9f6ed;
+}
+
+.home-card-label {
+  color: var(--text-secondary);
+  font-size: 0.74rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+}
+
+.home-progress-value {
+  margin-top: 22px;
+  color: var(--text-primary);
+  font-size: 2.6rem;
+  font-weight: 850;
+  letter-spacing: -0.05em;
+  line-height: 1;
+}
+
+.home-progress-card > .home-card-copy {
+  margin-top: 8px;
+}
+
+.home-progress-track {
+  height: 10px;
+  margin-top: 22px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: var(--track);
+}
+
+.home-progress-fill {
+  height: 100%;
+  border-radius: inherit;
+  background: var(--grad-brand);
+  transition: width 250ms ease;
+}
+
+.home-progress-caption {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 8px;
+  color: var(--text-muted);
+  font-size: 0.76rem;
+  font-weight: 650;
+}
+
+.home-text-action {
+  padding: 0;
+  border: 0;
+  color: var(--primary);
+  background: transparent;
+  font-size: 0.8rem;
+  font-weight: 750;
+  cursor: pointer;
+}
+
+.home-progress-card > .home-text-action {
+  margin-top: 24px;
+}
+
+.home-skills-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+}
+
+.home-skills-heading .home-card-copy {
+  margin: 7px 0 0 46px;
+}
+
+.home-skill-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin: 18px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.home-skill-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 42px;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.home-skill-status {
+  display: inline-flex;
+  color: var(--text-muted);
+}
+
+.home-skill-status.is-verified {
+  color: var(--accent-emerald);
+}
+
+.home-skill-info {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  min-width: 0;
+  flex: 1;
+}
+
+.home-skill-name {
+  overflow: hidden;
+  color: var(--text-primary);
+  font-size: 0.84rem;
+  font-weight: 700;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.home-skill-badge {
+  flex: 0 0 auto;
+  padding: 3px 7px;
+  border-radius: 999px;
+  color: #8a5a08;
+  background: #fff4d6;
+  font-size: 0.65rem;
+  font-weight: 750;
+}
+
+.home-skill-badge.is-verified {
+  color: #166534;
+  background: #e6f5e9;
+}
+
+.home-skill-score {
+  color: var(--text-secondary);
+  font-size: 0.78rem;
+  font-weight: 750;
+}
+
+.home-empty-skills {
+  margin: 22px 0;
+  color: var(--text-secondary);
+  font-size: 0.86rem;
+}
+
+.home-verify-action {
+  width: 100%;
+  margin-top: 16px;
+  padding: 10px 12px;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  color: var(--primary);
+  background: var(--surface-tint);
+  font-size: 0.8rem;
+  font-weight: 750;
+  cursor: pointer;
+}
+
+.home-verify-action svg:last-child {
+  margin-left: auto;
+}
+
+.home-text-action:focus-visible,
+.home-verify-action:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 3px;
+}
+
+@media (max-width: 760px) {
+  .home-overview-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .home-welcome {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .home-progress-card,
+  .home-skills-card {
+    padding: 20px;
+  }
+}
+
+@media (max-width: 420px) {
+  .home-skill-info {
+    gap: 6px;
+  }
+
+  .home-skill-badge {
+    font-size: 0.6rem;
+  }
+}

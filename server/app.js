@@ -5,6 +5,7 @@ import { fileURLToPath } from 'node:url';
 import { authenticate, createAuthRouter, requireRole } from './auth.js';
 import { createAdminRouter } from './admin.js';
 import { createSocialRouter } from './social.js';
+import { createMarketInsightsRouter } from './market-insights.js';
 
 const projectRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
@@ -36,6 +37,7 @@ export function createApp(database) {
   app.use('/api/auth', createAuthRouter(database, { userCapacity }));
   app.use('/api/admin', createAdminRouter(database, { userCapacity }));
   app.use('/api/social', createSocialRouter(database, { userCapacity }));
+  app.use('/api/insights', createMarketInsightsRouter());
 
   app.get('/api/health', (_request, response) => response.json({ status: 'ok' }));
 

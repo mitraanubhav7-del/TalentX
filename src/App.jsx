@@ -3,6 +3,7 @@ import { Navbar } from './components/Navbar';
 import { AuthLoading, AuthScreen, PendingApproval } from './components/AuthScreen';
 import { AdminDashboard } from './components/AdminDashboard';
 import { ProfileView } from './components/ProfileView';
+import { HomeDashboard } from './components/HomeDashboard';
 import { ProfileSetup } from './components/ProfileSetup';
 import { SkillVerificationModal } from './components/SkillVerificationModal';
 import { ResumeParserModal } from './components/ResumeParserModal';
@@ -13,6 +14,7 @@ import { OpportunitiesView } from './components/OpportunitiesView';
 import { EmployerPortal } from './components/EmployerPortal';
 import { UniversityPortal } from './components/UniversityPortal';
 import { SkillGraphView } from './components/SkillGraphView';
+import { MarketInsights } from './components/MarketInsights';
 import { INITIAL_USER } from './data/mockData';
 import { authApi } from './services/auth';
 import { profileIsComplete } from './utils/profile';
@@ -29,8 +31,8 @@ export function App() {
   const [authError, setAuthError] = useState('');
   const [capacityNotice, setCapacityNotice] = useState('');
   const [isEditingProfile, setIsEditingProfile] = useState(false);
-  const [activeView, setActiveView] = useState('talent'); // 'talent' | 'employer' | 'university' | 'skillgraph'
-  const [talentTab, setTalentTab] = useState('career_ai');
+  const [activeView, setActiveView] = useState('talent'); // 'talent' | 'employer' | 'university' | 'skillgraph' | 'market'
+  const [talentTab, setTalentTab] = useState('home');
 
   useEffect(() => {
     let isCurrent = true;
@@ -46,7 +48,7 @@ export function App() {
         } else {
           setUser(prev => ({ ...prev, ...currentUser.profile, name: currentUser.name }));
           setActiveView('talent');
-          setTalentTab('career_ai');
+          setTalentTab('home');
         }
       })
       .catch(error => {
@@ -76,7 +78,7 @@ export function App() {
     } else {
       setUser(prev => ({ ...prev, ...authenticatedUser.profile, name: authenticatedUser.name }));
       setActiveView('talent');
-      setTalentTab('career_ai');
+      setTalentTab('home');
     }
   };
 
@@ -88,7 +90,7 @@ export function App() {
       setActiveView('employer');
     } else {
       setActiveView('talent');
-      setTalentTab('career_ai');
+      setTalentTab('home');
     }
   };
 
@@ -335,6 +337,15 @@ export function App() {
         {/* VIEW 1: TALENT PORTAL */}
         {activeView === 'talent' && (
           <div>
+            {talentTab === 'home' && (
+              <HomeDashboard
+                user={user}
+                onNavigateToProfile={() => setTalentTab('profile')}
+                onNavigateToCareerAI={() => setTalentTab('career_ai')}
+                openVerificationModal={handleOpenVerification}
+              />
+            )}
+
             {talentTab === 'profile' && (
               <ProfileView
                 user={user}
@@ -412,6 +423,9 @@ export function App() {
         {/* VIEW 4: SKILL GRAPH & MARKET DEMAND */}
         {activeView === 'skillgraph' && (
           <SkillGraphView onNavigateToVerify={handleOpenVerification} />
+        )}
+        {activeView === 'market' && (
+          <MarketInsights onOpenSkillGraph={() => setActiveView('skillgraph')} />
         )}
       </main>
 

@@ -89,6 +89,10 @@ npm run dev
 
 Visit **`http://localhost:5173/`**. The Vite development server proxies API requests to the PostgreSQL-backed Express server.
 
+### Dataset-powered market insights
+
+The **Market** item in the candidate navigation opens the job-market dashboard. It is backed by `server/market-data/Analytics Jobs.csv` and `server/market-data/DataScience Jobs.csv`, copied from the SAS hackathon dataset. The API at `/api/insights/market` reports job-listing counts, estimated openings, weighted salary summaries, frequently listed skills and locations, experience bands, and leading companies and roles. Salary values are in lakh per annum (LPA); job and opening counts represent the source datasets' aggregated rows.
+
 The server permits up to 50 distinct, active candidate/recruiter accounts at once by default. Admin accounts do not use a user slot. Accounts release their slot when they sign out or when their browser has been inactive for five minutes; an open app tab refreshes its activity every minute. Set `USER_CAPACITY` in `.env` if you want to change this limit. Member profiles, connection requests, accepted connections, feed posts, likes, and direct messages are stored in PostgreSQL and shared between signed-in accounts.
 
 ### Authentication and role access
